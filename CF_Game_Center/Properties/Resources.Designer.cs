@@ -63,6 +63,26 @@ namespace CF_Game_Center.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Earth_Globe_96px {
+            get {
+                object obj = ResourceManager.GetObject("Earth Globe_96px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap home_512px {
+            get {
+                object obj = ResourceManager.GetObject("home_512px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_c_drive_96 {
             get {
                 object obj = ResourceManager.GetObject("icons8_c_drive_96", resourceCulture);
@@ -126,6 +146,26 @@ namespace CF_Game_Center.Properties {
         internal static System.Drawing.Bitmap LOGO1 {
             get {
                 object obj = ResourceManager.GetObject("LOGO1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap minecraft_pickaxe_48px {
+            get {
+                object obj = ResourceManager.GetObject("minecraft_pickaxe_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap nvidia_48px {
+            get {
+                object obj = ResourceManager.GetObject("nvidia_48px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
