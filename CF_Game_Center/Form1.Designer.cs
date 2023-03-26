@@ -20,6 +20,7 @@ namespace CF_Game_Center
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
+            this.Nav_Home = new Guna.UI2.WinForms.Guna2CirclePictureBox();
             this.guna2ControlBox2 = new Guna.UI2.WinForms.Guna2ControlBox();
             this.Nav_Steam_Games = new Guna.UI2.WinForms.Guna2Button();
             this.Nav_Games = new Guna.UI2.WinForms.Guna2Button();
@@ -28,6 +29,7 @@ namespace CF_Game_Center
             this.guna2ControlBox1 = new Guna.UI2.WinForms.Guna2ControlBox();
             this.Panel_Switcher = new Guna.UI2.WinForms.Guna2TabControl();
             this.Main_Page = new System.Windows.Forms.TabPage();
+            this.guna2Button6 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2HtmlLabel5 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2HtmlLabel4 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
@@ -47,6 +49,7 @@ namespace CF_Game_Center
             this.guna2HtmlLabel7 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2Button3 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2HtmlLabel6 = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.guna2PictureBox1 = new Guna.UI2.WinForms.Guna2PictureBox();
             this.Settings_Page = new System.Windows.Forms.TabPage();
             this.Download_Page = new System.Windows.Forms.TabPage();
             this.Download_Checksaves = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -55,6 +58,10 @@ namespace CF_Game_Center
             this.Download_Progressbar = new Guna.UI2.WinForms.Guna2ProgressBar();
             this.Download_SPEED = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.Download_Title = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.Download_Play = new Guna.UI2.WinForms.Guna2Button();
+            this.Download_Stop = new Guna.UI2.WinForms.Guna2Button();
+            this.Download_Pause = new Guna.UI2.WinForms.Guna2Button();
+            this.Download_Banner = new Guna.UI2.WinForms.Guna2PictureBox();
             this.Login_Page = new System.Windows.Forms.TabPage();
             this.guna2HtmlLabel2 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.Login_Remember = new Guna.UI2.WinForms.Guna2ToggleSwitch();
@@ -70,14 +77,8 @@ namespace CF_Game_Center
             this.guna2DragControl1 = new Guna.UI2.WinForms.Guna2DragControl(this.components);
             this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
             this.cloudsaveTimer = new System.Windows.Forms.Timer(this.components);
-            this.Nav_Home = new Guna.UI2.WinForms.Guna2CirclePictureBox();
-            this.guna2Button6 = new Guna.UI2.WinForms.Guna2Button();
-            this.guna2PictureBox1 = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.Download_Play = new Guna.UI2.WinForms.Guna2Button();
-            this.Download_Stop = new Guna.UI2.WinForms.Guna2Button();
-            this.Download_Pause = new Guna.UI2.WinForms.Guna2Button();
-            this.Download_Banner = new Guna.UI2.WinForms.Guna2PictureBox();
             this.guna2Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Nav_Home)).BeginInit();
             this.Panel_Switcher.SuspendLayout();
             this.Main_Page.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
@@ -86,17 +87,16 @@ namespace CF_Game_Center
             this.Library_Page.SuspendLayout();
             this.Library_Flow_Layout.SuspendLayout();
             this.guna2Panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).BeginInit();
             this.Download_Page.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Download_Banner)).BeginInit();
             this.Login_Page.SuspendLayout();
             this.Register_Page.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Nav_Home)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Download_Banner)).BeginInit();
             this.SuspendLayout();
             // 
             // guna2Panel1
             // 
-            this.guna2Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(72)))), ((int)(((byte)(108)))));
+            this.guna2Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.guna2Panel1.Controls.Add(this.Nav_Home);
             this.guna2Panel1.Controls.Add(this.guna2ControlBox2);
             this.guna2Panel1.Controls.Add(this.Nav_Steam_Games);
@@ -108,6 +108,18 @@ namespace CF_Game_Center
             this.guna2Panel1.Name = "guna2Panel1";
             this.guna2Panel1.Size = new System.Drawing.Size(1213, 46);
             this.guna2Panel1.TabIndex = 0;
+            // 
+            // Nav_Home
+            // 
+            this.Nav_Home.Image = global::CF_Game_Center.Properties.Resources.LOGO1;
+            this.Nav_Home.ImageRotate = 0F;
+            this.Nav_Home.Location = new System.Drawing.Point(15, 8);
+            this.Nav_Home.Name = "Nav_Home";
+            this.Nav_Home.Size = new System.Drawing.Size(30, 30);
+            this.Nav_Home.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Nav_Home.TabIndex = 6;
+            this.Nav_Home.TabStop = false;
+            this.Nav_Home.Click += new System.EventHandler(this.Nav_Buttons);
             // 
             // guna2ControlBox2
             // 
@@ -128,12 +140,12 @@ namespace CF_Game_Center
             this.Nav_Steam_Games.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.Nav_Steam_Games.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.Nav_Steam_Games.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.Nav_Steam_Games.FillColor = System.Drawing.Color.Transparent;
+            this.Nav_Steam_Games.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.Nav_Steam_Games.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Nav_Steam_Games.ForeColor = System.Drawing.Color.LightGray;
             this.Nav_Steam_Games.Location = new System.Drawing.Point(693, 3);
             this.Nav_Steam_Games.Name = "Nav_Steam_Games";
-            this.Nav_Steam_Games.Size = new System.Drawing.Size(136, 42);
+            this.Nav_Steam_Games.Size = new System.Drawing.Size(136, 36);
             this.Nav_Steam_Games.TabIndex = 4;
             this.Nav_Steam_Games.Text = "Untouched Games";
             this.Nav_Steam_Games.Click += new System.EventHandler(this.Nav_Buttons);
@@ -145,12 +157,12 @@ namespace CF_Game_Center
             this.Nav_Games.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.Nav_Games.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.Nav_Games.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.Nav_Games.FillColor = System.Drawing.Color.Transparent;
+            this.Nav_Games.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.Nav_Games.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Nav_Games.ForeColor = System.Drawing.Color.LightGray;
             this.Nav_Games.Location = new System.Drawing.Point(551, 3);
             this.Nav_Games.Name = "Nav_Games";
-            this.Nav_Games.Size = new System.Drawing.Size(136, 42);
+            this.Nav_Games.Size = new System.Drawing.Size(136, 36);
             this.Nav_Games.TabIndex = 3;
             this.Nav_Games.Text = "Cracked Games";
             this.Nav_Games.Click += new System.EventHandler(this.Nav_Buttons);
@@ -162,12 +174,12 @@ namespace CF_Game_Center
             this.Nav_Library.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.Nav_Library.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.Nav_Library.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.Nav_Library.FillColor = System.Drawing.Color.Transparent;
+            this.Nav_Library.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.Nav_Library.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Nav_Library.ForeColor = System.Drawing.Color.LightGray;
             this.Nav_Library.Location = new System.Drawing.Point(409, 3);
             this.Nav_Library.Name = "Nav_Library";
-            this.Nav_Library.Size = new System.Drawing.Size(136, 42);
+            this.Nav_Library.Size = new System.Drawing.Size(136, 36);
             this.Nav_Library.TabIndex = 2;
             this.Nav_Library.Text = "My Library";
             this.Nav_Library.Click += new System.EventHandler(this.Nav_Buttons);
@@ -229,11 +241,10 @@ namespace CF_Game_Center
             this.Panel_Switcher.TabIndex = 1;
             this.Panel_Switcher.TabMenuBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(42)))), ((int)(((byte)(57)))));
             this.Panel_Switcher.TabMenuOrientation = Guna.UI2.WinForms.TabMenuOrientation.VerticalRight;
-            this.Panel_Switcher.TabMenuVisible = false;
             // 
             // Main_Page
             // 
-            this.Main_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(37)))), ((int)(((byte)(61)))));
+            this.Main_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Main_Page.Controls.Add(this.guna2Button6);
             this.Main_Page.Controls.Add(this.guna2HtmlLabel5);
             this.Main_Page.Controls.Add(this.guna2HtmlLabel4);
@@ -243,9 +254,30 @@ namespace CF_Game_Center
             this.Main_Page.Location = new System.Drawing.Point(4, 4);
             this.Main_Page.Name = "Main_Page";
             this.Main_Page.Padding = new System.Windows.Forms.Padding(3);
-            this.Main_Page.Size = new System.Drawing.Size(1204, 673);
+            this.Main_Page.Size = new System.Drawing.Size(1025, 673);
             this.Main_Page.TabIndex = 0;
             this.Main_Page.Text = "Main_Page";
+            // 
+            // guna2Button6
+            // 
+            this.guna2Button6.BorderRadius = 6;
+            this.guna2Button6.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.guna2Button6.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.guna2Button6.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.guna2Button6.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.guna2Button6.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.guna2Button6.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.guna2Button6.ForeColor = System.Drawing.Color.LightGray;
+            this.guna2Button6.Image = global::CF_Game_Center.Properties.Resources.Loginicon;
+            this.guna2Button6.ImageAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.guna2Button6.ImageSize = new System.Drawing.Size(28, 28);
+            this.guna2Button6.Location = new System.Drawing.Point(1064, 598);
+            this.guna2Button6.Name = "guna2Button6";
+            this.guna2Button6.Size = new System.Drawing.Size(129, 36);
+            this.guna2Button6.TabIndex = 7;
+            this.guna2Button6.Text = "Login";
+            this.guna2Button6.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.guna2Button6.Click += new System.EventHandler(this.guna2Button6_Click);
             // 
             // guna2HtmlLabel5
             // 
@@ -311,13 +343,13 @@ namespace CF_Game_Center
             // 
             // Game_Page
             // 
-            this.Game_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(37)))), ((int)(((byte)(61)))));
+            this.Game_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Game_Page.Controls.Add(this.Game_Search_Bar);
             this.Game_Page.Controls.Add(this.guna2Panel3);
             this.Game_Page.Location = new System.Drawing.Point(4, 4);
             this.Game_Page.Name = "Game_Page";
             this.Game_Page.Padding = new System.Windows.Forms.Padding(3);
-            this.Game_Page.Size = new System.Drawing.Size(1204, 673);
+            this.Game_Page.Size = new System.Drawing.Size(1025, 673);
             this.Game_Page.TabIndex = 1;
             this.Game_Page.Text = "Game_Page";
             // 
@@ -366,25 +398,26 @@ namespace CF_Game_Center
             // 
             // Steam_Page
             // 
-            this.Steam_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(37)))), ((int)(((byte)(61)))));
+            this.Steam_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Steam_Page.Location = new System.Drawing.Point(4, 4);
             this.Steam_Page.Name = "Steam_Page";
-            this.Steam_Page.Size = new System.Drawing.Size(1204, 673);
+            this.Steam_Page.Size = new System.Drawing.Size(1025, 673);
             this.Steam_Page.TabIndex = 2;
             this.Steam_Page.Text = "Steam_Page";
             // 
             // Library_Page
             // 
-            this.Library_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(37)))), ((int)(((byte)(61)))));
+            this.Library_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Library_Page.Controls.Add(this.Library_Flow_Layout);
             this.Library_Page.Location = new System.Drawing.Point(4, 4);
             this.Library_Page.Name = "Library_Page";
-            this.Library_Page.Size = new System.Drawing.Size(1204, 673);
+            this.Library_Page.Size = new System.Drawing.Size(1025, 673);
             this.Library_Page.TabIndex = 3;
             this.Library_Page.Text = "Library_Page";
             // 
             // Library_Flow_Layout
             // 
+            this.Library_Flow_Layout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Library_Flow_Layout.Controls.Add(this.guna2Panel4);
             this.Library_Flow_Layout.Location = new System.Drawing.Point(11, 6);
             this.Library_Flow_Layout.Name = "Library_Flow_Layout";
@@ -484,18 +517,29 @@ namespace CF_Game_Center
             this.guna2HtmlLabel6.TabIndex = 7;
             this.guna2HtmlLabel6.Text = "Roblox";
             // 
+            // guna2PictureBox1
+            // 
+            this.guna2PictureBox1.BorderRadius = 5;
+            this.guna2PictureBox1.ImageRotate = 0F;
+            this.guna2PictureBox1.Location = new System.Drawing.Point(18, 14);
+            this.guna2PictureBox1.Name = "guna2PictureBox1";
+            this.guna2PictureBox1.Size = new System.Drawing.Size(89, 133);
+            this.guna2PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.guna2PictureBox1.TabIndex = 0;
+            this.guna2PictureBox1.TabStop = false;
+            // 
             // Settings_Page
             // 
-            this.Settings_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(37)))), ((int)(((byte)(61)))));
+            this.Settings_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Settings_Page.Location = new System.Drawing.Point(4, 4);
             this.Settings_Page.Name = "Settings_Page";
-            this.Settings_Page.Size = new System.Drawing.Size(1204, 673);
+            this.Settings_Page.Size = new System.Drawing.Size(1025, 673);
             this.Settings_Page.TabIndex = 4;
             this.Settings_Page.Text = "Settings_Page";
             // 
             // Download_Page
             // 
-            this.Download_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(37)))), ((int)(((byte)(61)))));
+            this.Download_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Download_Page.Controls.Add(this.Download_Checksaves);
             this.Download_Page.Controls.Add(this.Download_ETA);
             this.Download_Page.Controls.Add(this.Download_File);
@@ -508,7 +552,7 @@ namespace CF_Game_Center
             this.Download_Page.Controls.Add(this.Download_Banner);
             this.Download_Page.Location = new System.Drawing.Point(4, 4);
             this.Download_Page.Name = "Download_Page";
-            this.Download_Page.Size = new System.Drawing.Size(1204, 673);
+            this.Download_Page.Size = new System.Drawing.Size(1025, 673);
             this.Download_Page.TabIndex = 5;
             this.Download_Page.Text = "Download_Page";
             // 
@@ -580,9 +624,74 @@ namespace CF_Game_Center
             this.Download_Title.TabIndex = 2;
             this.Download_Title.Text = "Downloading : {Game Name}";
             // 
+            // Download_Play
+            // 
+            this.Download_Play.BorderRadius = 6;
+            this.Download_Play.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.Download_Play.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.Download_Play.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.Download_Play.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.Download_Play.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(139)))), ((int)(((byte)(195)))), ((int)(((byte)(74)))));
+            this.Download_Play.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.Download_Play.ForeColor = System.Drawing.Color.White;
+            this.Download_Play.Image = global::CF_Game_Center.Properties.Resources.icons8_next_96;
+            this.Download_Play.ImageSize = new System.Drawing.Size(35, 35);
+            this.Download_Play.Location = new System.Drawing.Point(951, 628);
+            this.Download_Play.Name = "Download_Play";
+            this.Download_Play.Size = new System.Drawing.Size(165, 35);
+            this.Download_Play.TabIndex = 10;
+            this.Download_Play.Text = "Play";
+            this.Download_Play.Click += new System.EventHandler(this.guna2Button3_Click);
+            // 
+            // Download_Stop
+            // 
+            this.Download_Stop.BorderRadius = 6;
+            this.Download_Stop.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.Download_Stop.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.Download_Stop.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.Download_Stop.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.Download_Stop.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
+            this.Download_Stop.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.Download_Stop.ForeColor = System.Drawing.Color.White;
+            this.Download_Stop.Image = global::CF_Game_Center.Properties.Resources.icons8_close_window_96;
+            this.Download_Stop.ImageSize = new System.Drawing.Size(30, 30);
+            this.Download_Stop.Location = new System.Drawing.Point(1161, 628);
+            this.Download_Stop.Name = "Download_Stop";
+            this.Download_Stop.Size = new System.Drawing.Size(33, 35);
+            this.Download_Stop.TabIndex = 7;
+            this.Download_Stop.Click += new System.EventHandler(this.guna2Button2_Click);
+            // 
+            // Download_Pause
+            // 
+            this.Download_Pause.BorderRadius = 6;
+            this.Download_Pause.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.Download_Pause.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.Download_Pause.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.Download_Pause.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.Download_Pause.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
+            this.Download_Pause.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.Download_Pause.ForeColor = System.Drawing.Color.White;
+            this.Download_Pause.Image = global::CF_Game_Center.Properties.Resources.icons8_pause_squared_96;
+            this.Download_Pause.ImageSize = new System.Drawing.Size(35, 35);
+            this.Download_Pause.Location = new System.Drawing.Point(1122, 628);
+            this.Download_Pause.Name = "Download_Pause";
+            this.Download_Pause.Size = new System.Drawing.Size(33, 35);
+            this.Download_Pause.TabIndex = 6;
+            this.Download_Pause.Click += new System.EventHandler(this.guna2Button1_Click);
+            // 
+            // Download_Banner
+            // 
+            this.Download_Banner.ImageRotate = 0F;
+            this.Download_Banner.Location = new System.Drawing.Point(11, 59);
+            this.Download_Banner.Name = "Download_Banner";
+            this.Download_Banner.Size = new System.Drawing.Size(1176, 385);
+            this.Download_Banner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Download_Banner.TabIndex = 4;
+            this.Download_Banner.TabStop = false;
+            // 
             // Login_Page
             // 
-            this.Login_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(37)))), ((int)(((byte)(61)))));
+            this.Login_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Login_Page.Controls.Add(this.guna2HtmlLabel2);
             this.Login_Page.Controls.Add(this.Login_Remember);
             this.Login_Page.Controls.Add(this.guna2Button5);
@@ -591,7 +700,7 @@ namespace CF_Game_Center
             this.Login_Page.Controls.Add(this.guna2Button4);
             this.Login_Page.Location = new System.Drawing.Point(4, 4);
             this.Login_Page.Name = "Login_Page";
-            this.Login_Page.Size = new System.Drawing.Size(1204, 673);
+            this.Login_Page.Size = new System.Drawing.Size(1025, 673);
             this.Login_Page.TabIndex = 6;
             this.Login_Page.Text = "Login_Page";
             // 
@@ -629,7 +738,7 @@ namespace CF_Game_Center
             this.guna2Button5.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.guna2Button5.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.guna2Button5.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2Button5.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(72)))), ((int)(((byte)(108)))));
+            this.guna2Button5.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.guna2Button5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2Button5.ForeColor = System.Drawing.Color.White;
             this.guna2Button5.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -692,7 +801,7 @@ namespace CF_Game_Center
             this.guna2Button4.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.guna2Button4.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.guna2Button4.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2Button4.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(72)))), ((int)(((byte)(108)))));
+            this.guna2Button4.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.guna2Button4.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2Button4.ForeColor = System.Drawing.Color.White;
             this.guna2Button4.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -706,14 +815,14 @@ namespace CF_Game_Center
             // 
             // Register_Page
             // 
-            this.Register_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(37)))), ((int)(((byte)(61)))));
+            this.Register_Page.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.Register_Page.Controls.Add(this.guna2Button8);
             this.Register_Page.Controls.Add(this.guna2Button7);
             this.Register_Page.Controls.Add(this.Reg_username);
             this.Register_Page.Controls.Add(this.Reg_password);
             this.Register_Page.Location = new System.Drawing.Point(4, 4);
             this.Register_Page.Name = "Register_Page";
-            this.Register_Page.Size = new System.Drawing.Size(1204, 673);
+            this.Register_Page.Size = new System.Drawing.Size(1025, 673);
             this.Register_Page.TabIndex = 7;
             this.Register_Page.Text = "Register_Page";
             // 
@@ -724,7 +833,7 @@ namespace CF_Game_Center
             this.guna2Button8.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.guna2Button8.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.guna2Button8.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2Button8.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(72)))), ((int)(((byte)(108)))));
+            this.guna2Button8.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.guna2Button8.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2Button8.ForeColor = System.Drawing.Color.White;
             this.guna2Button8.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -743,7 +852,7 @@ namespace CF_Game_Center
             this.guna2Button7.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.guna2Button7.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.guna2Button7.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2Button7.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(72)))), ((int)(((byte)(108)))));
+            this.guna2Button7.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.guna2Button7.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2Button7.ForeColor = System.Drawing.Color.White;
             this.guna2Button7.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -815,115 +924,6 @@ namespace CF_Game_Center
             this.cloudsaveTimer.Interval = 60000;
             this.cloudsaveTimer.Tick += new System.EventHandler(this.cloudsaveTimer_Tick);
             // 
-            // Nav_Home
-            // 
-            this.Nav_Home.Image = global::CF_Game_Center.Properties.Resources.LOGO1;
-            this.Nav_Home.ImageRotate = 0F;
-            this.Nav_Home.Location = new System.Drawing.Point(15, 8);
-            this.Nav_Home.Name = "Nav_Home";
-            this.Nav_Home.Size = new System.Drawing.Size(30, 30);
-            this.Nav_Home.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Nav_Home.TabIndex = 6;
-            this.Nav_Home.TabStop = false;
-            this.Nav_Home.Click += new System.EventHandler(this.Nav_Buttons);
-            // 
-            // guna2Button6
-            // 
-            this.guna2Button6.BorderRadius = 6;
-            this.guna2Button6.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.guna2Button6.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.guna2Button6.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.guna2Button6.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2Button6.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(72)))), ((int)(((byte)(108)))));
-            this.guna2Button6.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.guna2Button6.ForeColor = System.Drawing.Color.LightGray;
-            this.guna2Button6.Image = global::CF_Game_Center.Properties.Resources.Loginicon;
-            this.guna2Button6.ImageAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.guna2Button6.ImageSize = new System.Drawing.Size(28, 28);
-            this.guna2Button6.Location = new System.Drawing.Point(1064, 598);
-            this.guna2Button6.Name = "guna2Button6";
-            this.guna2Button6.Size = new System.Drawing.Size(129, 36);
-            this.guna2Button6.TabIndex = 7;
-            this.guna2Button6.Text = "Login";
-            this.guna2Button6.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.guna2Button6.Click += new System.EventHandler(this.guna2Button6_Click);
-            // 
-            // guna2PictureBox1
-            // 
-            this.guna2PictureBox1.BorderRadius = 5;
-            this.guna2PictureBox1.ImageRotate = 0F;
-            this.guna2PictureBox1.Location = new System.Drawing.Point(18, 14);
-            this.guna2PictureBox1.Name = "guna2PictureBox1";
-            this.guna2PictureBox1.Size = new System.Drawing.Size(89, 133);
-            this.guna2PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.guna2PictureBox1.TabIndex = 0;
-            this.guna2PictureBox1.TabStop = false;
-            // 
-            // Download_Play
-            // 
-            this.Download_Play.BorderRadius = 6;
-            this.Download_Play.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.Download_Play.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.Download_Play.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.Download_Play.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.Download_Play.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(139)))), ((int)(((byte)(195)))), ((int)(((byte)(74)))));
-            this.Download_Play.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Download_Play.ForeColor = System.Drawing.Color.White;
-            this.Download_Play.Image = global::CF_Game_Center.Properties.Resources.icons8_next_96;
-            this.Download_Play.ImageSize = new System.Drawing.Size(35, 35);
-            this.Download_Play.Location = new System.Drawing.Point(951, 628);
-            this.Download_Play.Name = "Download_Play";
-            this.Download_Play.Size = new System.Drawing.Size(165, 35);
-            this.Download_Play.TabIndex = 10;
-            this.Download_Play.Text = "Play";
-            this.Download_Play.Click += new System.EventHandler(this.guna2Button3_Click);
-            // 
-            // Download_Stop
-            // 
-            this.Download_Stop.BorderRadius = 6;
-            this.Download_Stop.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.Download_Stop.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.Download_Stop.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.Download_Stop.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.Download_Stop.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
-            this.Download_Stop.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Download_Stop.ForeColor = System.Drawing.Color.White;
-            this.Download_Stop.Image = global::CF_Game_Center.Properties.Resources.icons8_close_window_96;
-            this.Download_Stop.ImageSize = new System.Drawing.Size(30, 30);
-            this.Download_Stop.Location = new System.Drawing.Point(1161, 628);
-            this.Download_Stop.Name = "Download_Stop";
-            this.Download_Stop.Size = new System.Drawing.Size(33, 35);
-            this.Download_Stop.TabIndex = 7;
-            this.Download_Stop.Click += new System.EventHandler(this.guna2Button2_Click);
-            // 
-            // Download_Pause
-            // 
-            this.Download_Pause.BorderRadius = 6;
-            this.Download_Pause.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.Download_Pause.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.Download_Pause.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.Download_Pause.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.Download_Pause.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
-            this.Download_Pause.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Download_Pause.ForeColor = System.Drawing.Color.White;
-            this.Download_Pause.Image = global::CF_Game_Center.Properties.Resources.icons8_pause_squared_96;
-            this.Download_Pause.ImageSize = new System.Drawing.Size(35, 35);
-            this.Download_Pause.Location = new System.Drawing.Point(1122, 628);
-            this.Download_Pause.Name = "Download_Pause";
-            this.Download_Pause.Size = new System.Drawing.Size(33, 35);
-            this.Download_Pause.TabIndex = 6;
-            this.Download_Pause.Click += new System.EventHandler(this.guna2Button1_Click);
-            // 
-            // Download_Banner
-            // 
-            this.Download_Banner.ImageRotate = 0F;
-            this.Download_Banner.Location = new System.Drawing.Point(11, 59);
-            this.Download_Banner.Name = "Download_Banner";
-            this.Download_Banner.Size = new System.Drawing.Size(1176, 385);
-            this.Download_Banner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Download_Banner.TabIndex = 4;
-            this.Download_Banner.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -938,6 +938,7 @@ namespace CF_Game_Center
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.guna2Panel1.ResumeLayout(false);
             this.guna2Panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Nav_Home)).EndInit();
             this.Panel_Switcher.ResumeLayout(false);
             this.Main_Page.ResumeLayout(false);
             this.Main_Page.PerformLayout();
@@ -948,14 +949,13 @@ namespace CF_Game_Center
             this.Library_Flow_Layout.ResumeLayout(false);
             this.guna2Panel4.ResumeLayout(false);
             this.guna2Panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).EndInit();
             this.Download_Page.ResumeLayout(false);
             this.Download_Page.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Download_Banner)).EndInit();
             this.Login_Page.ResumeLayout(false);
             this.Login_Page.PerformLayout();
             this.Register_Page.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Nav_Home)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Download_Banner)).EndInit();
             this.ResumeLayout(false);
 
 		}
