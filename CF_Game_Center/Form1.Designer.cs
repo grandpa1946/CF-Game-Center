@@ -241,6 +241,7 @@ namespace CF_Game_Center
             this.Panel_Switcher.TabIndex = 1;
             this.Panel_Switcher.TabMenuBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(42)))), ((int)(((byte)(57)))));
             this.Panel_Switcher.TabMenuOrientation = Guna.UI2.WinForms.TabMenuOrientation.VerticalRight;
+            this.Panel_Switcher.TabMenuVisible = false;
             // 
             // Main_Page
             // 
@@ -411,7 +412,7 @@ namespace CF_Game_Center
             this.Library_Page.Controls.Add(this.Library_Flow_Layout);
             this.Library_Page.Location = new System.Drawing.Point(4, 4);
             this.Library_Page.Name = "Library_Page";
-            this.Library_Page.Size = new System.Drawing.Size(1025, 673);
+            this.Library_Page.Size = new System.Drawing.Size(1204, 673);
             this.Library_Page.TabIndex = 3;
             this.Library_Page.Text = "Library_Page";
             // 
