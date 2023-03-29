@@ -60,9 +60,14 @@ namespace CF_Game_Center
 
         public static Rootsave cloudsave = JsonConvert.DeserializeObject<Rootsave>(File.ReadAllText(Application.UserAppDataPath + "\\installed.json"));
 
-        public static Root game = JsonConvert.DeserializeObject<Root>(getAPPjson());
+        public static Root cracked = JsonConvert.DeserializeObject<Root>(getCrackjson());
 
-        public static string getAPPjson()
+        public static Root Official = JsonConvert.DeserializeObject<Root>(getCrackjson());
+
+        public static Root GFNPatch = JsonConvert.DeserializeObject<Root>(getCrackjson());
+
+
+        public static string getCrackjson()
         {
             return new WebClient().DownloadString("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json");
         }

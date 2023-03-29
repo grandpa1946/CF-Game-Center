@@ -236,7 +236,20 @@
   <ItemGroup>
     <None Include="CloudsaveModule.cs" />
     <Compile Include="crackjson.cs" />
-    <None Include="DynamicLoader.cs" />
+    <Compile Include="Download.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Download.Designer.cs">
+      <DependentUpon>Download.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Downloader.cs" />
+    <Compile Include="DownloadManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DownloadManager.Designer.cs">
+      <DependentUpon>DownloadManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DynamicLoader.cs" />
     <Compile Include="KeyAuth.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -246,6 +259,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Download.resx">
+      <DependentUpon>Download.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DownloadManager.resx">
+      <DependentUpon>DownloadManager.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -275,6 +294,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
+    <None Include="Resources\downloads_48px.png" />
+    <None Include="Resources\download_52px.png" />
+    <None Include="Resources\4c1b274e8befa9cbcd35ae8bdd5f1085.jpg" />
+    <None Include="Resources\home_512px.png" />
     <None Include="Resources\minecraft_pickaxe_48px.png" />
     <None Include="Resources\nvidia_48px.png" />
     <None Include="Resources\Earth Globe_96px.png" />

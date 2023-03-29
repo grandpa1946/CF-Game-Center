@@ -63,6 +63,36 @@ namespace CF_Game_Center.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _4c1b274e8befa9cbcd35ae8bdd5f1085 {
+            get {
+                object obj = ResourceManager.GetObject("4c1b274e8befa9cbcd35ae8bdd5f1085", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap download_52px {
+            get {
+                object obj = ResourceManager.GetObject("download_52px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap downloads_48px {
+            get {
+                object obj = ResourceManager.GetObject("downloads_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Earth_Globe_96px {
             get {
                 object obj = ResourceManager.GetObject("Earth Globe_96px", resourceCulture);
