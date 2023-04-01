@@ -16,6 +16,7 @@ using static CF_Game_Center.crackjson;
 using static CF_Game_Center.Download;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static CF_Game_Center.DownloadManager;
+using static System.Windows.Forms.LinkLabel;
 
 namespace CF_Game_Center
 {
@@ -169,30 +170,93 @@ namespace CF_Game_Center
         {
             try
             {
-                if (Process.GetProcessesByName("downloader").Length != 0 && e.Data.Contains("ETA"))
+
+                
+
+                if (Process.GetProcessesByName("downloader").Length != 0 )
                 {
                     if (downloadMNGR.Visible)
                     {
-                        string data = e.Data;
-                        string text = data.Substring(data.IndexOf("Transferred:"));
-                        string[] split = text.Split(',');
-                        int progress = 0;
-                        int num = text.IndexOf('%');
-                        (downloadMNGR.DownloadGBLeftLBL).Invoke((Action)(() => downloadMNGR.DownloadGBLeftLBL.Text = split[0].Remove(0, 18)));
-                        (downloadMNGR.DownloadSpeedLBL).Invoke((Action)(() => downloadMNGR.DownloadSpeedLBL.Text = split[2]));
-                        (downloadMNGR.DownloadETALBL).Invoke((Action)(() => downloadMNGR.DownloadETALBL.Text = split[3]));
-                        if (num >= 0)
+                        int lines = 0;
+                        downloadMNGR.FilesRichTXT.Invoke(new Action(() =>
                         {
-                            string text2 = text.Substring(0, num);
-                            int.TryParse(text2.Substring(text2.IndexOf(",") + 1), out progress);
+                            lines = downloadMNGR.FilesRichTXT.Lines.Length;
+                        }));
+                        if (e.Data.Contains("ETA"))
+                        {
+                            string data = e.Data;
+                            string text = data.Substring(data.IndexOf("Transferred:"));
+                            string[] split = text.Split(',');
+                            int progress = 0;
+                            int num = text.IndexOf('%');
+                            (downloadMNGR.DownloadGBLeftLBL).Invoke((Action)(() => downloadMNGR.DownloadGBLeftLBL.Text = split[0].Remove(0, 18)));
+                            (downloadMNGR.DownloadSpeedLBL).Invoke((Action)(() => downloadMNGR.DownloadSpeedLBL.Text = split[2]));
+                            (downloadMNGR.DownloadETALBL).Invoke((Action)(() => downloadMNGR.DownloadETALBL.Text = split[3]));
+                            if (num >= 0)
+                            {
+                                string text2 = text.Substring(0, num);
+                                int.TryParse(text2.Substring(text2.IndexOf(",") + 1), out progress);
+                            }
+
+
+                                (downloadMNGR.DownloadProgress).Invoke((Action)(() => downloadMNGR.DownloadProgress.Value = progress));
+
                         }
+                        else if (e.Data.Contains("*") && !e.Data.Contains("ETA"))
+                        {
+                            try
+                            {
+                                int maxLines = 10;
+                                var richTextBox = downloadMNGR.FilesRichTXT;
 
+                                if (richTextBox.InvokeRequired)
+                                {
+                                    richTextBox.Invoke(new Action(() =>
+                                    {
+                                        if (richTextBox.Lines.Length >= maxLines)
+                                        {
+                                            // Remove the oldest line if there are already 10 lines displayed
+                                            List<string> linesList = new List<string>(richTextBox.Lines);
+                                            linesList.RemoveAt(0);
+                                            richTextBox.Lines = linesList.ToArray();
+                                        }
 
-                        (downloadMNGR.DownloadProgress).Invoke((Action)(() => downloadMNGR.DownloadProgress.Value = progress));
-                        
+                                        // Add the new data
+                                        if (!string.IsNullOrEmpty(e.Data?.ToString()))
+                                        {
+                                            richTextBox.AppendText(Environment.NewLine);
+                                            richTextBox.AppendText(e.Data.ToString());
+                                        }
+                                    }));
+                                }
+                                else
+                                {
+                                    if (richTextBox.Lines.Length >= maxLines)
+                                    {
+                                        // Remove the oldest line if there are already 10 lines displayed
+                                        List<string> linesList = new List<string>(richTextBox.Lines);
+                                        linesList.RemoveAt(0);
+                                        richTextBox.Lines = linesList.ToArray();
+                                    }
+
+                                    // Add the new data
+                                    if (!string.IsNullOrEmpty(e.Data?.ToString()))
+                                    {
+                                        richTextBox.AppendText(Environment.NewLine);
+                                        richTextBox.AppendText(e.Data.ToString());
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine(ex.ToString());
+                            }
+
+                        }
 
                     }
                 }
+               
             }
             catch (NullReferenceException)
             {

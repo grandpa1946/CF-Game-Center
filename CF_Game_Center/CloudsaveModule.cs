@@ -46,14 +46,7 @@ namespace CF_Game_Center
             process.StartInfo.Arguments = "copy --transfers=2 --checkers=5 " + text + " Zortoscloud1:Cloudsave\\" + Form1.KeyAuthApp.user_data.username + "\\" + crackjson.cloudsave.data[Cloudsaveint].GameName.Replace(" ", "_") + "\\";
             process.EnableRaisingEvents = true;
             process.Start();
-            await Task.Run(delegate
-            {
-                process.WaitForExit();
-                if (Userpressed)
-                {
-                    MessageBox.Show("Save Finished");
-                }
-            });
+            while 
         }
 
         public void CreateDirSave() // creates a directory with the username to save stuff
