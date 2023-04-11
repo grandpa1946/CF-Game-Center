@@ -33,13 +33,13 @@
             this.TopbarLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.CloseBTN = new Guna.UI2.WinForms.Guna2ControlBox();
             this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
-            this.DownloadGameIMG = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.DownloadProgress = new Guna.UI2.WinForms.Guna2ProgressBar();
-            this.DownloadGameLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.DownloadGBLeftLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.DownloadSpeedLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.FilesRichTXT = new System.Windows.Forms.RichTextBox();
             this.DownloadETALBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.FilesRichTXT = new System.Windows.Forms.RichTextBox();
+            this.DownloadSpeedLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.DownloadGBLeftLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.DownloadGameLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.DownloadProgress = new Guna.UI2.WinForms.Guna2ProgressBar();
+            this.DownloadGameIMG = new Guna.UI2.WinForms.Guna2PictureBox();
             this.guna2Panel1.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DownloadGameIMG)).BeginInit();
@@ -106,26 +106,53 @@
             this.guna2Panel2.Size = new System.Drawing.Size(789, 277);
             this.guna2Panel2.TabIndex = 2;
             // 
-            // DownloadGameIMG
+            // DownloadETALBL
             // 
-            this.DownloadGameIMG.ImageRotate = 0F;
-            this.DownloadGameIMG.Location = new System.Drawing.Point(13, 14);
-            this.DownloadGameIMG.Name = "DownloadGameIMG";
-            this.DownloadGameIMG.Size = new System.Drawing.Size(73, 112);
-            this.DownloadGameIMG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.DownloadGameIMG.TabIndex = 0;
-            this.DownloadGameIMG.TabStop = false;
+            this.DownloadETALBL.BackColor = System.Drawing.Color.Transparent;
+            this.DownloadETALBL.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DownloadETALBL.ForeColor = System.Drawing.Color.White;
+            this.DownloadETALBL.Location = new System.Drawing.Point(92, 65);
+            this.DownloadETALBL.Name = "DownloadETALBL";
+            this.DownloadETALBL.Size = new System.Drawing.Size(27, 19);
+            this.DownloadETALBL.TabIndex = 11;
+            this.DownloadETALBL.Text = "ETA";
             // 
-            // DownloadProgress
+            // FilesRichTXT
             // 
-            this.DownloadProgress.BorderRadius = 4;
-            this.DownloadProgress.Location = new System.Drawing.Point(92, 38);
-            this.DownloadProgress.Name = "DownloadProgress";
-            this.DownloadProgress.Size = new System.Drawing.Size(678, 21);
-            this.DownloadProgress.TabIndex = 1;
-            this.DownloadProgress.Text = "guna2ProgressBar1";
-            this.DownloadProgress.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
-            this.DownloadProgress.ValueChanged += new System.EventHandler(this.guna2ProgressBar1_ValueChanged);
+            this.FilesRichTXT.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.FilesRichTXT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.FilesRichTXT.Cursor = System.Windows.Forms.Cursors.Default;
+            this.FilesRichTXT.DetectUrls = false;
+            this.FilesRichTXT.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FilesRichTXT.ForeColor = System.Drawing.Color.White;
+            this.FilesRichTXT.Location = new System.Drawing.Point(92, 148);
+            this.FilesRichTXT.Name = "FilesRichTXT";
+            this.FilesRichTXT.ReadOnly = true;
+            this.FilesRichTXT.Size = new System.Drawing.Size(665, 109);
+            this.FilesRichTXT.TabIndex = 10;
+            this.FilesRichTXT.Text = "";
+            // 
+            // DownloadSpeedLBL
+            // 
+            this.DownloadSpeedLBL.BackColor = System.Drawing.Color.Transparent;
+            this.DownloadSpeedLBL.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DownloadSpeedLBL.ForeColor = System.Drawing.Color.White;
+            this.DownloadSpeedLBL.Location = new System.Drawing.Point(92, 115);
+            this.DownloadSpeedLBL.Name = "DownloadSpeedLBL";
+            this.DownloadSpeedLBL.Size = new System.Drawing.Size(107, 19);
+            this.DownloadSpeedLBL.TabIndex = 9;
+            this.DownloadSpeedLBL.Text = "Download Speed";
+            // 
+            // DownloadGBLeftLBL
+            // 
+            this.DownloadGBLeftLBL.BackColor = System.Drawing.Color.Transparent;
+            this.DownloadGBLeftLBL.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DownloadGBLeftLBL.ForeColor = System.Drawing.Color.White;
+            this.DownloadGBLeftLBL.Location = new System.Drawing.Point(92, 90);
+            this.DownloadGBLeftLBL.Name = "DownloadGBLeftLBL";
+            this.DownloadGBLeftLBL.Size = new System.Drawing.Size(44, 19);
+            this.DownloadGBLeftLBL.TabIndex = 8;
+            this.DownloadGBLeftLBL.Text = "gb left";
             // 
             // DownloadGameLBL
             // 
@@ -139,52 +166,26 @@
             this.DownloadGameLBL.Text = "Game Size :";
             this.DownloadGameLBL.Click += new System.EventHandler(this.guna2HtmlLabel2_Click);
             // 
-            // DownloadGBLeftLBL
+            // DownloadProgress
             // 
-            this.DownloadGBLeftLBL.BackColor = System.Drawing.Color.Transparent;
-            this.DownloadGBLeftLBL.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DownloadGBLeftLBL.ForeColor = System.Drawing.Color.White;
-            this.DownloadGBLeftLBL.Location = new System.Drawing.Point(92, 90);
-            this.DownloadGBLeftLBL.Name = "DownloadGBLeftLBL";
-            this.DownloadGBLeftLBL.Size = new System.Drawing.Size(44, 19);
-            this.DownloadGBLeftLBL.TabIndex = 8;
-            this.DownloadGBLeftLBL.Text = "gb left";
+            this.DownloadProgress.BorderRadius = 4;
+            this.DownloadProgress.Location = new System.Drawing.Point(92, 38);
+            this.DownloadProgress.Name = "DownloadProgress";
+            this.DownloadProgress.Size = new System.Drawing.Size(678, 21);
+            this.DownloadProgress.TabIndex = 1;
+            this.DownloadProgress.Text = "guna2ProgressBar1";
+            this.DownloadProgress.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
+            this.DownloadProgress.ValueChanged += new System.EventHandler(this.guna2ProgressBar1_ValueChanged);
             // 
-            // DownloadSpeedLBL
+            // DownloadGameIMG
             // 
-            this.DownloadSpeedLBL.BackColor = System.Drawing.Color.Transparent;
-            this.DownloadSpeedLBL.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DownloadSpeedLBL.ForeColor = System.Drawing.Color.White;
-            this.DownloadSpeedLBL.Location = new System.Drawing.Point(92, 115);
-            this.DownloadSpeedLBL.Name = "DownloadSpeedLBL";
-            this.DownloadSpeedLBL.Size = new System.Drawing.Size(107, 19);
-            this.DownloadSpeedLBL.TabIndex = 9;
-            this.DownloadSpeedLBL.Text = "Download Speed";
-            // 
-            // FilesRichTXT
-            // 
-            this.FilesRichTXT.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.FilesRichTXT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.FilesRichTXT.Cursor = System.Windows.Forms.Cursors.Default;
-            this.FilesRichTXT.DetectUrls = false;
-            this.FilesRichTXT.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FilesRichTXT.Location = new System.Drawing.Point(92, 148);
-            this.FilesRichTXT.Name = "FilesRichTXT";
-            this.FilesRichTXT.ReadOnly = true;
-            this.FilesRichTXT.Size = new System.Drawing.Size(665, 109);
-            this.FilesRichTXT.TabIndex = 10;
-            this.FilesRichTXT.Text = "";
-            // 
-            // DownloadETALBL
-            // 
-            this.DownloadETALBL.BackColor = System.Drawing.Color.Transparent;
-            this.DownloadETALBL.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DownloadETALBL.ForeColor = System.Drawing.Color.White;
-            this.DownloadETALBL.Location = new System.Drawing.Point(92, 65);
-            this.DownloadETALBL.Name = "DownloadETALBL";
-            this.DownloadETALBL.Size = new System.Drawing.Size(27, 19);
-            this.DownloadETALBL.TabIndex = 11;
-            this.DownloadETALBL.Text = "ETA";
+            this.DownloadGameIMG.ImageRotate = 0F;
+            this.DownloadGameIMG.Location = new System.Drawing.Point(13, 14);
+            this.DownloadGameIMG.Name = "DownloadGameIMG";
+            this.DownloadGameIMG.Size = new System.Drawing.Size(73, 112);
+            this.DownloadGameIMG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.DownloadGameIMG.TabIndex = 0;
+            this.DownloadGameIMG.TabStop = false;
             // 
             // DownloadManager
             // 

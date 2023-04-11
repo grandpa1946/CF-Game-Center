@@ -17,6 +17,7 @@ namespace CF_Game_Center
             InitializeComponent();
         }
 
+        public static bool DownloadFinished = true;
         private void guna2HtmlLabel2_Click(object sender, EventArgs e)
         {
 

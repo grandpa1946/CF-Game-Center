@@ -17,6 +17,8 @@ using static CF_Game_Center.Download;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static CF_Game_Center.DownloadManager;
 using static System.Windows.Forms.LinkLabel;
+using Newtonsoft.Json;
+using System.Security.AccessControl;
 
 namespace CF_Game_Center
 {
@@ -66,18 +68,33 @@ namespace CF_Game_Center
                 {
                     case "cracked":
                         DownloadGame(Gameid, cracked.crack[Gameid].GameDownload);
+                        while (!Done)
+                        {
+                            Application.DoEvents();
+                        }
+                        Gameinstalled(Gameid, GameType);
                         break;
                     case "official":
                         DownloadGame(Gameid, Official.crack[Gameid].GameDownload);
+                        while (!Done)
+                        {
+                            Application.DoEvents();
+                        }
+                        Gameinstalled(Gameid, GameType);
                         break;
                     case "gfnpatch":
                         DownloadGame(Gameid, GFNPatch.crack[Gameid].GameDownload);
+                        while (!Done)
+                        {
+                            Application.DoEvents();
+                        }
+                        Gameinstalled(Gameid, GameType);
                         break;
                 }
-
+               
             }
         }
-        private bool Done = true;
+        public bool Done = true;
         public void DownloadGame(int Gameid, string DownloadURL)
         {
 
@@ -86,7 +103,7 @@ namespace CF_Game_Center
                 MessageBox.Show("Can't download while something is already downloading.");
                 return;
             }
-
+            DownloadFinished = false;
             string userName = Environment.UserName;
             WebClient webClient = new WebClient();
 
@@ -115,18 +132,13 @@ namespace CF_Game_Center
             
 
            // Start the download process and show the progress bar
-           Done = false;
+            Done = false;
             process.Start();
             process.BeginOutputReadLine();
 
-            // Wait for the download to complete
-            while (!Done)
-            {
-                Application.DoEvents();
-            }
+            
+          
 
-            // Update the UI to show that the game has been installed
-            //Gameinstalled(Form1.currentjsonint);
             //await Task.Delay(5000);
             //    if (!string.IsNullOrEmpty(Form1.KeyAuthApp.user_data.username))
             //    {
@@ -164,7 +176,71 @@ namespace CF_Game_Center
             //    });
             //}
         }
+        public void Gameinstalled(int Gameint,string GameType)
+        {
+            if (!File.Exists(Application.UserAppDataPath + "\\installed.json"))
+            {
+                File.Create(Application.UserAppDataPath + "\\installed.json");
+            }
+            string text = File.ReadAllText(Application.UserAppDataPath + "\\installed.json");
+            crackjson.Rootsave rootsave = JsonConvert.DeserializeObject<crackjson.Rootsave>(text);
+            if (text == "")
+            {
+                rootsave = new crackjson.Rootsave();
+                rootsave.data = new List<crackjson.save>();
+            }
+            if (rootsave.data != null)
+            {
+                switch (GameType.ToLower())
+                {
+                    case "cracked":
+                        rootsave.data.Add(new crackjson.save
+                        {
+                            GameBanner = cracked.crack[Gameint].GamePoster,
+                            GameName = cracked.crack[Gameint].Gamename,
+                            GameDownload = cracked.crack[Gameint].GameDownload,
+                            Id = Gameint,
+                            GameSize = cracked.crack[Gameint].GameSize,
+                            GameSavePath = cracked.crack[Gameint].GameSavePath,
+                            Gamelaunch = cracked.crack[Gameint].Gamelaunch,
+                            GameInstallDir = mainpath,
+                            GameType = "Cracked"
+                        });
+                        break;
+                    case "official":
+                        rootsave.data.Add(new crackjson.save
+                        {
+                            GameBanner = Official.crack[Gameint].GamePoster,
+                            GameName = Official.crack[Gameint].Gamename,
+                            GameDownload = Official.crack[Gameint].GameDownload,
+                            Id = Gameint,
+                            GameSize = Official.crack[Gameint].GameSize,
+                            GameSavePath = Official.crack[Gameint].GameSavePath,
+                            Gamelaunch = Official.crack[Gameint].Gamelaunch,
+                            GameInstallDir = mainpath,
+                            GameType = "Official"
+                        });
+                        break;
+                    case "gfnpatch":
+                        rootsave.data.Add(new crackjson.save
+                        {
+                            GameBanner = GFNPatch.crack[Gameint].GamePoster,
+                            GameName = GFNPatch.crack[Gameint].Gamename,
+                            GameDownload = GFNPatch.crack[Gameint].GameDownload,
+                            Id = Gameint,
+                            GameSize = GFNPatch.crack[Gameint].GameSize,
+                            GameSavePath = GFNPatch.crack[Gameint].GameSavePath,
+                            Gamelaunch = GFNPatch.crack[Gameint].Gamelaunch,
+                            GameInstallDir = mainpath,
+                            GameType = "GFNPatch"
+                        });
+                        break;
+                }
 
+                string contents = JsonConvert.SerializeObject(rootsave, (Formatting)1);
+                File.WriteAllText(Application.UserAppDataPath + "\\installed.json", contents);
+            }
+        }
 
         private void process_OutputDataReceived(object sender, DataReceivedEventArgs e ,DownloadManager downloadMNGR)
         {
@@ -204,8 +280,7 @@ namespace CF_Game_Center
                         }
                         else if (e.Data.Contains("*") && !e.Data.Contains("ETA"))
                         {
-                            try
-                            {
+                          
                                 int maxLines = 10;
                                 var richTextBox = downloadMNGR.FilesRichTXT;
 
@@ -246,11 +321,8 @@ namespace CF_Game_Center
                                         richTextBox.AppendText(e.Data.ToString());
                                     }
                                 }
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.WriteLine(ex.ToString());
-                            }
+                            
+                           
 
                         }
 
@@ -258,7 +330,7 @@ namespace CF_Game_Center
                 }
                
             }
-            catch (NullReferenceException)
+            catch (Exception)
             {
                 // do nothing
             }
@@ -271,6 +343,7 @@ namespace CF_Game_Center
                 downloadMNGR.DownloadETALBL.Invoke((Action)(() => downloadMNGR.DownloadETALBL.Text = string.Empty));
                 downloadMNGR.DownloadSpeedLBL.Invoke((Action)(() => downloadMNGR.DownloadSpeedLBL.Text = string.Empty));
                 downloadMNGR.DownloadProgress.Invoke((Action)(() => downloadMNGR.DownloadProgress.Value = 0));
+                DownloadFinished = true;
             }
             catch (Exception)
             {

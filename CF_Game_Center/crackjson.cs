@@ -56,6 +56,8 @@ namespace CF_Game_Center
             public string GameSavePath { get; set; }
 
             public string GameInstallDir { get; set; }
+
+            public string GameType { get; set; }
         }
 
         public static Rootsave cloudsave = JsonConvert.DeserializeObject<Rootsave>(File.ReadAllText(Application.UserAppDataPath + "\\installed.json"));

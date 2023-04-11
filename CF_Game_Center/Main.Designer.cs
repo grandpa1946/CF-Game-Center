@@ -30,17 +30,17 @@
         {
             this.components = new System.ComponentModel.Container();
             this.Top_bar = new Guna.UI2.WinForms.Guna2Panel();
+            this.Downloads_BTN = new Guna.UI2.WinForms.Guna2Button();
+            this.Home_BTN = new Guna.UI2.WinForms.Guna2Button();
             this.MinimizeBTN = new Guna.UI2.WinForms.Guna2ControlBox();
+            this.Official_BTN = new Guna.UI2.WinForms.Guna2Button();
+            this.GFN_BTN = new Guna.UI2.WinForms.Guna2Button();
             this.CloseBTN = new Guna.UI2.WinForms.Guna2ControlBox();
+            this.Cracked_BTN = new Guna.UI2.WinForms.Guna2Button();
             this.guna2DragControl1 = new Guna.UI2.WinForms.Guna2DragControl(this.components);
             this.GameFlowlayout = new System.Windows.Forms.FlowLayoutPanel();
             this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
             this.SearchBox = new Guna.UI2.WinForms.Guna2TextBox();
-            this.Downloads_BTN = new Guna.UI2.WinForms.Guna2Button();
-            this.Home_BTN = new Guna.UI2.WinForms.Guna2Button();
-            this.Official_BTN = new Guna.UI2.WinForms.Guna2Button();
-            this.GFN_BTN = new Guna.UI2.WinForms.Guna2Button();
-            this.Cracked_BTN = new Guna.UI2.WinForms.Guna2Button();
             this.Top_bar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,72 +58,6 @@
             this.Top_bar.Name = "Top_bar";
             this.Top_bar.Size = new System.Drawing.Size(1058, 65);
             this.Top_bar.TabIndex = 0;
-            // 
-            // MinimizeBTN
-            // 
-            this.MinimizeBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.MinimizeBTN.BorderRadius = 4;
-            this.MinimizeBTN.ControlBoxType = Guna.UI2.WinForms.Enums.ControlBoxType.MinimizeBox;
-            this.MinimizeBTN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.MinimizeBTN.IconColor = System.Drawing.Color.White;
-            this.MinimizeBTN.Location = new System.Drawing.Point(952, 11);
-            this.MinimizeBTN.Name = "MinimizeBTN";
-            this.MinimizeBTN.Size = new System.Drawing.Size(45, 29);
-            this.MinimizeBTN.TabIndex = 2;
-            // 
-            // CloseBTN
-            // 
-            this.CloseBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.CloseBTN.BorderRadius = 4;
-            this.CloseBTN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.CloseBTN.IconColor = System.Drawing.Color.White;
-            this.CloseBTN.Location = new System.Drawing.Point(1003, 11);
-            this.CloseBTN.Name = "CloseBTN";
-            this.CloseBTN.Size = new System.Drawing.Size(45, 29);
-            this.CloseBTN.TabIndex = 1;
-            // 
-            // guna2DragControl1
-            // 
-            this.guna2DragControl1.DockIndicatorTransparencyValue = 0.6D;
-            this.guna2DragControl1.TargetControl = this.Top_bar;
-            this.guna2DragControl1.UseTransparentDrag = true;
-            // 
-            // GameFlowlayout
-            // 
-            this.GameFlowlayout.Location = new System.Drawing.Point(12, 109);
-            this.GameFlowlayout.Name = "GameFlowlayout";
-            this.GameFlowlayout.Size = new System.Drawing.Size(1034, 471);
-            this.GameFlowlayout.TabIndex = 1;
-            // 
-            // guna2Elipse1
-            // 
-            this.guna2Elipse1.BorderRadius = 4;
-            this.guna2Elipse1.TargetControl = this;
-            // 
-            // SearchBox
-            // 
-            this.SearchBox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.SearchBox.BorderRadius = 4;
-            this.SearchBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.SearchBox.DefaultText = "";
-            this.SearchBox.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
-            this.SearchBox.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
-            this.SearchBox.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.SearchBox.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.SearchBox.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.SearchBox.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.SearchBox.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.SearchBox.ForeColor = System.Drawing.Color.White;
-            this.SearchBox.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.SearchBox.Location = new System.Drawing.Point(15, 73);
-            this.SearchBox.Name = "SearchBox";
-            this.SearchBox.PasswordChar = '\0';
-            this.SearchBox.PlaceholderText = "Search Your Games Here!";
-            this.SearchBox.SelectedText = "";
-            this.SearchBox.Size = new System.Drawing.Size(1031, 30);
-            this.SearchBox.TabIndex = 2;
-            this.SearchBox.Visible = false;
-            this.SearchBox.TextChanged += new System.EventHandler(this.guna2TextBox1_TextChanged);
             // 
             // Downloads_BTN
             // 
@@ -164,6 +98,18 @@
             this.Home_BTN.TabIndex = 4;
             this.Home_BTN.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.Home_BTN.Click += new System.EventHandler(this.Top_Buttons);
+            // 
+            // MinimizeBTN
+            // 
+            this.MinimizeBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.MinimizeBTN.BorderRadius = 4;
+            this.MinimizeBTN.ControlBoxType = Guna.UI2.WinForms.Enums.ControlBoxType.MinimizeBox;
+            this.MinimizeBTN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MinimizeBTN.IconColor = System.Drawing.Color.White;
+            this.MinimizeBTN.Location = new System.Drawing.Point(952, 11);
+            this.MinimizeBTN.Name = "MinimizeBTN";
+            this.MinimizeBTN.Size = new System.Drawing.Size(45, 29);
+            this.MinimizeBTN.TabIndex = 2;
             // 
             // Official_BTN
             // 
@@ -207,6 +153,17 @@
             this.GFN_BTN.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.GFN_BTN.Click += new System.EventHandler(this.Top_Buttons);
             // 
+            // CloseBTN
+            // 
+            this.CloseBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.CloseBTN.BorderRadius = 4;
+            this.CloseBTN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.CloseBTN.IconColor = System.Drawing.Color.White;
+            this.CloseBTN.Location = new System.Drawing.Point(1003, 11);
+            this.CloseBTN.Name = "CloseBTN";
+            this.CloseBTN.Size = new System.Drawing.Size(45, 29);
+            this.CloseBTN.TabIndex = 1;
+            // 
             // Cracked_BTN
             // 
             this.Cracked_BTN.BorderRadius = 4;
@@ -227,6 +184,49 @@
             this.Cracked_BTN.Text = "Cracked Games";
             this.Cracked_BTN.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.Cracked_BTN.Click += new System.EventHandler(this.Top_Buttons);
+            // 
+            // guna2DragControl1
+            // 
+            this.guna2DragControl1.DockIndicatorTransparencyValue = 0.6D;
+            this.guna2DragControl1.TargetControl = this.Top_bar;
+            this.guna2DragControl1.UseTransparentDrag = true;
+            // 
+            // GameFlowlayout
+            // 
+            this.GameFlowlayout.Location = new System.Drawing.Point(12, 109);
+            this.GameFlowlayout.Name = "GameFlowlayout";
+            this.GameFlowlayout.Size = new System.Drawing.Size(1034, 471);
+            this.GameFlowlayout.TabIndex = 1;
+            // 
+            // guna2Elipse1
+            // 
+            this.guna2Elipse1.BorderRadius = 4;
+            this.guna2Elipse1.TargetControl = this;
+            // 
+            // SearchBox
+            // 
+            this.SearchBox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.SearchBox.BorderRadius = 4;
+            this.SearchBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.SearchBox.DefaultText = "";
+            this.SearchBox.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.SearchBox.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.SearchBox.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.SearchBox.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.SearchBox.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.SearchBox.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.SearchBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.SearchBox.ForeColor = System.Drawing.Color.White;
+            this.SearchBox.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.SearchBox.Location = new System.Drawing.Point(15, 73);
+            this.SearchBox.Name = "SearchBox";
+            this.SearchBox.PasswordChar = '\0';
+            this.SearchBox.PlaceholderText = "Search Your Games Here!";
+            this.SearchBox.SelectedText = "";
+            this.SearchBox.Size = new System.Drawing.Size(1031, 30);
+            this.SearchBox.TabIndex = 2;
+            this.SearchBox.Visible = false;
+            this.SearchBox.TextChanged += new System.EventHandler(this.guna2TextBox1_TextChanged);
             // 
             // Main
             // 

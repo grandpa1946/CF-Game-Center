@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CF_Game_Center.DownloadManager;
 
 namespace CF_Game_Center
 {
@@ -45,7 +46,10 @@ namespace CF_Game_Center
                 case "Downloads_BTN":
                     GameFlowlayout.Visible = true;
                     SearchBox.Visible = true;
-                    downloadManager.Show();
+                    if (!DownloadFinished)
+                    {
+                        downloadManager.Show();
+                    }
                     break;
             }
         }
