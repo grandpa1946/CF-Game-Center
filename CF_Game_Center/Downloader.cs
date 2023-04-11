@@ -19,11 +19,17 @@ using static CF_Game_Center.DownloadManager;
 using static System.Windows.Forms.LinkLabel;
 using Newtonsoft.Json;
 using System.Security.AccessControl;
+using CustomAlertBoxDemo;
 
 namespace CF_Game_Center
 {
     internal class Downloader
     {
+        public void Alert(string msg, Form_Alert.enmType type)
+        {
+            Form_Alert frm = new Form_Alert();
+            frm.showAlert(msg, type);
+        }
         public void ShowDownloadPrompt(int Gameid, string GameType)
         {
 
@@ -73,6 +79,9 @@ namespace CF_Game_Center
                             Application.DoEvents();
                         }
                         Gameinstalled(Gameid, GameType);
+                        this.Alert("Checking Saves", Form_Alert.enmType.Info);
+                        // Check Save
+                        this.Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
                         break;
                     case "official":
                         DownloadGame(Gameid, Official.crack[Gameid].GameDownload);
@@ -80,7 +89,11 @@ namespace CF_Game_Center
                         {
                             Application.DoEvents();
                         }
+
                         Gameinstalled(Gameid, GameType);
+                        this.Alert("Checking Saves", Form_Alert.enmType.Info);
+                        // Check Save
+                        this.Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
                         break;
                     case "gfnpatch":
                         DownloadGame(Gameid, GFNPatch.crack[Gameid].GameDownload);
@@ -89,6 +102,9 @@ namespace CF_Game_Center
                             Application.DoEvents();
                         }
                         Gameinstalled(Gameid, GameType);
+                        this.Alert("Checking Saves", Form_Alert.enmType.Info);
+                        // Check Save
+                        this.Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
                         break;
                 }
                
@@ -136,9 +152,9 @@ namespace CF_Game_Center
             process.Start();
             process.BeginOutputReadLine();
 
-            
-          
 
+
+            
             //await Task.Delay(5000);
             //    if (!string.IsNullOrEmpty(Form1.KeyAuthApp.user_data.username))
             //    {
@@ -175,6 +191,7 @@ namespace CF_Game_Center
             //        ((Control)(object)FilePlaybtn).Visible = true;
             //    });
             //}
+            
         }
         public void Gameinstalled(int Gameint,string GameType)
         {

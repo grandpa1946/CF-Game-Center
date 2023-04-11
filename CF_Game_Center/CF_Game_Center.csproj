@@ -250,6 +250,12 @@
       <DependentUpon>DownloadManager.cs</DependentUpon>
     </Compile>
     <Compile Include="DynamicLoader.cs" />
+    <Compile Include="Form_Alert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Alert.designer.cs">
+      <DependentUpon>Form_Alert.cs</DependentUpon>
+    </Compile>
     <Compile Include="KeyAuth.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -264,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DownloadManager.resx">
       <DependentUpon>DownloadManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Alert.resx">
+      <DependentUpon>Form_Alert.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -294,6 +303,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
+    <None Include="Resources\warning.png" />
+    <None Include="Resources\success.png" />
+    <None Include="Resources\info.png" />
+    <None Include="Resources\icons8_cancel_25px.png" />
+    <None Include="Resources\error.png" />
     <None Include="Resources\downloads_48px.png" />
     <None Include="Resources\download_52px.png" />
     <None Include="Resources\4c1b274e8befa9cbcd35ae8bdd5f1085.jpg" />
