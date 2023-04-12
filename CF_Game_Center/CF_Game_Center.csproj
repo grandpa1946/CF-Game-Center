@@ -234,6 +234,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SaveModule.cs" />
     <None Include="CloudsaveModule.cs" />
     <Compile Include="crackjson.cs" />
     <Compile Include="Download.cs">

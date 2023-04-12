@@ -81,6 +81,7 @@ namespace CF_Game_Center
                         Gameinstalled(Gameid, GameType);
                         this.Alert("Checking Saves", Form_Alert.enmType.Info);
                         // Check Save
+                        
                         this.Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
                         break;
                     case "official":
@@ -193,6 +194,11 @@ namespace CF_Game_Center
             //}
             
         }
+        /// <summary>
+        /// Adds game to My Library
+        /// </summary>
+        /// <param name="Gameint"></param>
+        /// <param name="GameType"></param>
         public void Gameinstalled(int Gameint,string GameType)
         {
             if (!File.Exists(Application.UserAppDataPath + "\\installed.json"))
