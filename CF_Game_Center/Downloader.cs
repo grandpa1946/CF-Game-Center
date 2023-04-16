@@ -78,6 +78,8 @@ namespace CF_Game_Center
                         {
                             Application.DoEvents();
                         }
+                        Done = true;
+                        DownloadFinished =true;
                         Gameinstalled(Gameid, GameType);
                         this.Alert("Checking Saves", Form_Alert.enmType.Info);
                         // Check Save
@@ -90,7 +92,8 @@ namespace CF_Game_Center
                         {
                             Application.DoEvents();
                         }
-
+                        Done = true;
+                        DownloadFinished = true;
                         Gameinstalled(Gameid, GameType);
                         this.Alert("Checking Saves", Form_Alert.enmType.Info);
                         // Check Save
@@ -102,6 +105,8 @@ namespace CF_Game_Center
                         {
                             Application.DoEvents();
                         }
+                        Done = true;
+                        DownloadFinished = true;
                         Gameinstalled(Gameid, GameType);
                         this.Alert("Checking Saves", Form_Alert.enmType.Info);
                         // Check Save

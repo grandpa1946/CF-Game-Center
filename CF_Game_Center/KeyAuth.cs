@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
 using System.Collections.Specialized;
 using System.Text;
@@ -19,6 +19,7 @@ namespace KeyAuth
     public class api
     {
         public string name, ownerid, secret, version;
+	public static long responseTime;
         /// <summary>
         /// Set up your application credentials in order to use keyauth
         /// </summary>
@@ -126,7 +127,7 @@ namespace KeyAuth
         }
         #endregion
         private static string sessionid, enckey;
-        bool initzalized;
+        bool initialized;
         /// <summary>
         /// Initializes the connection with keyauth in order to use any of the functions
         /// </summary>
@@ -158,7 +159,7 @@ namespace KeyAuth
             {
                 load_app_data(json.appinfo);
                 sessionid = json.sessionid;
-                initzalized = true;
+                initialized = true;
             }
             else if (json.message == "invalidver")
             {
@@ -167,18 +168,51 @@ namespace KeyAuth
 
         }
         /// <summary>
+        /// Checks if Keyauth is been Initalized
+        /// </summary>
+        public void CheckInit()
+        {
+            if (!initialized)
+            {
+                error("You must run the function KeyAuthApp.init(); first");
+                Environment.Exit(0);
+            }
+        }
+
+        /// <summary>
+        /// Converts Unix time to Days,Months,Hours
+        ///</summary>
+        /// <param name="subscription">Subscription Number</param>
+        /// <param name="Type">You can choose between Days,Hours,Months </param>
+        public string expirydaysleft(string Type,int subscription)
+        {
+            CheckInit();
+
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Local);
+            dtDateTime = dtDateTime.AddSeconds(long.Parse(user_data.subscriptions[subscription].expiry)).ToLocalTime();
+            TimeSpan difference = dtDateTime - DateTime.Now;
+            switch (Type.ToLower())
+            {
+                case "months":
+                    return Convert.ToString(difference.Days / 30);
+                case "days":
+                    return Convert.ToString(difference.Days);
+                case "hours":
+                    return Convert.ToString(difference.Hours);
+            }
+            return null;
+
+        }
+
+        /// <summary>
         /// Registers the user using a license and gives the user a subscription that matches their license level
         /// </summary>
         /// <param name="username">Username</param>
         /// <param name="pass">Password</param>
         /// <param name="key">License key</param>
-        public void register(string username, string pass, string key)
+        public void register(string username, string pass, string key, string email = "")
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             string hwid = WindowsIdentity.GetCurrent().User.Value;
 
@@ -188,6 +222,7 @@ namespace KeyAuth
                 ["username"] = username,
                 ["pass"] = pass,
                 ["key"] = key,
+                ["email"] = email,
                 ["hwid"] = hwid,
                 ["sessionid"] = sessionid,
                 ["name"] = name,
@@ -202,17 +237,37 @@ namespace KeyAuth
                 load_user_data(json.info);
         }
         /// <summary>
+        /// Allow users to enter their account information and recieve an email to reset their password.
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="email">Email address</param>
+        public void forgot(string username, string email)
+        {
+            CheckInit();
+
+            var values_to_upload = new NameValueCollection
+            {
+                ["type"] = "forgot",
+                ["username"] = username,
+                ["email"] = email,
+                ["sessionid"] = sessionid,
+                ["name"] = name,
+                ["ownerid"] = ownerid
+            };
+
+            var response = req(values_to_upload);
+
+            var json = response_decoder.string_to_generic<response_structure>(response);
+            load_response_struct(json);
+        }
+        /// <summary>
         /// Authenticates the user using their username and password
         /// </summary>
         /// <param name="username">Username</param>
         /// <param name="pass">Password</param>
         public void login(string username, string pass)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             string hwid = WindowsIdentity.GetCurrent().User.Value;
 
@@ -237,17 +292,13 @@ namespace KeyAuth
 
         public void web_login()
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             string hwid = WindowsIdentity.GetCurrent().User.Value;
 
             string datastore, datastore2, outputten;
 
-        start:
+            start:
 
             HttpListener listener = new HttpListener();
 
@@ -344,11 +395,7 @@ namespace KeyAuth
 
         public void button(string button)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             HttpListener listener = new HttpListener();
 
@@ -389,11 +436,7 @@ namespace KeyAuth
         /// <param name="key">License with the same level as the subscription you want to give the user</param>
         public void upgrade(string username, string key)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -418,11 +461,7 @@ namespace KeyAuth
         /// <param name="key">Licence used to login with</param>
         public void license(string key)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             string hwid = WindowsIdentity.GetCurrent().User.Value;
 
@@ -448,11 +487,7 @@ namespace KeyAuth
         /// </summary>
         public void check()
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -474,11 +509,7 @@ namespace KeyAuth
         /// <param name="data">The content of the variable</param>
         public void setvar(string var, string data)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -502,11 +533,7 @@ namespace KeyAuth
         /// <returns>The content of the user variable</returns>
         public string getvar(string var)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -530,11 +557,7 @@ namespace KeyAuth
         /// </summary>
         public void ban(string reason = null)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -557,11 +580,7 @@ namespace KeyAuth
         /// <returns>The content of the variable</returns>
         public string var(string varid)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -586,11 +605,7 @@ namespace KeyAuth
         /// <returns>ArrayList of usernames</returns>
         public List<users> fetchOnline()
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -616,11 +631,7 @@ namespace KeyAuth
         /// <returns>the last 50 sent messages of that channel</returns>
         public List<msg> chatget(string channelname)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -649,11 +660,7 @@ namespace KeyAuth
         /// <returns>If the message was sent successfully, it returns true if not false</returns>
         public bool chatsend(string msg, string channelname)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -679,11 +686,7 @@ namespace KeyAuth
         /// <returns>If found blacklisted returns true if not false</returns>
         public bool checkblack()
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
             string hwid = WindowsIdentity.GetCurrent().User.Value;
 
             var values_to_upload = new NameValueCollection
@@ -713,12 +716,7 @@ namespace KeyAuth
         /// <returns>the webhook's response</returns>
         public string webhook(string webid, string param, string body = "", string conttype = "")
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-                return null;
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -747,11 +745,7 @@ namespace KeyAuth
         /// <returns>The bytes of the download file</returns>
         public byte[] download(string fileid)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first. File is empty since no request could be made.");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -777,11 +771,7 @@ namespace KeyAuth
         /// <param name="message">Message</param>
         public void log(string message)
         {
-            if (!initzalized)
-            {
-                error("You must run the function KeyAuthApp.init(); first");
-                Environment.Exit(0);
-            }
+            CheckInit();
 
             var values_to_upload = new NameValueCollection
             {
@@ -795,6 +785,29 @@ namespace KeyAuth
 
             req(values_to_upload);
         }
+        /// <summary>
+        /// Change the username of a user, *User must be logged in*
+        /// </summary>
+        /// <param username="username">New username.</param>
+        public void changeUsername(string username)
+        {
+            CheckInit();
+
+            var values_to_upload = new NameValueCollection
+            {
+                ["type"] = "changeUsername",
+                ["newUsername"] = username,
+                ["sessionid"] = sessionid,
+                ["name"] = name,
+                ["ownerid"] = ownerid
+            };
+
+            var response = req(values_to_upload);
+
+            var json = response_decoder.string_to_generic<response_structure>(response);
+            load_response_struct(json);
+        }
+
         public static string checksum(string filename)
         {
             string result;
@@ -819,6 +832,7 @@ namespace KeyAuth
             });
             Environment.Exit(0);
         }
+	    
         private static string req(NameValueCollection post_data)
         {
             try
@@ -829,7 +843,15 @@ namespace KeyAuth
 
                     ServicePointManager.ServerCertificateValidationCallback += assertSSL;
 
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+
                     var raw_response = client.UploadValues("https://keyauth.win/api/1.2/", post_data);
+
+                    stopwatch.Stop();
+                    responseTime = stopwatch.ElapsedMilliseconds;
+
+                    ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
                     sigCheck(Encoding.Default.GetString(raw_response), client.ResponseHeaders["signature"], post_data.Get(0));
 
@@ -854,8 +876,8 @@ namespace KeyAuth
         }
 
         private static bool assertSSL(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-        {
-            if (!certificate.Issuer.Contains("Cloudflare Inc") || sslPolicyErrors != SslPolicyErrors.None)
+        { 
+            if ((!certificate.Issuer.Contains("Cloudflare Inc") && !certificate.Issuer.Contains("Google Trust Services") && !certificate.Issuer.Contains("Let's Encrypt")) || sslPolicyErrors != SslPolicyErrors.None)
             {
                 error("SSL assertion fail, make sure you're not debugging Network. Disable internet firewall on router if possible. & echo: & echo If not, ask the developer of the program to use custom domains to fix this.");
                 return false;
@@ -865,18 +887,23 @@ namespace KeyAuth
 
         private static void sigCheck(string resp, string signature, string type)
         {
+			if(type == "log") // log doesn't return a response.
+            {
+                return;
+            }
+			
             try
             {
                 string clientComputed = encryption.HashHMAC((type == "init") ? enckey.Substring(17, 64) : enckey, resp);
                 if (clientComputed != signature)
                 {
-                    error("Signaure check fail. Try to run the program again, your session may have expired.");
+                    error("Signature checksum failed. Request was tampered with or session ended most likely. & echo: & echo Response: " + resp);
                     Environment.Exit(0);
                 }
             }
             catch
             {
-                error("Signaure check fail. Try to run the program again, your session may have expired.");
+                error("Signature checksum failed. Request was tampered with or session ended most likely. & echo: & echo Response: " + resp);
                 Environment.Exit(0);
             }
         }
