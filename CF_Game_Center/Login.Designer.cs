@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.usernameTXT = new Guna.UI2.WinForms.Guna2TextBox();
             this.passwordTXT = new Guna.UI2.WinForms.Guna2TextBox();
             this.guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -35,6 +36,7 @@
             this.MinimizeBTN = new Guna.UI2.WinForms.Guna2ControlBox();
             this.CloseBTN = new Guna.UI2.WinForms.Guna2ControlBox();
             this.Cracked_BTN = new Guna.UI2.WinForms.Guna2Button();
+            this.guna2DragControl1 = new Guna.UI2.WinForms.Guna2DragControl(this.components);
             this.SuspendLayout();
             // 
             // usernameTXT
@@ -150,6 +152,12 @@
             this.Cracked_BTN.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.Cracked_BTN.Click += new System.EventHandler(this.Cracked_BTN_Click);
             // 
+            // guna2DragControl1
+            // 
+            this.guna2DragControl1.DockIndicatorTransparencyValue = 0.6D;
+            this.guna2DragControl1.TargetControl = this;
+            this.guna2DragControl1.UseTransparentDrag = true;
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -178,5 +186,6 @@
         private Guna.UI2.WinForms.Guna2ControlBox MinimizeBTN;
         private Guna.UI2.WinForms.Guna2ControlBox CloseBTN;
         private Guna.UI2.WinForms.Guna2Button Cracked_BTN;
+        private Guna.UI2.WinForms.Guna2DragControl guna2DragControl1;
     }
 }

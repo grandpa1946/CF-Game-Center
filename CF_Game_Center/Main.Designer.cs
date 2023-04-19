@@ -41,6 +41,7 @@
             this.GameFlowlayout = new System.Windows.Forms.FlowLayoutPanel();
             this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
             this.SearchBox = new Guna.UI2.WinForms.Guna2TextBox();
+            this.LoginBTN = new Guna.UI2.WinForms.Guna2Button();
             this.Top_bar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -193,7 +194,7 @@
             // 
             // GameFlowlayout
             // 
-            this.GameFlowlayout.Location = new System.Drawing.Point(12, 109);
+            this.GameFlowlayout.Location = new System.Drawing.Point(15, 109);
             this.GameFlowlayout.Name = "GameFlowlayout";
             this.GameFlowlayout.Size = new System.Drawing.Size(1034, 471);
             this.GameFlowlayout.TabIndex = 1;
@@ -228,6 +229,27 @@
             this.SearchBox.Visible = false;
             this.SearchBox.TextChanged += new System.EventHandler(this.guna2TextBox1_TextChanged);
             // 
+            // LoginBTN
+            // 
+            this.LoginBTN.BorderRadius = 4;
+            this.LoginBTN.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.LoginBTN.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.LoginBTN.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.LoginBTN.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.LoginBTN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.LoginBTN.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.LoginBTN.ForeColor = System.Drawing.Color.White;
+            this.LoginBTN.Image = global::CF_Game_Center.Properties.Resources.Loginicon;
+            this.LoginBTN.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.LoginBTN.ImageSize = new System.Drawing.Size(30, 30);
+            this.LoginBTN.Location = new System.Drawing.Point(15, 535);
+            this.LoginBTN.Name = "LoginBTN";
+            this.LoginBTN.Size = new System.Drawing.Size(93, 45);
+            this.LoginBTN.TabIndex = 9;
+            this.LoginBTN.Text = "Login";
+            this.LoginBTN.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.LoginBTN.Click += new System.EventHandler(this.LoginBTN_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -237,6 +259,7 @@
             this.Controls.Add(this.SearchBox);
             this.Controls.Add(this.GameFlowlayout);
             this.Controls.Add(this.Top_bar);
+            this.Controls.Add(this.LoginBTN);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Main";
             this.Text = "Main";
@@ -259,5 +282,6 @@
         private Guna.UI2.WinForms.Guna2Elipse guna2Elipse1;
         private Guna.UI2.WinForms.Guna2TextBox SearchBox;
         private Guna.UI2.WinForms.Guna2Button Downloads_BTN;
+        private Guna.UI2.WinForms.Guna2Button LoginBTN;
     }
 }

@@ -69,5 +69,12 @@ namespace CF_Game_Center
                 }
             }
         }
+
+        private void LoginBTN_Click(object sender, EventArgs e)
+        {
+            Login login = new Login();
+            login.ShowDialog();
+
+        }
     }
 }
