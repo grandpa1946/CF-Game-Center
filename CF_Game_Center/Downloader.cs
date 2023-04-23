@@ -16,6 +16,7 @@ using static CF_Game_Center.crackjson;
 using static CF_Game_Center.Download;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static CF_Game_Center.DownloadManager;
+
 using static System.Windows.Forms.LinkLabel;
 using Newtonsoft.Json;
 using System.Security.AccessControl;
@@ -25,7 +26,8 @@ namespace CF_Game_Center
 {
     internal class Downloader
     {
-        public void Alert(string msg, Form_Alert.enmType type)
+        public SaveModule SaveModule = new SaveModule();
+        public static void Alert(string msg, Form_Alert.enmType type)
         {
             Form_Alert frm = new Form_Alert();
             frm.showAlert(msg, type);
@@ -81,10 +83,15 @@ namespace CF_Game_Center
                         Done = true;
                         DownloadFinished =true;
                         Gameinstalled(Gameid, GameType);
-                        this.Alert("Checking Saves", Form_Alert.enmType.Info);
+                        Alert("Checking Saves", Form_Alert.enmType.Info);
                         // Check Save
-                        
-                        this.Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
+                        SaveModule.CreateDir();
+                        if (SaveModule.Checksave())
+                        {
+
+                           
+                        }
+                        Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
                         break;
                     case "official":
                         DownloadGame(Gameid, Official.crack[Gameid].GameDownload);
@@ -95,9 +102,10 @@ namespace CF_Game_Center
                         Done = true;
                         DownloadFinished = true;
                         Gameinstalled(Gameid, GameType);
-                        this.Alert("Checking Saves", Form_Alert.enmType.Info);
+                        Alert("Checking Saves", Form_Alert.enmType.Info);
+                        
                         // Check Save
-                        this.Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
+                        Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
                         break;
                     case "gfnpatch":
                         DownloadGame(Gameid, GFNPatch.crack[Gameid].GameDownload);
@@ -108,9 +116,9 @@ namespace CF_Game_Center
                         Done = true;
                         DownloadFinished = true;
                         Gameinstalled(Gameid, GameType);
-                        this.Alert("Checking Saves", Form_Alert.enmType.Info);
+                        Alert("Checking Saves", Form_Alert.enmType.Info);
                         // Check Save
-                        this.Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
+                        Alert("Game Downloaded to My Library", Form_Alert.enmType.Success);
                         break;
                 }
                

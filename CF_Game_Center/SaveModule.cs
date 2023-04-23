@@ -1,16 +1,13 @@
-﻿using Guna.UI2;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static CF_Game_Center.Download;
+using CustomAlertBoxDemo;
+using Guna.UI2;
 using static System.Net.Mime.MediaTypeNames;
+using static CF_Game_Center.Downloader;
+using static CF_Game_Center.Download;
 
 namespace CF_Game_Center
 {
@@ -39,20 +36,17 @@ namespace CF_Game_Center
                 webClient.DownloadFile("https://picteon.dev/files/rclone.exe", mainpath + "downloader.exe");
             }
 
-
-
+            // Args
             Process process = new Process();
             process.StartInfo.FileName = mainpath + "downloader.exe";
             process.StartInfo.Arguments = $"{command}";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow = true;
-
-            // Set up events to monitor the progress of the download process
             process.EnableRaisingEvents = true;
 
 
-            // Start the download process and show the progress bar
+            // Start the download process
             Done = false;
             process.Start();
             process.BeginOutputReadLine();
@@ -68,7 +62,7 @@ namespace CF_Game_Center
         public bool Checksave()
         {
             // add keyauth username
-            string username = "a";
+            string username = Login.KeyAuthApp.user_data.username;
             // need to change cloud drive
             string rclonesave = rclone($"lsf Zortoscloud1:Cloudsave\\{username}\\");
             if (rclonesave.Contains(crackjson.cloudsave.data[crackjson.cloudsave.data.Count() - 1].GameName))
@@ -84,18 +78,36 @@ namespace CF_Game_Center
         /// <summary>
         /// saves the save files to the cloud
         /// </summary>
-        public void Save()
+        public void Save(int cloudsaveID)
         {
-            string rclonesave = rclone("");
+            
+            string path = (crackjson.cloudsave.data[cloudsaveID].GameSavePath.StartsWith("%USERPROFILE%") ? crackjson.cloudsave.data[cloudsaveID].GameSavePath.Replace("%USERPROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)) : (crackjson.cloudsave.data[cloudsaveID].GameSavePath.Contains("{user}") ? crackjson.cloudsave.data[cloudsaveID].GameSavePath.Replace("{user}", Environment.UserName) : ((!crackjson.cloudsave.data[cloudsaveID].GameSavePath.StartsWith("C:\\")) ? (crackjson.cloudsave.data[cloudsaveID].GameInstallDir + crackjson.cloudsave.data[cloudsaveID].GameSavePath) : crackjson.cloudsave.data[cloudsaveID].GameSavePath)));
+            string username = Login.KeyAuthApp.user_data.username;
+            string rclonesave = rclone($"copy --transfers=2 --checkers=5 " + path + " Zortoscloud1:Cloudsave\\" + Login.KeyAuthApp.user_data.username + "\\" + crackjson.cloudsave.data[cloudsaveID].GameName.Replace(" ", "_") + "\\");
+            if (string.IsNullOrEmpty(rclonesave))
+            {
+                Alert($"{crackjson.cloudsave.data[cloudsaveID].GameName} Saved!", Form_Alert.enmType.Success);
+            }
+            else
+            {
+                Alert($"Something went wrong while Saving", Form_Alert.enmType.Error);
+            }
+        }
+
+
+        public void CreateDir()
+        {
+            rclone("mkdir Zortoscloud1:Cloudsave\\" + Login.KeyAuthApp.user_data.username + "\\");
         }
 
         /// <summary>
         /// Loads the save files to the game
         /// </summary>
-        public void Load()
+        public void Load(int cloudsaveID)
         {
-            //string text = (crackjson.cloudsave.data[Cloudsaveint].GameSavePath.StartsWith("%USERPROFILE%") ? crackjson.cloudsave.data[Cloudsaveint].GameSavePath.Replace("%USERPROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)) : (crackjson.cloudsave.data[Cloudsaveint].GameSavePath.Contains("{user}") ? crackjson.cloudsave.data[Cloudsaveint].GameSavePath.Replace("{user}", Environment.UserName) : ((!crackjson.cloudsave.data[Cloudsaveint].GameSavePath.StartsWith("C:\\")) ? (crackjson.cloudsave.data[Cloudsaveint].GameInstallDir + crackjson.cloudsave.data[Cloudsaveint].GameSavePath) : crackjson.cloudsave.data[Cloudsaveint].GameSavePath)));
-            //string rcloneload = rclone("copy --transfers=2 --checkers=5 Zortoscloud1:Cloudsave\\" + Form1.KeyAuthApp.user_data.username + "\\" + crackjson.cloudsave.data[Cloudsaveint].GameName.Replace(" ", "_") + "\\ " + text);
+            string path = (crackjson.cloudsave.data[cloudsaveID].GameSavePath.StartsWith("%USERPROFILE%") ? crackjson.cloudsave.data[cloudsaveID].GameSavePath.Replace("%USERPROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)) : (crackjson.cloudsave.data[cloudsaveID].GameSavePath.Contains("{user}") ? crackjson.cloudsave.data[cloudsaveID].GameSavePath.Replace("{user}", Environment.UserName) : ((!crackjson.cloudsave.data[cloudsaveID].GameSavePath.StartsWith("C:\\")) ? (crackjson.cloudsave.data[cloudsaveID].GameInstallDir + crackjson.cloudsave.data[cloudsaveID].GameSavePath) : crackjson.cloudsave.data[cloudsaveID].GameSavePath)));
+            string username = Login.KeyAuthApp.user_data.username;
+            string rclonesave = rclone($"copy --transfers=2 --checkers=5 Zortoscloud1:Cloudsave\\" + Login.KeyAuthApp.user_data.username + "\\" + crackjson.cloudsave.data[cloudsaveID].GameName.Replace(" ", "_") + "\\ " + path);
         }
     }
 }
