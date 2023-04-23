@@ -198,6 +198,7 @@
             this.GameFlowlayout.Name = "GameFlowlayout";
             this.GameFlowlayout.Size = new System.Drawing.Size(1034, 471);
             this.GameFlowlayout.TabIndex = 1;
+            this.GameFlowlayout.Paint += new System.Windows.Forms.PaintEventHandler(this.GameFlowlayout_Paint);
             // 
             // guna2Elipse1
             // 
@@ -262,6 +263,7 @@
             this.Controls.Add(this.LoginBTN);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Main";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Main";
             this.Top_bar.ResumeLayout(false);
             this.ResumeLayout(false);

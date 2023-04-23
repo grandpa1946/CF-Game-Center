@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
-            this.DownloadLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.MinimizeBTN = new Guna.UI2.WinForms.Guna2ControlBox();
+            this.DownloadLBL = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.CloseBTN = new Guna.UI2.WinForms.Guna2ControlBox();
             this.SearchBox = new Guna.UI2.WinForms.Guna2TextBox();
             this.guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -53,17 +53,6 @@
             this.guna2Panel1.Size = new System.Drawing.Size(800, 49);
             this.guna2Panel1.TabIndex = 0;
             // 
-            // DownloadLBL
-            // 
-            this.DownloadLBL.BackColor = System.Drawing.Color.Transparent;
-            this.DownloadLBL.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DownloadLBL.ForeColor = System.Drawing.Color.White;
-            this.DownloadLBL.Location = new System.Drawing.Point(13, 13);
-            this.DownloadLBL.Name = "DownloadLBL";
-            this.DownloadLBL.Size = new System.Drawing.Size(129, 22);
-            this.DownloadLBL.TabIndex = 0;
-            this.DownloadLBL.Text = "Download {name}";
-            // 
             // MinimizeBTN
             // 
             this.MinimizeBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -75,6 +64,17 @@
             this.MinimizeBTN.Name = "MinimizeBTN";
             this.MinimizeBTN.Size = new System.Drawing.Size(45, 29);
             this.MinimizeBTN.TabIndex = 4;
+            // 
+            // DownloadLBL
+            // 
+            this.DownloadLBL.BackColor = System.Drawing.Color.Transparent;
+            this.DownloadLBL.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DownloadLBL.ForeColor = System.Drawing.Color.White;
+            this.DownloadLBL.Location = new System.Drawing.Point(13, 13);
+            this.DownloadLBL.Name = "DownloadLBL";
+            this.DownloadLBL.Size = new System.Drawing.Size(129, 22);
+            this.DownloadLBL.TabIndex = 0;
+            this.DownloadLBL.Text = "Download {name}";
             // 
             // CloseBTN
             // 
@@ -186,6 +186,7 @@
             this.Controls.Add(this.guna2Panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Download";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Download";
             this.guna2Panel1.ResumeLayout(false);
             this.guna2Panel1.PerformLayout();

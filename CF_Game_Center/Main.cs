@@ -76,5 +76,10 @@ namespace CF_Game_Center
             login.ShowDialog();
 
         }
+
+        private void GameFlowlayout_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
