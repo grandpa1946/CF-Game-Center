@@ -17,7 +17,11 @@ function showPopupBox(message, emoji, delay) {
   if (delay) {
     setTimeout(function () {
       popupBox.classList.add("hide");
-    }, delay); // Change delay time as needed
+      setTimeout(function () {
+        popupBox.classList.remove("show");
+        popupBox.classList.remove("hide");
+      }, 500);
+    }, delay); 
   }
 }
 
@@ -115,7 +119,7 @@ function unixTimestampToString(unixTimestamp) {
 }
 
 window.addEventListener("load", () => {
-  showPopupBox("Welcome to CF Game Center!", "👋", 3000);
+  showPopupBox("Welcome to CF Game Center!", "👋", 2000);
 
   fetch("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json")
     .then((response) => response.json())
@@ -126,24 +130,24 @@ window.addEventListener("load", () => {
         const gameItem = document.createElement("div");
         gameItem.className = "game-item";
         gameItem.style.animation = "fadeIn 1s ease-in-out;";
-
+      
         const gamePoster = document.createElement("div");
         gamePoster.className = "game-poster";
         const posterImg = document.createElement("img");
         posterImg.src = game.GamePoster;
         gamePoster.appendChild(posterImg);
-
+      
         const gameName = document.createElement("div");
         gameName.className = "game-name";
         gameName.textContent = game.Gamename;
-
+      
         gameItem.appendChild(gamePoster);
         gameItem.appendChild(gameName);
         gameList.appendChild(gameItem);
-
+      
         gameItem.addEventListener("click", () => {
           // handle click event here
-          console.log(`Clicked on ${game.Gamename}`);
+          showPopupBox(`Clicked on ${game.Gamename}!`, "🎮", 3000);
         });
       });
     });

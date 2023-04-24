@@ -259,9 +259,6 @@
   position: relative;
 }
 
-
-
-
 /* Button styles */
 .button-main {
   animation: fadeIn 1s ease-in-out;
@@ -280,6 +277,7 @@
   position: relative;
   min-width: 120px; /* Set a minimum width for the button */
   margin: 18px;
+  user-select: none; /* Prevents content from being highlightable */
 }
 
 button:hover {
@@ -328,9 +326,8 @@ button.loading .button__text {
   color: #fff;
   margin-bottom: 30px;
   text-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+  user-select: none; /* Prevents content from being highlightable */
 }
-
-
 
 #infotext {
   animation: fadeIn 1s ease-in-out;
@@ -340,8 +337,6 @@ button.loading .button__text {
   text-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
   margin: 20px;
 }
-
-
 
 /* Added style for box around progress label */
 .progress-label-box {
@@ -387,7 +382,6 @@ button.loading .button__text {
   border-color: transparent transparent #ccc transparent;
 }
 
-
 .box-header {
   font-weight: bold;
   border-bottom: 1px solid #ccc;
@@ -398,35 +392,8 @@ button.loading .button__text {
   margin: 10px 0;
 }
 
-@media only screen and (max-width: 768px) {
-  .pop-out-box-container {
-    position: static;
-  }
-
-  .pop-out-box {
-    position: static;
-    width: 100%;
-    max-width: none;
-    box-shadow: none;
-    border: none;
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  .pop-out-box:before {
-    display: none;
-  }
-
-  .user-box,
-  .server-box {
-    width: 90%;
-    margin: 10px auto;
-  }
-}
 
 /* login stuff */
-
-
 
 @keyframes fadeIn {
   0% {
@@ -451,28 +418,7 @@ label {
   color: white;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="name"] {
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  color: white;
-  background-color: #3f3f3f;
-  width: 100%;
-}
-@media (max-width: 600px) {
-  #login-form {
-    padding: 10px;
-  }
-  input[type="text"],
-  input[type="password"],
-  input[type="name"],
-  button[type="submit"] {
-    font-size: 14px;
-    background-color: #3f3f3f;
-  }
-}
+
 
 .floating-popup-box {
   position: fixed;
@@ -559,58 +505,57 @@ input[type="name"] {
   }
 }
 
-
 .game-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    animation: fade-in 0.5s ease-in-out forwards;
-  }
-  
-  .game-item {
-    width: 20%;
-    height: 350px;
-    margin: 20px;
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    box-sizing: border-box;
-    background-color: #333;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    user-select: none; /* Prevents content from being highlightable */
-  }
-  
-  .game-poster {
-    width: 100%;
-    height: 100%;
-    margin-bottom: 10px;
-    overflow: hidden;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-  
-  .game-poster img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    height: auto;
-    display: block;
-    user-drag: none; /* Prevents image from being draggable */
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-  }
-  
-  .game-name {
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  animation: fade-in 0.5s ease-in-out forwards;
+}
 
+.game-item {
+  width: 20%;
+  height: 350px;
+  margin: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Added this property */
+  justify-content: space-between; /* Added this property */
+  box-sizing: border-box;
+  background-color: #333;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none; /* Prevents content from being highlightable */
+}
+
+.game-poster {
+  width: 100%;
+  height: 100% !important;
+  margin-bottom: 10px;
+  overflow: hidden;
+  object-fit: cover !important;
+  padding-top: 10px; /* add padding to the top */
+}
+
+.game-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-drag: none; /* Prevents image from being draggable */
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.game-name {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: white; /* Added this property */
+  margin: 10px; /* Added this property */
+}
