@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cloudforce Game Center</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta content="Main Web" name="description" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.discordapp.com/attachments/1061755202086125678/1085013775893143563/Boosteriod_Rounded.png"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <div class="logo-details">
+        <div class="logo_name">Cloudforce Game Center</div>
+        <i class="bx bx-menu" id="btn"></i>
+      </div>
+      <ul class="nav-list">
+        <li>
+          <i class="bx bx-search"></i>
+          <input type="search" placeholder="Search..." />
+          <span class="tooltip">Search</span>
+        </li>
+        <li>
+          <a href="#" id="dashboard-link" onclick="showDashboardSection()">
+            <i class="bx bx-grid-alt"></i>
+            <span class="links_name">Dashboard</span>
+          </a>
+          <span class="tooltip">Dashboard</span>
+        </li>
+        <li>
+          <a href="#" onclick="showFilesSection()">
+            <i class="bx bx-game"></i>
+            <span class="links_name">Games</span>
+          </a>
+          <span class="tooltip">Games</span>
+        </li>
+        <li>
+            <a href="#" onclick="">
+              <i class="bx bx-download"></i>
+              <span class="links_name">Downloads</span>
+            </a>
+            <span class="tooltip">Downloads</span>
+          </li>
+        <li>
+          <a href="#" onclick="showSettingsSection()">
+            <i class="bx bx-cog"></i>
+            <span class="links_name">Settings</span>
+          </a>
+          <span class="tooltip">Settings</span>
+        </li>
+        <li class="profile">
+          <div class="profile-details">
+            <img src="./assets/profile.png" alt="profileImg" />
+            <div class="name_job">
+              <div class="name" id="loginlabel">Login</div>
+              <div class="job"></div>
+            </div>
+          </div>
+          <i class="bx bx-log-out" id="log_out" onclick="showLoginForm()"></i>
+        </li>
+      </ul>
+    </div>
+    <section class="home-section" id="dashboard-section" style="display: block">
+      <div class="text">Main</div>
+      <div>
+        <p>
+          <button class="button-main" id="aboutme" type="submit">
+            <span class="button__text">About me</span>
+            <span class="spinner"></span>
+          </button>
+          <button class="button-main" id="sports" type="submit">
+            <span class="button__text">Sports Day</span>
+            <span class="spinner"></span>
+          </button>
+          <button class="button-main" id="cloudforce" type="submit">
+            <span class="button__text">Cloudforce</span>
+            <span class="spinner"></span>
+          </button>
+        </p>
+      </div>
+    </section>
+    <section class="home-section" id="user-section" style="display: none">
+      <div class="text">Users</div>
+    </section>
+    <section class="home-section" id="files-section" style="display: none">
+      <div class="text">Games</div>
+      <div class="game-list"></div>
+    </section>
+    <section class="home-section" id="settings-section" style="display: none">
+      <div class="text">Settings</div>
+    </section>
+    <div class="floating-popup-box">
+      <div class="floating-popup-box-emoji" id="Popup-Emoji">ℹ️</div>
+      <div class="floating-popup-box-content">
+        <p>This is a floating popup box!</p>
+        <button class="floating-popup-box-close-button">&times;</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
