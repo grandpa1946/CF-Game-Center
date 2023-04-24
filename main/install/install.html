@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <title>Cloudforce Game Center</title>
+    <title>Cloudforce Game Center ➡️ Download</title>
     <link rel="stylesheet" href="style.css" />
     <meta content="Main Web" name="description" />
     <link
@@ -14,12 +14,22 @@
       href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
       rel="stylesheet"
     />
-    <link
-      href="./js/loading-bar.css"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" type="text/css" href="./js/loading-bar.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
-  <script src="script.js"></script>
-  <script src="./js/loading-bar.js"></script>
+  <body>
+    <div class="download-section">
+      <div class="download-details">
+        <div class="download-name">File Name</div>
+        <div data-preset="fan" class="ldBar label-center" data-value="35"></div>
+        <div class="download-speed" id="downloadSpeed" style="display: none">
+          0 MBPS
+        </div>
+        <div class="download-time" id="downloadTime" style="display: none">
+          ETA: --:--:--
+        </div>
+        <a href="#" class="download-button" style="display: block">Download</a>
+      </div>
+    </div>
+  </body>
 </html>

@@ -248,6 +248,29 @@
   font-weight: 500;
   margin: 18px;
 }
+
+.download-section {
+  position: relative;
+  background: #262346;
+  background-color: #262346;
+  min-height: 100vh;
+  top: 0;
+  left: 78px;
+  width: calc(100% - 78px);
+  transition: all 0.5s ease;
+  z-index: 2;
+}
+
+
+.download-section .downloader-text {
+  display: inline-block;
+  color: #d6d6d6;
+  font-size: 25px;
+  font-weight: 500;
+  margin: 18px;
+  animation: fadeInRight 1s ease-in-out;
+}
+
 @media (max-width: 420px) {
   .sidebar li .tooltip {
     display: none;
@@ -392,13 +415,23 @@ button.loading .button__text {
   margin: 10px 0;
 }
 
-
 /* login stuff */
 
 @keyframes fadeIn {
   0% {
     opacity: 0;
     transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
   }
   100% {
     opacity: 1;
@@ -417,8 +450,6 @@ label {
   margin-bottom: 5px;
   color: white;
 }
-
-
 
 .floating-popup-box {
   position: fixed;
@@ -523,12 +554,17 @@ label {
   flex-direction: column; /* Added this property */
   justify-content: space-between; /* Added this property */
   box-sizing: border-box;
-  background-color: #333;
+  background-color: #1d1b31;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   user-select: none; /* Prevents content from being highlightable */
+}
+
+.game-item:hover {
+  transform: scale(1.1);
 }
 
 .game-poster {
