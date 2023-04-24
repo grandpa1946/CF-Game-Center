@@ -4,7 +4,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
-const { spawn } = require('child_process');
+const { exec } = require('child_process');
 const express = require('express');
 const app2 = express();
 const bp = require("body-parser"); //Body Parser
@@ -79,16 +79,21 @@ app2.get('/drives', (req, res) => {
     // Split the output into lines and remove any empty ones
     const lines = stdout.trim().split('\r\n').filter((line) => line !== '');
 
-    // Extract the drive information from each line
+    // Extract the drive information from each line and format the sizes in GB
     const drives = lines.slice(1).map((line) => {
       const [drive, size, available] = line.trim().split(/\s+/);
-      return { Drive: drive, DriveSpace: size, AvailableSpace: available };
+      const sizeGB = Math.round(parseInt(size) / (1024 * 1024 * 1024));
+      const availableGB = Math.round(parseInt(available) / (1024 * 1024 * 1024));
+      return { Drive: drive, DriveSpace: `${sizeGB}GB`, AvailableSpace: `${availableGB}GB` };
     });
 
     // Send the drive information as JSON
     res.json({ Drives: drives });
   });
 });
+
+
+
 
 
 
