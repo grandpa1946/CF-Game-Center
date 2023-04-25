@@ -1,22 +1,26 @@
 {
   "name": "cloudforce",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Cloudforce game center",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "postinstall": "electron-builder install-app-deps",
+    "build": "electron-builder --windows ",
+    "release": "electron-builder --windows  --publish always"
   },
   "author": "Kief#2583",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
     "@electron-forge/maker-deb": "^6.1.1",
     "@electron-forge/maker-rpm": "^6.1.1",
     "@electron-forge/maker-squirrel": "^6.1.1",
     "@electron-forge/maker-zip": "^6.1.1",
-    "electron": "^24.1.2"
+    "electron": "^24.1.2",
+    "electron-builder": "^23.6.0"
   },
   "dependencies": {
     "cors": "^2.8.5",
