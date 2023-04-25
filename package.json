@@ -12,7 +12,7 @@
     "release": "electron-builder --windows  --publish always"
   },
   "author": "Kief#2583",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
     "@electron-forge/maker-deb": "^6.1.1",
