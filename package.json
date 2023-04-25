@@ -7,6 +7,9 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
+    "postinstall": "electron-builder install-app-deps",
+		"build": "electron-builder --mac --windows --linux",
+		"release": "electron-builder --mac --windows --linux --publish always"
   },
   "author": "Kief#2583",
   "license": "ISC",
