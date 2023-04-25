@@ -271,6 +271,72 @@
   animation: fadeInRight 1s ease-in-out;
 }
 
+
+.download-button {
+  background-color: #fff;
+  color: #262346;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  animation: fadeInRight 1s ease-in-out;
+}
+
+.downloader-game-name {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 10px;
+  top: 20%;
+  right: 47.5%;
+  text-align: center;
+  position: fixed;
+  animation: fadeInRight 1s ease-in-out;
+}
+
+
+.download-button:hover {
+  background-color: #3e8e41;
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.download-location {
+  color: white;
+  font-size: 15px;
+  height: 50px;
+  width: 400px;
+  margin-bottom: 10px;
+  top: 30%;
+  right: 32.7%;
+  text-align: center;
+  position: fixed;
+  animation: fadeInRight 1s ease-in-out;
+  background-color: #1d1b31;
+  padding: 10px;
+  border: 1px solid #666666;
+  border-radius: 5px;
+}
+
+.download-status {
+  /* Status text */
+  color: white;
+  font-size: 15px;
+  height: 50px;
+  width: 400px;
+  margin-bottom: 10px;
+  top: 40%;
+  right: 32.7%;
+  text-align: center;
+  position: fixed;
+  animation: fadeInRight 1s ease-in-out;
+}
+
 @media (max-width: 420px) {
   .sidebar li .tooltip {
     display: none;
@@ -561,6 +627,8 @@ label {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   user-select: none; /* Prevents content from being highlightable */
+  border-color: white;
+  border-style: solid;
 }
 
 .game-item:hover {

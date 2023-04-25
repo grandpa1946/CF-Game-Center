@@ -7,7 +7,7 @@
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  text-shadow: 0 0 3px #fff;
+  color: white;
 }
 .ldBar-label:after {
   content: "%";

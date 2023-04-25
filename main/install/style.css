@@ -86,21 +86,12 @@ body {
   border-radius: 2px;
 }
 
-.loading-bar .progress-bar {
-  height: 100%;
-  width: 0;
-  background-color: #262346;
-  border-radius: 2px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: width 0.3s ease;
-}
+.downloader-game-name {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
 
-.loading-label {
-  font-size: 18px;
-  font-weight: 500;
-  color: #d6d6d6;
 }
 
 .download-details {
