@@ -8,8 +8,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "postinstall": "electron-builder install-app-deps",
-    "build": "electron-builder --windows --linux",
-    "release": "electron-builder --windows --linux --publish always"
+    "build": "electron-builder --windows ",
+    "release": "electron-builder --windows  --publish always"
   },
   "author": "Kief#2583",
   "license": "ISC",
