@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { ipcRenderer } = require('electron')
 
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -11,3 +12,9 @@ window.addEventListener("DOMContentLoaded", () => {
     replaceText(`${type}-version`, process.versions[type]);
   }
 });
+
+
+ipcRenderer.on('popUpBox', (event, message) => {
+  // Send a message back to the main process to call the 'showpopupbox' function.
+  ipcRenderer.invoke('showPopupBox', message)
+})

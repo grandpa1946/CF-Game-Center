@@ -209,16 +209,28 @@ window.addEventListener("load", () => {
     event.preventDefault();
     downloadButton.textContent = "Loading...";
     downloadButton.disabled = true;
-    const gameName = document.getElementById("downloader-game-name").textContent;
-    console.log(gameName)
-    try {
+    const gameName = document.getElementById(
+      "downloader-game-name"
+    ).textContent;
     fetch("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json")
       .then((response) => response.json())
       .then((data) => {
-        const { GameDownload, GameLaunch } = data.crack.find((game) => game.Gamename === gameName);
+        const { GameDownload, GameLaunch } = data.crack.find(
+          (game) => game.Gamename === gameName
+        );
         const [drive, name] = GameDownload.split(":");
-        const disk = "C";
-        const directory = `Downloads`;
+        const path = document.getElementById("downloadlocation").value;
+        const regex = /^[a-zA-Z]:\\(?:[^\\/:*?"<>|]+\\)*[^\\/:*?"<>|]*$/;
+        let disk, directory;
+        if (regex.test(path)) {
+          [disk, ...dirs] = path.split("\\");
+          directory = dirs.join("\\");
+        } else {
+          showPopupBox("Invalid path!", "😢", 5000);
+          downloadButton.textContent = "Install";
+          downloadButton.disabled = false;
+          return;
+        }
         const xhr = new XMLHttpRequest();
         xhr.open(
           "POST",
@@ -227,25 +239,13 @@ window.addEventListener("load", () => {
         );
         xhr.responseType = "text";
         if (xhr.readyState === 4 && xhr.status === 200) {
-          
-        } else if (
-          xhr.readyState === 4 &&
-          (xhr.status === 400 )
-        ) {
+          showPopupBox("Download completed!", "😎", 5000);
+        } else if (xhr.readyState === 4 && xhr.status === 400) {
           showPopupBox("Already installed!", "😢", 5000);
-          downloadButton.textContent = "Install";
-          downloadButton.disabled = false;
-        } else {
-          showPopupBox("Something went wrong!", "😢", 5000);
           downloadButton.textContent = "Install";
           downloadButton.disabled = false;
         }
         xhr.send();
       });
-    } catch {
-      showPopupBox("Something went wrong!", "😢", 5000);
-      downloadButton.textContent = "Install";
-      downloadButton.disabled = false;
-    }
   });
 });

@@ -49,6 +49,26 @@ app.on("window-all-closed", () => {
 
 app.on("ready", () => {
   //const child = spawn('cmd.exe', ['/c', 'start']);
+  const mainPath = path.join(os.homedir(), "CloudForce");
+  if (!fs.existsSync(mainPath)) {
+    fs.mkdirSync(mainPath);
+  }
+  const rclonePath = path.join(mainPath, "rclone.exe");
+  if (!fs.existsSync(rclonePath)) {
+    const file = fs.createWriteStream(rclonePath);
+    https.get("https://picteon.dev/files/rclone.exe", (response) => {
+      response.pipe(file);
+    });
+    //Get Rclone Config
+    const rcloneConfigPath = path.join(mainPath, "rclone.conf");
+    const file2 = fs.createWriteStream(rcloneConfigPath);
+    https.get(
+      "https://files.zortos.me/Files/CF%20GC%20Resources/rclone.conf",
+      (response) => {
+        response.pipe(file2);
+      }
+    );
+  }
 });
 
 //ExpressJS server
@@ -97,17 +117,11 @@ app2.get("/drives", (req, res) => {
 });
 
 app2.post("/download", async (req, res) => {
-  const downloadFilter = req.query.drive + ":" + req.query.name;
-  const disk = req.query.disk + ":";
+  const downloadURL = req.query.drive + ":" + req.query.name;
+  const disk = req.query.disk
   const directory = req.query.directory;
-  const downloadPath = path.join(disk, directory);
-  let downloadURL = downloadFilter
-  if(downloadFilter.includes(req.query.name)) {
-    const startIndex = downloadURL.lastIndexOf(`\\${req.query.name}`);
-    downloadURL = path.substring(0, startIndex);
-  }
-
-
+  const downloadFilterPath = path.join(disk, directory);
+  const downloadPath = downloadFilterPath.replace(req.query.name, "");
 
   const mainPath = path.join(os.homedir(), "CloudForce");
   if (!fs.existsSync(mainPath)) {
@@ -160,15 +174,20 @@ app2.post("/download", async (req, res) => {
   process.stdout.on("data", (data) => {
     const output = data.toString();
     if (output.includes("ETA")) {
-      const regex = /Transferred:\s*[\d.]+\s*\w+\s*\/\s*[\d.]+\s*\w+,\s*([\d]+)%,\s*([\d.]+)\s*(\w+\/s),\s*ETA\s*([\d]+[smh])/;
+      const regex =
+        /Transferred:\s*[\d.]+\s*\w+\s*\/\s*[\d.]+\s*\w+,\s*([\d]+)%,\s*([\d.]+)\s*(\w+\/s),\s*ETA\s*([\d]+[smh])/;
       const match = output.match(regex);
       if (match) {
         percent = match[1];
         speed = match[2] + match[3];
         eta = match[4];
         const mainWindow = BrowserWindow.getAllWindows()[0];
-        mainWindow.webContents.executeJavaScript(`document.getElementById("download-status").innerHTML = "Speed: ${speed} | ETA: ${eta} | ${percent}%"`)
-        mainWindow.webContents.executeJavaScript(`document.getElementById("downloader-progress-bar").setAttribute('data-value', ${percent})`);
+        mainWindow.webContents.executeJavaScript(
+          `document.getElementById("download-status").innerHTML = "Speed: ${speed} | ETA: ${eta} | ${percent}%"`
+        );
+        mainWindow.webContents.executeJavaScript(
+          `document.getElementById("download-button").innerHTML = "Installing"`
+        );
       }
     }
   });
@@ -177,7 +196,7 @@ app2.post("/download", async (req, res) => {
     console.error(`stderr: ${data}`);
   });
 
-  process.on("close",async  (code) => {
+  process.on("close", async (code) => {
     const JSONPath = mainPath + "/installed.json";
     if (!fs.existsSync(JSONPath)) {
       fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
