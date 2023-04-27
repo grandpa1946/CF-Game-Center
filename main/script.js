@@ -237,14 +237,17 @@ window.addEventListener("load", () => {
           `http://localhost:3000/download?drive=${drive}&name=${name}&disk=${disk}&directory=${directory}&gameLaunch=${GameLaunch}`,
           true
         );
-        xhr.responseType = "text";
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          showPopupBox("Download completed!", "😎", 5000);
-        } else if (xhr.readyState === 4 && xhr.status === 400) {
-          showPopupBox("Already installed!", "😢", 5000);
-          downloadButton.textContent = "Install";
-          downloadButton.disabled = false;
-        }
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            showPopupBox("Download completed!", "😎", 5000);
+          } else if (xhr.readyState === 4 && xhr.status === 400) {
+            showPopupBox("Already installed!", "😢", 5000);
+            downloadButton.textContent = "Install";
+            downloadButton.disabled = false;
+          } else {
+            console.log(xhr.status);
+          }
+        };
         xhr.send();
       });
   });
