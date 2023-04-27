@@ -240,6 +240,7 @@ window.addEventListener("load", () => {
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
             showPopupBox("Download completed!", "😎", 5000);
+            downloadButton.textContent = "Installed";
           } else if (xhr.readyState === 4 && xhr.status === 400) {
             showPopupBox("Already installed!", "😢", 5000);
             downloadButton.textContent = "Install";

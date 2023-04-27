@@ -197,6 +197,9 @@ app2.post("/download", async (req, res) => {
   });
 
   process.on("close", async (code) => {
+
+    res.status(200).json({ message: "Download Complete"});
+    res.end()
     const JSONPath = mainPath + "/installed.json";
     if (!fs.existsSync(JSONPath)) {
       fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
@@ -210,8 +213,6 @@ app2.post("/download", async (req, res) => {
       InstallLocation: downloadPath + "/" + req.query.name,
     });
     fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
-    res.status(200).json({ message: "Download Complete", path: GameLaunch });
-    res.end();
   });
 });
 
