@@ -1,10 +1,13 @@
 /* Google Font Link */
+
+
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
+  user-select: none;
 }
 .sidebar {
   position: fixed;
@@ -291,12 +294,15 @@
   color: white;
   font-size: 24px;
   margin-bottom: 10px;
+  position: absolute;
   top: 20%;
-  right: 47.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
   text-align: center;
-  position: fixed;
   animation: fadeInRight 1s ease-in-out;
 }
+
 
 
 .download-button:hover {
@@ -312,10 +318,12 @@
   height: 50px;
   width: 400px;
   margin-bottom: 10px;
-  top: 30%;
-  right: 32.7%;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
   text-align: center;
-  position: fixed;
   animation: fadeInRight 1s ease-in-out;
   background-color: #1d1b31;
   padding: 10px;
@@ -327,15 +335,17 @@
   /* Status text */
   color: white;
   font-size: 15px;
-  height: 50px;
-  width: 400px;
+  height: auto;
+  width: auto;
   margin-bottom: 10px;
-  top: 40%;
-  right: 32.7%;
-  text-align: center;
-  position: fixed;
+  position: absolute;
+  transform-origin: center center;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   animation: fadeInRight 1s ease-in-out;
 }
+
 
 @media (max-width: 420px) {
   .sidebar li .tooltip {

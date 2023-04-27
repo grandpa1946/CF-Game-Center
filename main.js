@@ -11,6 +11,7 @@ const app2 = express();
 const bp = require("body-parser"); //Body Parser
 const cors = require("cors"); //CORS Policy
 const https = require("https");
+const mkdirp = require("mkdirp");
 
 const createWindow = () => {
   // Create the browser window.
@@ -95,23 +96,31 @@ app2.get("/drives", (req, res) => {
   );
 });
 
-app2.post("/download", (req, res) => {
-  const downloadURL = req.query.downloadURL;
-  const disk = req.query.disk;
+app2.post("/download", async (req, res) => {
+  const downloadFilter = req.query.drive + ":" + req.query.name;
+  const disk = req.query.disk + ":";
   const directory = req.query.directory;
   const downloadPath = path.join(disk, directory);
+  let downloadURL = downloadFilter
+  if(downloadFilter.includes(req.query.name)) {
+    const startIndex = downloadURL.lastIndexOf(`\\${req.query.name}`);
+    downloadURL = path.substring(0, startIndex);
+  }
+
+
+
   const mainPath = path.join(os.homedir(), "CloudForce");
+  if (!fs.existsSync(mainPath)) {
+    fs.mkdirSync(mainPath);
+  }
 
   // Check if the game is already downloaded
-  if (fs.existsSync(downloadPath)) {
-    res.status(400).send("Game already downloaded");
+  if (fs.existsSync(path.join(downloadPath, req.query.name))) {
+    res.status(400).json({ error: "Game already downloaded" });
     return;
   }
 
   // Check if the download path exists, create it if it doesn't
-  if (!fs.existsSync(downloadPath)) {
-    fs.mkdirSync(downloadPath);
-  }
 
   // Check if Rclone is present, if not download it
   const rclonePath = path.join(mainPath, "rclone.exe");
@@ -123,11 +132,13 @@ app2.post("/download", (req, res) => {
     //Get Rclone Config
     const rcloneConfigPath = path.join(mainPath, "rclone.conf");
     const file2 = fs.createWriteStream(rcloneConfigPath);
-    https.get("https://files.zortos.me/Files/CF%20GC%20Resources/rclone.conf", (response) => {
-      response.pipe(file2);
-    });
+    https.get(
+      "https://files.zortos.me/Files/CF%20GC%20Resources/rclone.conf",
+      (response) => {
+        response.pipe(file2);
+      }
+    );
   }
-
   // Start the download process
   const process = spawn(rclonePath, [
     "copy",
@@ -144,20 +155,21 @@ app2.post("/download", (req, res) => {
   let percent = "";
 
   // Set up interval to send progress updates every 3 seconds
-  const progressInterval = setInterval(() => {
-    res.write(JSON.stringify({ eta, speed, percent }));
-  }, 3000);
 
   // Set up event listeners to monitor the progress of the download process
   process.stdout.on("data", (data) => {
     const output = data.toString();
     if (output.includes("ETA")) {
-      const regex =
-        /.*ETA\s+([\d\w:]+)\s+.*speed\s+([\d.]+[KMG]B\/s)\s+(.*%)\sof\s([\d.]+[KMG]B)\s+.*$/;
+      const regex = /Transferred:\s*[\d.]+\s*\w+\s*\/\s*[\d.]+\s*\w+,\s*([\d]+)%,\s*([\d.]+)\s*(\w+\/s),\s*ETA\s*([\d]+[smh])/;
       const match = output.match(regex);
-      eta = match[1];
-      speed = match[2];
-      percent = match[3];
+      if (match) {
+        percent = match[1];
+        speed = match[2] + match[3];
+        eta = match[4];
+        const mainWindow = BrowserWindow.getAllWindows()[0];
+        mainWindow.webContents.executeJavaScript(`document.getElementById("download-status").innerHTML = "Speed: ${speed} | ETA: ${eta} | ${percent}%"`)
+        mainWindow.webContents.executeJavaScript(`document.getElementById("downloader-progress-bar").setAttribute('data-value', ${percent})`);
+      }
     }
   });
 
@@ -165,8 +177,21 @@ app2.post("/download", (req, res) => {
     console.error(`stderr: ${data}`);
   });
 
-  process.on("close", (code) => {
-    clearInterval(progressInterval);
+  process.on("close",async  (code) => {
+    const JSONPath = mainPath + "/installed.json";
+    if (!fs.existsSync(JSONPath)) {
+      fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
+    }
+
+    const UpdatedPath = fs.readFileSync(JSONPath);
+
+    await UpdatedPath.Installed.push({
+      Name: req.query.name,
+      GameLaunch: req.query.GameLaunch,
+      InstallLocation: downloadPath + "/" + req.query.name,
+    });
+    fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
+    res.status(200).json({ message: "Download Complete", path: GameLaunch });
     res.end();
   });
 });

@@ -3,6 +3,7 @@ console.log("Loaded");
 let sidebar = document.querySelector(".sidebar");
 let closeBtn = document.querySelector("#btn");
 let searchBtn = document.querySelector(".bx-search");
+const downloadURL = "localhost:3000";
 
 //Floating pop-up
 const popupBox = document.querySelector(".floating-popup-box");
@@ -21,7 +22,7 @@ function showPopupBox(message, emoji, delay) {
         popupBox.classList.remove("show");
         popupBox.classList.remove("hide");
       }, 500);
-    }, delay); 
+    }, delay);
   }
 }
 
@@ -55,30 +56,36 @@ function showDashboardSection() {
   let homeSection = document.querySelector("#dashboard-section");
   let filesSection = document.querySelector("#files-section");
   let settingsSection = document.querySelector("#settings-section");
+  let downloadSection = document.querySelector("#downloader-section");
 
   homeSection.style.display = "block";
   filesSection.style.display = "none";
   settingsSection.style.display = "none";
+  downloadSection.style.display = "none";
 }
 
 function showSettingsSection() {
   let homeSection = document.querySelector("#dashboard-section");
   let filesSection = document.querySelector("#files-section");
   let settingsSection = document.querySelector("#settings-section");
+  let downloadSection = document.querySelector("#downloader-section");
 
   homeSection.style.display = "none";
   filesSection.style.display = "none";
   settingsSection.style.display = "block";
+  downloadSection.style.display = "none";
 }
 
 function showFilesSection() {
   let homeSection = document.querySelector("#dashboard-section");
   let filesSection = document.querySelector("#files-section");
   let settingsSection = document.querySelector("#settings-section");
+  let downloadSection = document.querySelector("#downloader-section");
 
   homeSection.style.display = "none";
   filesSection.style.display = "block";
   settingsSection.style.display = "none";
+  downloadSection.style.display = "none";
 }
 
 //About me button
@@ -118,7 +125,42 @@ function unixTimestampToString(unixTimestamp) {
   }
 }
 
+function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
+  fetch("http://localhost:3000/drives")
+    .then((response) => response.json())
+    .then((data) => {
+      const availableDrives = document.getElementById("download-status");
+
+      // Build the drive list string
+      let driveList = "";
+      data.Drives.forEach((drive) => {
+        driveList += `${drive.Drive} ${drive.DriveSpace} | `;
+      });
+
+      // Remove the trailing '|' character from the drive list string
+      driveList = driveList.slice(0, -2);
+
+      // Update the text content of the download status element with the drive list string
+      availableDrives.textContent = driveList;
+    });
+
+  document.getElementById("downloader-game-name").textContent = Gamename;
+  document.getElementById(
+    "downloadlocation"
+  ).value = `C:\\CloudForce\\${Gamename}`;
+  let homeSection = document.querySelector("#dashboard-section");
+  let filesSection = document.querySelector("#files-section");
+  let settingsSection = document.querySelector("#settings-section");
+  let downloadSection = document.querySelector("#downloader-section");
+
+  homeSection.style.display = "none";
+  filesSection.style.display = "none";
+  settingsSection.style.display = "none";
+  downloadSection.style.display = "block";
+}
+
 window.addEventListener("load", () => {
+  let downloading = false;
   showPopupBox("Welcome to CF Game Center!", "👋", 2000);
 
   fetch("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json")
@@ -130,25 +172,80 @@ window.addEventListener("load", () => {
         const gameItem = document.createElement("div");
         gameItem.className = "game-item";
         gameItem.style.animation = "fadeIn 1s ease-in-out;";
-      
+
         const gamePoster = document.createElement("div");
         gamePoster.className = "game-poster";
         const posterImg = document.createElement("img");
         posterImg.src = game.GamePoster;
         gamePoster.appendChild(posterImg);
-      
+
         const gameName = document.createElement("div");
         gameName.className = "game-name";
         gameName.textContent = game.Gamename;
-      
+
         gameItem.appendChild(gamePoster);
         gameItem.appendChild(gameName);
         gameList.appendChild(gameItem);
-      
+
         gameItem.addEventListener("click", () => {
           // handle click event here
-          showPopupBox(`Clicked on ${game.Gamename}!`, "🎮", 3000);
+          if (downloading) {
+            showPopupBox("Something is already downloading!", "🤔", 5000);
+          } else {
+            showDownloadMenu(
+              game.Gamename,
+              game.GaneDownload,
+              game.GameLaunch,
+              game.GameSize
+            );
+          }
         });
       });
     });
+
+  //Download stuff
+  const downloadButton = document.getElementById("download-button");
+  downloadButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    downloadButton.textContent = "Loading...";
+    downloadButton.disabled = true;
+    const gameName = document.getElementById("downloader-game-name").textContent;
+    console.log(gameName)
+    try {
+    fetch("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json")
+      .then((response) => response.json())
+      .then((data) => {
+        const { GameDownload, GameLaunch } = data.crack.find((game) => game.Gamename === gameName);
+        const [drive, name] = GameDownload.split(":");
+        const disk = "C";
+        const directory = `Downloads`;
+        const xhr = new XMLHttpRequest();
+        xhr.open(
+          "POST",
+          `http://localhost:3000/download?drive=${drive}&name=${name}&disk=${disk}&directory=${directory}&gameLaunch=${GameLaunch}`,
+          true
+        );
+        xhr.responseType = "text";
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          
+        } else if (
+          xhr.readyState === 4 &&
+          (xhr.status === 400 )
+        ) {
+          showPopupBox("Already installed!", "😢", 5000);
+          downloadButton.textContent = "Install";
+          downloadButton.disabled = false;
+        } else {
+          showPopupBox("Something went wrong!", "😢", 5000);
+          downloadButton.textContent = "Install";
+          downloadButton.disabled = false;
+        }
+        xhr.send();
+      });
+    } catch {
+      showPopupBox("Something went wrong!", "😢", 5000);
+      downloadButton.textContent = "Install";
+      downloadButton.disabled = false;
+    }
+  });
 });
