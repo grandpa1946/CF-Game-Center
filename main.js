@@ -68,6 +68,12 @@ app.on("ready", () => {
       }
     );
   }
+
+  //Create installed.json if it doesn't exist
+  const JSONPath = mainPath + "/installed.json";
+  if (!fs.existsSync(JSONPath)) {
+    fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
+  }
 });
 
 //ExpressJS server
@@ -117,7 +123,7 @@ app2.get("/drives", (req, res) => {
 
 app2.post("/download", async (req, res) => {
   const downloadURL = req.query.drive + ":" + req.query.name;
-  const disk = req.query.disk
+  const disk = req.query.disk;
   const directory = req.query.directory;
   const downloadFilterPath = path.join(disk, directory);
   const downloadPath = downloadFilterPath.replace(req.query.name, "");
@@ -196,23 +202,121 @@ app2.post("/download", async (req, res) => {
   });
 
   process.on("close", async (code) => {
-
-    res.status(200).json({ message: "Download Complete"});
-    res.end()
+    res.status(200).json({ message: "Download Complete" });
+    res.end();
     const JSONPath = mainPath + "/installed.json";
     if (!fs.existsSync(JSONPath)) {
       fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
     }
 
-    const UpdatedPath = fs.readFileSync(JSONPath);
+    const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
 
     await UpdatedPath.Installed.push({
       Name: req.query.name,
-      GameLaunch: req.query.GameLaunch,
-      InstallLocation: downloadPath + "/" + req.query.name,
+      GameLaunch: req.query.gameLaunch,
+      InstallLocation: downloadPath + req.query.name,
+      InstallDirectory: downloadPath,
+      GameRunning: false,
     });
     fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
   });
+});
+
+app2.get("/installed", async (req, res) => {
+  const mainPath = path.join(os.homedir(), "CloudForce");
+  const JSONPath = mainPath + "/installed.json";
+  if (!fs.existsSync(JSONPath)) return res.status(200).json({ Installed: [] });
+  const Installed = await JSON.parse(fs.readFileSync(JSONPath));
+  res.status(200).json(Installed);
+});
+
+app2.post("/launch", async (req, res) => {
+  const mainPath = path.join(os.homedir(), "CloudForce");
+  const JSONPath = mainPath + "/installed.json";
+  const Installed = await JSON.parse(fs.readFileSync(JSONPath));
+  const Game = Installed.Installed.find((game) => game.Name === req.query.name);
+  const GamePath = Game.InstallLocation;
+  const GameLaunch = Game.GameLaunch;
+  const GameDirectory = Game.InstallDirectory;
+  const LaunchExe = path.join(GameDirectory, GameLaunch);
+  // Check if the game directory exists (Install Location)
+  if (!fs.existsSync(GamePath)) {
+    res.status(400).json({ error: "Game not installed" });
+    return;
+  }
+  //Start the game process
+  const process = spawn(LaunchExe, [], {
+    cwd: GameDirectory,
+    detached: true,
+  });
+  process.unref();
+  //Check if the process is running and send a response
+  if (process.pid) {
+    res.status(200).json({ message: "Game Launched" });
+  } else {
+    res.status(400).json({ error: "Game failed to launch" });
+  }
+
+  //Update the JSON file to show the game is running
+  const mathPath = mainPath + "/installed.json";
+  const UpdatedPath = await JSON.parse(fs.readFileSync(mathPath));
+  const GameIndex = UpdatedPath.Installed.findIndex(
+    (game) => game.Name === req.query.name
+  );
+  UpdatedPath.Installed[GameIndex].GameRunning = true;
+
+  //Write the updated JSON file
+  fs.writeFileSync(mathPath, JSON.stringify(UpdatedPath));
+
+  //When game is closed, update the JSON file to show the game is not running
+  process.on("close", async (code) => {
+    const mathPath = mainPath + "/installed.json";
+    const UpdatedPath = await JSON.parse(fs.readFileSync(mathPath));
+    const GameIndex = UpdatedPath.Installed.findIndex(
+      (game) => game.Name === req.query.name
+    );
+    UpdatedPath.Installed[GameIndex].GameRunning = false;
+    fs.writeFileSync(mathPath, JSON.stringify(UpdatedPath));
+  });
+});
+
+app2.get("/gameStatus", async (req, res) => {
+  const mainPath = path.join(os.homedir(), "CloudForce");
+  const JSONPath = mainPath + "/installed.json";
+  const Installed = await JSON.parse(fs.readFileSync(JSONPath));
+  const Game = Installed.Installed.find((game) => game.Name === req.query.name);
+  const GamePath = Game.InstallLocation;
+  const GameRunning = Game.GameRunning;
+  if (!fs.existsSync(GamePath)) {
+    res.status(400).json({ error: "Game not installed" });
+    return;
+  }
+  res.status(200).json({ GameRunning: GameRunning });
+});
+
+app2.get("/uninstall", async (req, res) => {
+  const mainPath = path.join(os.homedir(), "CloudForce");
+  const JSONPath = mainPath + "/installed.json";
+  const Installed = await JSON.parse(fs.readFileSync(JSONPath));
+  const Game = Installed.Installed.find((game) => game.Name === req.query.name);
+  const GamePath = Game.InstallLocation;
+  const GameDirectory = Game.InstallDirectory;
+  if (!fs.existsSync(GamePath)) {
+    res.status(400).json({ error: "Game not installed" });
+    return;
+  }
+  fs.rmdirSync(GameDirectory, { recursive: true });
+
+  const mathPath = mainPath + "/installed.json";
+  const UpdatedPath = await JSON.parse(fs.readFileSync(mathPath));
+  const GameIndex = UpdatedPath.Installed.findIndex(
+    (game) => game.Name === req.query.name
+  );
+  UpdatedPath.Installed.splice(GameIndex, 1);
+
+  fs.writeFileSync(mathPath, JSON.stringify(UpdatedPath));
+
+  res.status(200).json({ message: "Game uninstalled" });
 });
 
 const port = 3000;

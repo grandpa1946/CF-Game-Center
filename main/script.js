@@ -57,11 +57,13 @@ function showDashboardSection() {
   let filesSection = document.querySelector("#files-section");
   let settingsSection = document.querySelector("#settings-section");
   let downloadSection = document.querySelector("#downloader-section");
+  let installedSection = document.querySelector("#installed-section");
 
   homeSection.style.display = "block";
   filesSection.style.display = "none";
   settingsSection.style.display = "none";
   downloadSection.style.display = "none";
+  installedSection.style.display = "none";
 }
 
 function showSettingsSection() {
@@ -69,11 +71,13 @@ function showSettingsSection() {
   let filesSection = document.querySelector("#files-section");
   let settingsSection = document.querySelector("#settings-section");
   let downloadSection = document.querySelector("#downloader-section");
+  let installedSection = document.querySelector("#installed-section");
 
   homeSection.style.display = "none";
   filesSection.style.display = "none";
   settingsSection.style.display = "block";
   downloadSection.style.display = "none";
+  installedSection.style.display = "none";
 }
 
 function showFilesSection() {
@@ -81,11 +85,107 @@ function showFilesSection() {
   let filesSection = document.querySelector("#files-section");
   let settingsSection = document.querySelector("#settings-section");
   let downloadSection = document.querySelector("#downloader-section");
+  let installedSection = document.querySelector("#installed-section");
 
   homeSection.style.display = "none";
   filesSection.style.display = "block";
   settingsSection.style.display = "none";
   downloadSection.style.display = "none";
+  installedSection.style.display = "none";
+}
+
+function showDownloadSection() {
+  let homeSection = document.querySelector("#dashboard-section");
+  let filesSection = document.querySelector("#files-section");
+  let settingsSection = document.querySelector("#settings-section");
+  let downloadSection = document.querySelector("#downloader-section");
+  let installedSection = document.querySelector("#installed-section");
+  fetchInstalledContent();
+  homeSection.style.display = "none";
+  filesSection.style.display = "none";
+  settingsSection.style.display = "none";
+  downloadSection.style.display = "none";
+  installedSection.style.display = "block";
+}
+
+function fetchInstalledContent() {
+  const bannerList = document.getElementById("banner-list");
+  //clear it
+  bannerList.innerHTML = "";
+  fetch("http://localhost:3000/installed")
+    .then((response) => response.json())
+    .then((data) => {
+      data.Installed.forEach((banner) => {
+        const bannerItem = document.createElement("div");
+        bannerItem.className = "banner-item";
+
+        const bannerName = document.createElement("div");
+        bannerName.className = "banner-name";
+        bannerName.textContent = banner.Name;
+
+        const bannerButtons = document.createElement("div");
+        bannerButtons.className = "banner-buttons";
+
+        const infoButton = document.createElement("button");
+        infoButton.innerHTML = '<i class="bx bx-trash"></i>';
+        infoButton.classList.add("info-button");
+
+        const playButton = document.createElement("button");
+        playButton.innerHTML = '<i class="bx bx-play"></i>';
+        playButton.classList.add("play-button");
+        bannerButtons.appendChild(infoButton);
+        bannerButtons.appendChild(playButton);
+        bannerItem.appendChild(bannerName);
+        bannerItem.appendChild(bannerButtons);
+
+        bannerList.appendChild(bannerItem);
+        playButton.addEventListener("click", () => {
+          playButton.disabled = true;
+          playButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
+          const xhr = new XMLHttpRequest();
+          xhr.open(
+            "POST",
+            `http://localhost:3000/launch?name=${banner.Name}`,
+            true
+          );
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              showPopupBox("Launched Successfully!", "😎", 5000);
+              playButton.innerHTML = '<i class="bx bx-play"></i>';
+              playButton.disabled = false;
+            } else if (xhr.readyState === 4 && xhr.status === 400) {
+              showPopupBox("Failed to launch!", "😢", 5000);
+              playButton.innerHTML = '<i class="bx bx-play"></i>';
+              playButton.disabled = false;
+            }
+          };
+          xhr.send();
+        });
+
+        infoButton.addEventListener("click", () => {
+          infoButton.disabled = true;
+          infoButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
+          const xhr = new XMLHttpRequest();
+          xhr.open(
+            "GET",
+            `http://localhost:3000/uninstall?name=${banner.Name}`,
+            true
+          );
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              showPopupBox("Uninstalled Successfully!", "😎", 5000);
+              infoButton.innerHTML = '<i class="bx bx-trash"></i>';
+              infoButton.disabled = false;
+            } else if (xhr.readyState === 4 && xhr.status === 400) {
+              showPopupBox("Failed to uninstall!", "😢", 5000);
+              infoButton.innerHTML = '<i class="bx bx-trash"></i>';
+              infoButton.disabled = false;
+            }
+          };
+          xhr.send();
+        });
+      });
+    });
 }
 
 //About me button
@@ -126,43 +226,52 @@ function unixTimestampToString(unixTimestamp) {
 }
 
 function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
-  fetch("http://localhost:3000/drives")
-    .then((response) => response.json())
-    .then((data) => {
-      const availableDrives = document.getElementById("download-status");
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", `http://localhost:3000/gameStatus?name=${Gamename}`, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      showDownloadSection();
+    } else if (xhr.readyState === 4 && xhr.status === 404) {
+      fetch("http://localhost:3000/drives")
+        .then((response) => response.json())
+        .then((data) => {
+          const availableDrives = document.getElementById("download-status");
 
-      // Build the drive list string
-      let driveList = "";
-      data.Drives.forEach((drive) => {
-        driveList += `${drive.Drive} ${drive.DriveSpace} | `;
-      });
+          // Build the drive list string
+          let driveList = "";
+          data.Drives.forEach((drive) => {
+            driveList += `${drive.Drive} ${drive.DriveSpace} | `;
+          });
 
-      // Remove the trailing '|' character from the drive list string
-      driveList = driveList.slice(0, -2);
+          // Remove the trailing '|' character from the drive list string
+          driveList = driveList.slice(0, -2);
+          // Update the text content of the download status element with the drive list string
+          availableDrives.textContent = driveList;
+        });
 
-      // Update the text content of the download status element with the drive list string
-      availableDrives.textContent = driveList;
-    });
+      document.getElementById("downloader-game-name").textContent = Gamename;
+      document.getElementById(
+        "downloadlocation"
+      ).value = `C:\\CloudForce\\${Gamename}`;
+      let homeSection = document.querySelector("#dashboard-section");
+      let filesSection = document.querySelector("#files-section");
+      let settingsSection = document.querySelector("#settings-section");
+      let downloadSection = document.querySelector("#downloader-section");
+      let installedSection = document.querySelector("#installed-section");
 
-  document.getElementById("downloader-game-name").textContent = Gamename;
-  document.getElementById(
-    "downloadlocation"
-  ).value = `C:\\CloudForce\\${Gamename}`;
-  let homeSection = document.querySelector("#dashboard-section");
-  let filesSection = document.querySelector("#files-section");
-  let settingsSection = document.querySelector("#settings-section");
-  let downloadSection = document.querySelector("#downloader-section");
-
-  homeSection.style.display = "none";
-  filesSection.style.display = "none";
-  settingsSection.style.display = "none";
-  downloadSection.style.display = "block";
+      homeSection.style.display = "none";
+      filesSection.style.display = "none";
+      settingsSection.style.display = "none";
+      downloadSection.style.display = "block";
+      installedSection.style.display = "none";
+    }
+  };
+  xhr.send();
 }
 
 window.addEventListener("load", () => {
   let downloading = false;
   showPopupBox("Welcome to CF Game Center!", "👋", 2000);
-
   fetch("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json")
     .then((response) => response.json())
     .then((data) => {
@@ -215,7 +324,7 @@ window.addEventListener("load", () => {
     fetch("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json")
       .then((response) => response.json())
       .then((data) => {
-        const { GameDownload, GameLaunch } = data.crack.find(
+        const { GameDownload, Gamelaunch } = data.crack.find(
           (game) => game.Gamename === gameName
         );
         const [drive, name] = GameDownload.split(":");
@@ -234,13 +343,15 @@ window.addEventListener("load", () => {
         const xhr = new XMLHttpRequest();
         xhr.open(
           "POST",
-          `http://localhost:3000/download?drive=${drive}&name=${name}&disk=${disk}&directory=${directory}&gameLaunch=${GameLaunch}`,
+          `http://localhost:3000/download?drive=${drive}&name=${name}&disk=${disk}&directory=${directory}&gameLaunch=${Gamelaunch}`,
           true
         );
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
             showPopupBox("Download completed!", "😎", 5000);
-            downloadButton.textContent = "Installed";
+            downloadButton.textContent = "Install";
+            showDownloadSection();
+            downloadButton.disabled = false;
           } else if (xhr.readyState === 4 && xhr.status === 400) {
             showPopupBox("Already installed!", "😢", 5000);
             downloadButton.textContent = "Install";

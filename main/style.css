@@ -264,6 +264,18 @@
   z-index: 2;
 }
 
+.installed-section {
+  position: relative;
+  background: #262346;
+  background-color: #262346;
+  min-height: 100vh;
+  top: 0;
+  left: 78px;
+  width: calc(100% - 78px);
+  transition: all 0.5s ease;
+  z-index: 2;
+}
+
 
 .download-section .downloader-text {
   display: inline-block;
@@ -273,6 +285,7 @@
   margin: 18px;
   animation: fadeInRight 1s ease-in-out;
 }
+
 
 
 .download-button {
@@ -530,7 +543,7 @@ label {
 .floating-popup-box {
   position: fixed;
   bottom: 20px;
-  left: 40%;
+  left: 42%;
   transform: translateX(-50%);
   padding: 10px;
   background-color: #f2f2f2;
@@ -631,13 +644,13 @@ label {
   justify-content: space-between; /* Added this property */
   box-sizing: border-box;
   background-color: #1d1b31;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   user-select: none; /* Prevents content from being highlightable */
-  border-color: white;
+  border-color: rgb(48, 42, 129);
   border-style: solid;
 }
 
@@ -672,4 +685,84 @@ label {
   text-align: center;
   color: white; /* Added this property */
   margin: 10px; /* Added this property */
+}
+
+/*Scroll bar that matches style with the rest of website*/
+::-webkit-scrollbar {
+  width: 10px;
+  height: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(48, 42, 129);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5b00d1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6e71ff;
+}
+
+
+.banner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px; /* Add left and right padding */
+  box-sizing: border-box;
+}
+
+.banner-item {
+  display: flex;
+  flex-direction:row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  margin: 10px 0;
+  padding: 20px;
+  background-color: #1d1b31;
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.banner-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.banner-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.play-button,
+.info-button {
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.play-button:disabled {
+  cursor: not-allowed;
+}
+
+.play-button i,
+.info-button i {
+  font-size: 24px;
+  color: white;
 }
