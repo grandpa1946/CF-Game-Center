@@ -176,6 +176,7 @@ function fetchInstalledContent() {
               showPopupBox("Uninstalled Successfully!", "😎", 5000);
               infoButton.innerHTML = '<i class="bx bx-trash"></i>';
               infoButton.disabled = false;
+              fetchInstalledContent();
             } else if (xhr.readyState === 4 && xhr.status === 400) {
               showPopupBox("Failed to uninstall!", "😢", 5000);
               infoButton.innerHTML = '<i class="bx bx-trash"></i>';
