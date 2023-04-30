@@ -273,7 +273,7 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
 window.addEventListener("load", () => {
   let downloading = false;
   showPopupBox("Welcome to CF Game Center!", "👋", 2000);
-  fetch("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json")
+  fetch("https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json")
     .then((response) => response.json())
     .then((data) => {
       const gameList = document.querySelector(".game-list");
@@ -322,7 +322,7 @@ window.addEventListener("load", () => {
     const gameName = document.getElementById(
       "downloader-game-name"
     ).textContent;
-    fetch("https://files.zortos.me/Files/CF%20GC%20Resources/GameCenter.json")
+    fetch("https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json")
       .then((response) => response.json())
       .then((data) => {
         const { GameDownload, Gamelaunch } = data.crack.find(
