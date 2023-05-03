@@ -6,9 +6,8 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "build": "electron-forge make",
     "postinstall": "electron-builder install-app-deps",
-    "build": "electron-builder --windows ",
     "release": "electron-builder --windows  --publish always"
   },
   "author": "Kief#2583",
