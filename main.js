@@ -26,7 +26,7 @@ const createWindow = () => {
 
     webPreferences: {
       nodeIntegration: true,
-      devTools: false,
+      devTools: true,
     },
   });
   // Disable the application menu
@@ -69,7 +69,7 @@ app.on("ready", () => {
     const rcloneConfigPath = path.join(mainPath, "rclone.conf");
     const file2 = fs.createWriteStream(rcloneConfigPath);
     https.get(
-      "https://files.zortos.me/Files/CF%20GC%20Resources/rclone.conf",
+      "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
       (response) => {
         response.pipe(file2);
       }
@@ -147,7 +147,7 @@ app2.post("/download", async (req, res) => {
   }
 
   // Check if the download path exists, create it if it doesn't
-
+  console.log(downloadPath);
   // Check if Rclone is present, if not download it
   const rclonePath = path.join(mainPath, "rclone.exe");
   if (!fs.existsSync(rclonePath)) {
@@ -159,7 +159,7 @@ app2.post("/download", async (req, res) => {
     const rcloneConfigPath = path.join(mainPath, "rclone.conf");
     const file2 = fs.createWriteStream(rcloneConfigPath);
     https.get(
-      "https://files.zortos.me/Files/CF%20GC%20Resources/rclone.conf",
+      "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
       (response) => {
         response.pipe(file2);
       }
