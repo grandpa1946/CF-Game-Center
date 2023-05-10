@@ -30,7 +30,7 @@ jobs:
             - ./node_modules
       - run:
           name: Generate Builds
-          command: npm run make --platform win32
+          command: npm run make --platform=win32
 
       - store_artifacts:
           path: ~/repo/out/make
