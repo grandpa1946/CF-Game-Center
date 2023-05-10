@@ -328,3 +328,4 @@ app2.get("/uninstall", async (req, res) => {
 
 const port = 3000;
 app2.listen(port, () => {});
+if (require('electron-squirrel-startup')) app.quit();
