@@ -16,6 +16,9 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-zip'
+      "platforms": [
+          "windows"
+       ]
     },
     {
       name: '@electron-forge/maker-squirrel',
