@@ -20,7 +20,7 @@ jobs:
             sudo apt-get update -y
             sudo apt-get install -y dpkg fakeroot
             sudo apt-get install -y rpm 
-            sudo apt-get install -y mono 
+            sudo apt-get install -y mono-complete
 
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
