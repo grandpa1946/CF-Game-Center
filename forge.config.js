@@ -14,5 +14,16 @@ module.exports = {
       name: '@electron-forge/maker-rpm',
       config: {},
     },
+    {
+      name: '@electron-forge/maker-zip'
+    },
+    {
+      name: '@electron-forge/maker-squirrel',
+      config: {
+        authors: 'Zortos and Kief',
+        description: 'Cloudforce Game Center'
+      },
+      
+    },
   ],
 };
