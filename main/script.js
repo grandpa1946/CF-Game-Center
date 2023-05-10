@@ -226,6 +226,22 @@ function unixTimestampToString(unixTimestamp) {
   }
 }
 
+function Login(username,password) {
+  xhr.open("POST", `http://localhost:3000/login?username=${username}&password=${password}`, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      showPopupBox("Logged in successfully!", "😎", 5000);
+      showHomeSection();
+    } else if (xhr.readyState === 4 && xhr.status === 404) {
+      showPopupBox("Failed to login!", "😢", 5000);
+    }
+   
+  };
+  xhr.send();
+}
+
+
+
 function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
   const xhr = new XMLHttpRequest();
   xhr.open("POST", `http://localhost:3000/gameStatus?name=${Gamename}`, true);
