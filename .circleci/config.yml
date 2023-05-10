@@ -15,12 +15,14 @@ jobs:
           name: Install Dependencies
           command: npm install
       - run:
-          name: Install dpkg and fakeroot
+          name: Install Packages (dpkg,fakeroot,rpm,mono,Wine)
           command: |
+            sudo dpkg --add-architecture i386 
+            sudo mkdir -pm755 /etc/apt/keyrings
+            sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+            sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/focal/winehq-focal.sources
             sudo apt-get update -y
-            sudo apt-get install -y dpkg fakeroot
-            sudo apt-get install -y rpm 
-            sudo apt-get install -y mono-complete
+            sudo apt-get install -y dpkg fakeroot rpm mono-complete winehq-stable
 
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
