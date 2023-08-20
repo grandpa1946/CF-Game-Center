@@ -115,6 +115,9 @@ function fetchInstalledContent() {
   fetch("http://localhost:3000/installed")
     .then((response) => response.json())
     .then((data) => {
+      if(data.Installed.length === 0){
+        //put 
+      }
       data.Installed.forEach((banner) => {
         const bannerItem = document.createElement("div");
         bannerItem.className = "banner-item";
