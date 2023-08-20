@@ -247,53 +247,63 @@ app2.get("/installed", async (req, res) => {
 });
 
 app2.post("/launch", async (req, res) => {
-  const mainPath = path.join(os.homedir(), "CloudForce");
-  const JSONPath = mainPath + "/installed.json";
-  const Installed = await JSON.parse(fs.readFileSync(JSONPath));
-  const Game = Installed.Installed.find((game) => game.Name === req.query.name);
-  const GamePath = Game.InstallLocation;
-  const GameLaunch = Game.GameLaunch;
-  const GameDirectory = Game.InstallDirectory;
-  const LaunchExe = path.join(GameDirectory, GameLaunch);
-  // Check if the game directory exists (Install Location)
-  if (!fs.existsSync(GamePath)) {
-    res.status(400).json({ error: "Game not installed" });
-    return;
+  try {
+    const mainPath = path.join(os.homedir(), "CloudForce");
+    const JSONPath = path.join(mainPath, "installed.json");
+    
+    // Read the JSON file
+    const installedData = JSON.parse(fs.readFileSync(JSONPath));
+
+    const gameName = req.query.name;
+    const game = installedData.Installed.find((game) => game.Name === gameName);
+
+    if (!game) {
+      return res.status(400).json({ error: "Game not installed" });
+    }
+
+    const { InstallLocation, GameLaunch, InstallDirectory } = game;
+    const launchExe = path.join(InstallDirectory, GameLaunch);
+
+    // Check if the game directory exists (Install Location)
+    if (!fs.existsSync(InstallLocation)) {
+      return res.status(400).json({ error: "Game not installed" });
+    }
+
+    // Start the game process
+    const gameProcess = spawn(launchExe, [], {
+      cwd: InstallDirectory,
+      detached: true,
+    });
+
+    // Check if the process is running and send a response
+    gameProcess.on("exit", (code) => {
+      // When the game is closed, update the JSON file to show the game is not running
+      const updatedData = JSON.parse(fs.readFileSync(JSONPath));
+      const gameIndex = updatedData.Installed.findIndex((game) => game.Name === gameName);
+
+      if (gameIndex !== -1) {
+        updatedData.Installed[gameIndex].GameRunning = false;
+        fs.writeFileSync(JSONPath, JSON.stringify(updatedData));
+      }
+
+      if (code === 0) {
+        res.status(200).json({ message: "Game Launched" });
+      } else {
+        res.status(400).json({ error: "Game failed to launch" });
+      }
+    });
+
+    // Update the JSON file to show the game is running
+    const gameIndex = installedData.Installed.findIndex((game) => game.Name === gameName);
+    if (gameIndex !== -1) {
+      installedData.Installed[gameIndex].GameRunning = true;
+      fs.writeFileSync(JSONPath, JSON.stringify(installedData));
+    }
+    
+  } catch (error) {
+    console.error("Error launching the game:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-  //Start the game process
-  const process = spawn(LaunchExe, [], {
-    cwd: GameDirectory,
-    detached: true,
-  });
-  process.unref();
-  //Check if the process is running and send a response
-  if (process.pid) {
-    res.status(200).json({ message: "Game Launched" });
-  } else {
-    res.status(400).json({ error: "Game failed to launch" });
-  }
-
-  //Update the JSON file to show the game is running
-  const mathPath = mainPath + "/installed.json";
-  const UpdatedPath = await JSON.parse(fs.readFileSync(mathPath));
-  const GameIndex = UpdatedPath.Installed.findIndex(
-    (game) => game.Name === req.query.name
-  );
-  UpdatedPath.Installed[GameIndex].GameRunning = true;
-
-  //Write the updated JSON file
-  fs.writeFileSync(mathPath, JSON.stringify(UpdatedPath));
-
-  //When game is closed, update the JSON file to show the game is not running
-  process.on("close", async (code) => {
-    const mathPath = mainPath + "/installed.json";
-    const UpdatedPath = await JSON.parse(fs.readFileSync(mathPath));
-    const GameIndex = UpdatedPath.Installed.findIndex(
-      (game) => game.Name === req.query.name
-    );
-    UpdatedPath.Installed[GameIndex].GameRunning = false;
-    fs.writeFileSync(mathPath, JSON.stringify(UpdatedPath));
-  });
 });
 
 app2.get("/gameStatus", async (req, res) => {
@@ -310,32 +320,48 @@ app2.get("/gameStatus", async (req, res) => {
   res.status(200).json({ GameRunning: GameRunning });
 });
 
-app2.get("/uninstall", async (req, res) => {
-  const mainPath = path.join(os.homedir(), "CloudForce");
-  const JSONPath = mainPath + "/installed.json";
-  const Installed = await JSON.parse(fs.readFileSync(JSONPath));
-  const Game = Installed.Installed.find((game) => game.Name === req.query.name);
-  const GamePath = Game.InstallLocation;
-  const GameDirectory = Game.InstallDirectory;
-  if (!fs.existsSync(GamePath)) {
-    res.status(400).json({ error: "Game not installed" });
-    return;
+app2.get('/uninstall', async (req, res) => {
+  try {
+    const mainPath = path.join(os.homedir(), 'CloudForce');
+    const JSONPath = path.join(mainPath, 'installed.json');
+
+    // Read installed.json using fs.promises.readFile
+    const installedData = JSON.parse(await fs.readFile(JSONPath));
+
+    // Find the game by name
+    const game = installedData.Installed.find(game => game.Name === req.query.name);
+
+    if (!game) {
+      res.status(400).json({ error: 'Game not installed' });
+      return;
+    }
+
+    const gamePath = game.InstallLocation;
+    const gameDirectory = game.InstallDirectory;
+
+    if (!fs.existsSync(gamePath)) {
+      res.status(400).json({ error: 'Game not installed' });
+      return;
+    }
+
+    // Use fs.promises.rm to remove directories recursively
+    await fs.rm(gameDirectory, { recursive: true });
+
+    // Remove the game from the installed list
+    const gameIndex = installedData.Installed.indexOf(game);
+    installedData.Installed.splice(gameIndex, 1);
+
+    // Write the updated data back to installed.json
+    await fs.writeFile(JSONPath, JSON.stringify(installedData));
+
+    res.status(200).json({ message: 'Game uninstalled' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  fs.rmdirSync(GameDirectory, { recursive: true });
-
-  const mathPath = mainPath + "/installed.json";
-  const UpdatedPath = await JSON.parse(fs.readFileSync(mathPath));
-  const GameIndex = UpdatedPath.Installed.findIndex(
-    (game) => game.Name === req.query.name
-  );
-  UpdatedPath.Installed.splice(GameIndex, 1);
-
-  fs.writeFileSync(mathPath, JSON.stringify(UpdatedPath));
-
-  res.status(200).json({ message: "Game uninstalled" });
 });
 
-app2.get("/login", async (req, res) => {
+app2.post("/login", async (req, res) => {
   const KeyAuthApp = new KeyAuth(
     "CF Game Center", // Application Name
     "0t0Sr0pLaB", // OwnerID
