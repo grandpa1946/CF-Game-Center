@@ -11,7 +11,7 @@ const app2 = express();
 const bp = require("body-parser"); //Body Parser
 const cors = require("cors"); //CORS Policy
 const https = require("https");
-const KeyAuth = require('./KeyAuth');
+const KeyAuth = require("./KeyAuth");
 const { env } = require("process");
 
 const createWindow = () => {
@@ -328,7 +328,6 @@ app2.get("/uninstall", async (req, res) => {
   res.status(200).json({ message: "Game uninstalled" });
 });
 
-
 app2.get("/login", async (req, res) => {
   const KeyAuthApp = new KeyAuth(
     "CF Game Center", // Application Name
@@ -343,9 +342,7 @@ app2.get("/login", async (req, res) => {
   } else {
     res.status(400).json({ error: "Login Failed" });
   }
-
 });
-
 
 app2.get("/savetocloud", async (req, res) => {
   //Get the game name from the query
@@ -355,16 +352,18 @@ app2.get("/savetocloud", async (req, res) => {
   //Get the game cloud save directory from the query
   const GameCloudDirectory = req.query.cloudDirectory;
   //use rclone to save it to cloud
-  const process = spawn(rclonePath, ["copy", GameSaveDirectory, GameCloudDirectory]);
+  const process = spawn(rclonePath, [
+    "copy",
+    GameSaveDirectory,
+    GameCloudDirectory,
+  ]);
   //Check if the process is running and no errors outputted
   if (process.pid) {
     res.status(200).json({ message: "Save Successful" });
   } else {
     res.status(400).json({ error: "Save Failed" });
   }
-  
 });
-
 
 app2.get("/loadfromcloud", async (req, res) => {
   //Get the game name from the query
@@ -374,7 +373,11 @@ app2.get("/loadfromcloud", async (req, res) => {
   //Get the game cloud save directory from the query
   const GameCloudDirectory = req.query.cloudDirectory;
   //use rclone to save it to cloud
-  const process = spawn(rclonePath, ["copy", GameCloudDirectory, GameSaveDirectory]);
+  const process = spawn(rclonePath, [
+    "copy",
+    GameCloudDirectory,
+    GameSaveDirectory,
+  ]);
   //Check if the process is running and no errors outputted
   if (process.pid) {
     res.status(200).json({ message: "Load Successful" });
@@ -384,4 +387,4 @@ app2.get("/loadfromcloud", async (req, res) => {
 });
 const port = 3000;
 app2.listen(port, () => {});
-if (require('electron-squirrel-startup')) app.quit();
+if (require("electron-squirrel-startup")) app.quit();

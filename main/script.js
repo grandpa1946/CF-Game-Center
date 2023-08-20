@@ -422,7 +422,9 @@ window.addEventListener("load", async () => {
     }
     try {
       const fileResponse = await Promise.race([
-        fetch("https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json"),
+        fetch(
+          "https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json"
+        ),
         new Promise((_, reject) => setTimeout(() => reject(), 5000)),
       ]);
       if (fileResponse.status == 200) {
