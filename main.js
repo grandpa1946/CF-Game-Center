@@ -91,7 +91,7 @@ app2.use(bp.urlencoded({ extended: true })); //Body Parser
 app2.use(cors()); //CORS Policy
 
 app2.get("/", (req, res) => {
-  res.send({ message: "Online" });
+  res.send({ message: "CF Game Center | ONLINE" });
 });
 
 app2.get("/drives", (req, res) => {
@@ -131,105 +131,112 @@ app2.get("/drives", (req, res) => {
 });
 
 app2.post("/download", async (req, res) => {
-  const downloadURL = req.query.drive + ":" + req.query.name;
-  const disk = req.query.disk;
-  const directory = req.query.directory;
-  const downloadFilterPath = path.join(disk, directory);
-  const downloadPath = downloadFilterPath.replace(req.query.name, "");
+  try {
+    const downloadURL = req.query.drive + ":" + req.query.name;
+    const disk = req.query.disk;
+    const directory = req.query.directory;
+    const downloadFilterPath = path.join(disk, directory);
+    const downloadPath = downloadFilterPath.replace(req.query.name, "");
 
-  const mainPath = path.join(os.homedir(), "CloudForce");
-  if (!fs.existsSync(mainPath)) {
-    fs.mkdirSync(mainPath);
-  }
-
-  // Check if the game is already downloaded
-  if (fs.existsSync(path.join(downloadPath, req.query.name))) {
-    res.status(400).json({ error: "Game already downloaded" });
-    return;
-  }
-
-  // Check if the download path exists, create it if it doesn't
-  console.log(downloadPath);
-  // Check if Rclone is present, if not download it
-  const rclonePath = path.join(mainPath, "rclone.exe");
-  if (!fs.existsSync(rclonePath)) {
-    const file = fs.createWriteStream(rclonePath);
-    https.get("https://picteon.dev/files/rclone.exe", (response) => {
-      response.pipe(file);
-    });
-    //Get Rclone Config
-    const rcloneConfigPath = path.join(mainPath, "rclone.conf");
-    const file2 = fs.createWriteStream(rcloneConfigPath);
-    https.get(
-      "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
-      (response) => {
-        response.pipe(file2);
-      }
-    );
-  }
-  // Start the download process
-  const process = spawn(rclonePath, [
-    "copy",
-    "-P",
-    "--transfers=10",
-    "--checkers=16",
-    downloadURL,
-    downloadPath,
-  ]);
-
-  // Set up variables to store download progress
-  let eta = "";
-  let speed = "";
-  let percent = "";
-
-  // Set up interval to send progress updates every 3 seconds
-
-  // Set up event listeners to monitor the progress of the download process
-  process.stdout.on("data", (data) => {
-    const output = data.toString();
-    if (output.includes("ETA")) {
-      const regex =
-        /Transferred:\s*[\d.]+\s*\w+\s*\/\s*[\d.]+\s*\w+,\s*([\d]+)%,\s*([\d.]+)\s*(\w+\/s),\s*ETA\s*([\d]+[smh])/;
-      const match = output.match(regex);
-      if (match) {
-        percent = match[1];
-        speed = match[2] + match[3];
-        eta = match[4];
-        const mainWindow = BrowserWindow.getAllWindows()[0];
-        mainWindow.webContents.executeJavaScript(
-          `document.getElementById("download-status").innerHTML = "Speed: ${speed} | ETA: ${eta} | ${percent}%"`
-        );
-        mainWindow.webContents.executeJavaScript(
-          `document.getElementById("download-button").innerHTML = "Installing"`
-        );
-      }
-    }
-  });
-
-  process.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
-  });
-
-  process.on("close", async (code) => {
-    res.status(200).json({ message: "Download Complete" });
-    res.end();
-    const JSONPath = mainPath + "/installed.json";
-    if (!fs.existsSync(JSONPath)) {
-      fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
+    const mainPath = path.join(os.homedir(), "CloudForce");
+    if (!fs.existsSync(mainPath)) {
+      fs.mkdirSync(mainPath);
     }
 
-    const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
+    // Check if the game is already downloaded
+    if (fs.existsSync(path.join(downloadPath, req.query.name))) {
+      return res.status(400).json({ error: "Game already downloaded" });
+    }
 
-    await UpdatedPath.Installed.push({
-      Name: req.query.name,
-      GameLaunch: req.query.gameLaunch,
-      InstallLocation: downloadPath + req.query.name,
-      InstallDirectory: downloadPath,
-      GameRunning: false,
+    // Check if Rclone is present, if not download it
+    const rclonePath = path.join(mainPath, "rclone.exe");
+    if (!fs.existsSync(rclonePath)) {
+      await downloadFile("https://picteon.dev/files/rclone.exe", rclonePath);
+      // Download Rclone Config
+      const rcloneConfigPath = path.join(mainPath, "rclone.conf");
+      await downloadFile("https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf", rcloneConfigPath);
+    }
+
+    // Start the download process
+    const process = spawn(rclonePath, [
+      "copy",
+      "-P",
+      "--transfers=10",
+      "--checkers=16",
+      downloadURL,
+      downloadPath,
+    ]);
+
+    // Set up variables to store download progress
+    let eta = "";
+    let speed = "";
+    let percent = "";
+
+    // Set up event listeners to monitor the progress of the download process
+    process.stdout.on("data", (data) => {
+      const output = data.toString();
+      if (output.includes("ETA")) {
+        const regex =
+          /Transferred:\s*[\d.]+\s*\w+\s*\/\s*[\d.]+\s*\w+,\s*([\d]+)%,\s*([\d.]+)\s*(\w+\/s),\s*ETA\s*([\d]+[smh])/;
+        const match = output.match(regex);
+        if (match) {
+          percent = match[1];
+          speed = match[2] + match[3];
+          eta = match[4];
+          const mainWindow = BrowserWindow.getAllWindows()[0];
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-status").innerHTML = "Speed: ${speed} | ETA: ${eta} | ${percent}%"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-button").innerHTML = "Installing"`
+          );
+        }
+      }
     });
-    fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
-  });
+
+    process.stderr.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+    });
+
+    process.on("close", async (code) => {
+      res.status(200).json({ message: "Download Complete" });
+      const JSONPath = mainPath + "/installed.json";
+      if (!fs.existsSync(JSONPath)) {
+        fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
+      }
+
+      const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
+
+      UpdatedPath.Installed.push({
+        Name: req.query.name,
+        GameLaunch: req.query.gameLaunch,
+        InstallLocation: downloadPath + req.query.name,
+        InstallDirectory: downloadPath,
+        GameRunning: false,
+      });
+      fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
+async function downloadFile(url, destPath) {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(destPath);
+    https.get(url, (response) => {
+      response.pipe(file);
+      file.on("finish", () => {
+        file.close();
+        resolve();
+      });
+    }).on("error", (err) => {
+      fs.unlink(destPath, () => reject(err));
+    });
+  });
+}
+
 
 app2.get("/installed", async (req, res) => {
   const mainPath = path.join(os.homedir(), "CloudForce");
