@@ -226,8 +226,12 @@ function unixTimestampToString(unixTimestamp) {
   }
 }
 
-function Login(username,password) {
-  xhr.open("POST", `http://localhost:3000/login?username=${username}&password=${password}`, true);
+function Login(username, password) {
+  xhr.open(
+    "POST",
+    `http://localhost:3000/login?username=${username}&password=${password}`,
+    true
+  );
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       showPopupBox("Logged in successfully!", "😎", 5000);
@@ -235,12 +239,9 @@ function Login(username,password) {
     } else if (xhr.readyState === 4 && xhr.status === 404) {
       showPopupBox("Failed to login!", "😢", 5000);
     }
-   
   };
   xhr.send();
 }
-
-
 
 function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
   const xhr = new XMLHttpRequest();
@@ -281,6 +282,9 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
       settingsSection.style.display = "none";
       downloadSection.style.display = "block";
       installedSection.style.display = "none";
+    } else {
+      //show popup box with error
+      showPopupBox("Failed to get game status!", "😢", 5000);
     }
   };
   xhr.send();
@@ -289,7 +293,9 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
 window.addEventListener("load", () => {
   let downloading = false;
   showPopupBox("Welcome to CF Game Center!", "👋", 2000);
-  fetch("https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json")
+  fetch(
+    "https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json"
+  )
     .then((response) => response.json())
     .then((data) => {
       const gameList = document.querySelector(".game-list");
@@ -338,7 +344,9 @@ window.addEventListener("load", () => {
     const gameName = document.getElementById(
       "downloader-game-name"
     ).textContent;
-    fetch("https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json")
+    fetch(
+      "https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json"
+    )
       .then((response) => response.json())
       .then((data) => {
         const { GameDownload, Gamelaunch } = data.crack.find(
@@ -380,4 +388,46 @@ window.addEventListener("load", () => {
         xhr.send();
       });
   });
+});
+
+window.addEventListener("load", async () => {
+  const fileServerStatus = document.getElementById("installed-status");
+  const gamesStatus = document.getElementById("games-status");
+
+  const handleTimeout = (serverStatus, message) => {
+    if (message == "none") {
+      serverStatus.innerHTML = `<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"> <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> None </span>`;
+    } else if (message == "error") {
+      serverStatus.innerHTML = `<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"> <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> Error </span>`;
+    } else {
+      serverStatus.innerHTML = `<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"> <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> None </span>`;
+    }
+  };
+
+  const updateStatus = async () => {
+    try {
+      // Make an API request to files.printedwaste.live with a 5-second timeout
+      const fileResponse = await Promise.race([
+        fetch("http://localhost:3000/installed"),
+        new Promise((_, reject) => setTimeout(() => reject(), 5000)),
+      ]);
+      if (fileResponse.status == 200) {
+        const data = await fileResponse.json();
+        const amount = data.length;
+        fileServerStatus.innerHTML = `<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"> <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span> ${amount} </span>`;
+      } else {
+        handleTimeout(fileServerStatus, "none");
+      }
+    } catch (error) {
+      handleTimeout(fileServerStatus, "error");
+    }
+  };
+
+  // Initial update when the page loads
+  setTimeout(() => {
+    updateStatus();
+  }, 5000);
+
+  // Set the interval to update status every 30 seconds
+  setInterval(updateStatus, 30000);
 });

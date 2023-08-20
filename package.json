@@ -1,6 +1,6 @@
 {
   "name": "cloudforce",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Cloudforce game center",
   "main": "main.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "postinstall": "electron-builder install-app-deps",
     "release": "electron-builder --windows  --publish always"
   },
-  "author": "Kief#2583",
+  "author": "printedwaste",
   "license": "MIT",
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
