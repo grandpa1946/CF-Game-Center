@@ -406,20 +406,34 @@ window.addEventListener("load", async () => {
 
   const updateStatus = async () => {
     try {
-      // Make an API request to files.printedwaste.live with a 5-second timeout
       const fileResponse = await Promise.race([
         fetch("http://localhost:3000/installed"),
         new Promise((_, reject) => setTimeout(() => reject(), 5000)),
       ]);
       if (fileResponse.status == 200) {
         const data = await fileResponse.json();
-        const amount = data.length;
+        const amount = data.Installed.length;
         fileServerStatus.innerHTML = `<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"> <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span> ${amount} </span>`;
       } else {
         handleTimeout(fileServerStatus, "none");
       }
     } catch (error) {
       handleTimeout(fileServerStatus, "error");
+    }
+    try {
+      const fileResponse = await Promise.race([
+        fetch("https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json"),
+        new Promise((_, reject) => setTimeout(() => reject(), 5000)),
+      ]);
+      if (fileResponse.status == 200) {
+        const data = await fileResponse.json();
+        const amount = data.crack.length;
+        gamesStatus.innerHTML = `<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"> <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span> ${amount} </span>`;
+      } else {
+        handleTimeout(gamesStatus, "none");
+      }
+    } catch (error) {
+      handleTimeout(gamesStatus, "error");
     }
   };
 
