@@ -1,6 +1,5 @@
 /* Google Font Link */
 
-
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 * {
   margin: 0;
@@ -82,6 +81,7 @@
   left: calc(100% + 15px);
   z-index: 3;
   background: #fff;
+  color: black;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
   padding: 6px 12px;
   border-radius: 4px;
@@ -102,6 +102,20 @@
 .sidebar.open li .tooltip {
   display: none;
 }
+
+article {
+  /*slide in animation*/
+  animation: slideIn 0.5s;
+}
+h2 {
+  /*slide in animation*/
+  animation: slideIn 0.5s;
+}
+a {
+  /*slide in animation*/
+  animation: slideIn 0.5s;
+}
+
 .sidebar input {
   font-size: 15px;
   color: #fff;
@@ -130,11 +144,11 @@
 }
 .sidebar.open .bx-search:hover {
   background: #1d1b31;
-  color: #fff;
+  color: #000000;
 }
 .sidebar .bx-search:hover {
   background: #fff;
-  color: #11101d;
+  color: #000000;
 }
 .sidebar li a {
   display: flex;
@@ -148,6 +162,7 @@
 }
 .sidebar li a:hover {
   background: #fff;
+  color: black;
 }
 .sidebar li a .links_name {
   color: #fff;
@@ -165,7 +180,7 @@
 .sidebar li a:hover .links_name,
 .sidebar li a:hover i {
   transition: all 0.5s ease;
-  color: #11101d;
+  color: #000000;
 }
 .sidebar li i {
   height: 50px;
@@ -228,8 +243,8 @@
 }
 .home-section {
   position: relative;
-  background: #262346;
-  background-color: #262346;
+  background: #111827;
+  background-color: #111827;
   min-height: 100vh;
   top: 0;
   left: 78px;
@@ -276,7 +291,6 @@
   z-index: 2;
 }
 
-
 .download-section .downloader-text {
   display: inline-block;
   color: #d6d6d6;
@@ -285,8 +299,6 @@
   margin: 18px;
   animation: fadeInRight 1s ease-in-out;
 }
-
-
 
 .download-button {
   background-color: #fff;
@@ -315,8 +327,6 @@
   text-align: center;
   animation: fadeInRight 1s ease-in-out;
 }
-
-
 
 .download-button:hover {
   background-color: #3e8e41;
@@ -358,7 +368,6 @@
   transform: translate(-50%, -50%);
   animation: fadeInRight 1s ease-in-out;
 }
-
 
 @media (max-width: 420px) {
   .sidebar li .tooltip {
@@ -547,6 +556,7 @@ label {
   transform: translateX(-50%);
   padding: 10px;
   background-color: #f2f2f2;
+  color: black;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   font-size: 16px;
@@ -643,14 +653,14 @@ label {
   flex-direction: column; /* Added this property */
   justify-content: space-between; /* Added this property */
   box-sizing: border-box;
-  background-color: #1d1b31;
-  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.2);
+  background-color: #1f2937;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   user-select: none; /* Prevents content from being highlightable */
-  border-color: rgb(48, 42, 129);
+  border-color: #807878;
+  border-width: 2px;
   border-style: solid;
 }
 
@@ -705,7 +715,6 @@ label {
   background: #6e71ff;
 }
 
-
 .banner-container {
   display: flex;
   flex-direction: column;
@@ -717,7 +726,7 @@ label {
 
 .banner-item {
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -765,4 +774,14 @@ label {
 .info-button i {
   font-size: 24px;
   color: white;
+}
+
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }

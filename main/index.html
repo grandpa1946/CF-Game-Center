@@ -19,6 +19,17 @@
       type="text/css"
       href="./install/js/loading-bar.css"
     />
+        <link
+      href="https://cdn.jsdelivr.net/combine/npm/flowbite@1/dist/flowbite.min.css,npm/daisyui@2/dist/full.css"
+      rel="stylesheet"
+    />
+    <script
+      async
+      defer
+      src="https://cdn.jsdelivr.net/combine/npm/flowbite@1/dist/flowbite.min.js,npm/@fortawesome/fontawesome-free@6/js/all.min.js"
+      data-cfasync="false"
+    ></script>
+    <script src="https://cdn.tailwindcss.com" data-cfasync="false"></script>
     <script type="text/javascript" src="./install/js/loading-bar.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
@@ -75,27 +86,256 @@
         </li>
       </ul>
     </div>
-    <section class="home-section" id="dashboard-section" style="display: block">
-      <div class="text">Main</div>
-      <div>
-        <p>
-          <button
-            class="button-main"
-            type="submit"
-            onclick="showFilesSection()"
+        <section class="home-section" id="dashboard-section" style="display: block">
+      <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+        <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
+          <h2
+            class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+            style="transition: all 0.5s ease"
           >
-            <span class="button__text">Browse Games</span>
-            <span class="spinner"></span>
-          </button>
-          <button
-          class="button-main"
-          type="submit"
-          onclick="showPopupBox('Created by Kief and Zortos', '👨‍💻', 5000)"
-        >
-          <span class="button__text">Credits</span>
-          <span class="spinner"></span>
-        </button>
-        </p>
+            CloudForce Game Center
+          </h2>
+        </div>
+        
+        <div class="grid gap-8 lg:grid-cols-2">
+          <article
+            class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+          >
+            <div class="flex justify-between items-center mb-5 text-gray-500">
+              <span
+                class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800"
+              >
+                <svg
+                  class="mr-1 w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
+                    clip-rule="evenodd"
+                  ></path>
+                  <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path>
+                </svg>
+                Info
+              </span>
+            </div>
+            <h2
+              class="mb-2 text-2xl font-bold trackingHere's the continuation of the corrected HTML code: ```html -tight text-gray-900 dark:text-white"
+            >
+              <a href="#games">Games</a>
+              <span
+              class="inline-flex items-center"
+              style="align-self: center"
+              id="games"
+            >
+              <div
+                class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+              >
+                Fetching...
+              </div>
+            </span>
+            </h2>
+            <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
+              View games that you can install!
+            </p>
+            <div class="flex justify-between items-center">
+              <a
+                href="#files"
+                onclick="showFilesSection()"
+                
+                class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                style="color: rgb(221, 221, 221)"
+              >
+                Explorer Games
+                <svg
+                  class="ml-2 w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+          <article
+            class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+          >
+            <div class="flex justify-between items-center mb-5 text-gray-500">
+              <span
+                class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800"
+              >
+                <svg
+                  class="mr-1 w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
+                    clip-rule="evenodd"
+                  ></path>
+                  <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path>
+                </svg>
+                Info
+              </span>
+            </div>
+            <h2
+              class="mb-2 text-2xl font-bold trackingHere's the continuation of the corrected HTML code: ```html -tight text-gray-900 dark:text-white"
+              style="align-items: center"
+            >
+              <a href="https://files.printedwaste.live/">Installed Games</a>
+              <span
+                class="inline-flex items-center"
+                style="align-self: center"
+                id="file-server-status"
+              >
+                <div
+                  class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+                >
+                  Fetching...
+                </div>
+              </span>
+            </h2>
+            <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
+              Checkout the games you installed!
+            </p>
+            <div class="flex justify-between items-center">
+              <a
+                href="https://files.printedwaste.live/"
+                class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                style="color: rgb(221, 221, 221)"
+              >
+                View
+                <svg
+                  class="ml-2 w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+          <article
+            class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+          >
+            <div class="flex justify-between items-center mb-5 text-gray-500">
+              <span
+                class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800"
+              >
+                <svg
+                  class="mr-1 w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
+                    clip-rule="evenodd"
+                  ></path>
+                  <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path>
+                </svg>
+                Help
+              </span>
+            </div>
+            <h2
+              class="mb-2 text-2xl font-bold trackingHere's the continuation of the corrected HTML code: ```html -tight text-gray-900 dark:text-white"
+            >
+              <a href="https://discord.gg/zortos-cloud-gaming-926861356148326502">Support (Discord)</a>
+            </h2>
+            <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
+              On life support? Join our discord!
+            </p>
+            <div class="flex justify-between items-center">
+              <a
+                href="https://discord.gg/zortos-cloud-gaming-926861356148326502"
+                class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                style="color: rgb(221, 221, 221)"
+              >
+                Visit
+                <svg
+                  class="ml-2 w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+          <article
+            class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+          >
+            <div class="flex justify-between items-center mb-5 text-gray-500">
+              <span
+                class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800"
+              >
+                <svg
+                  class="mr-1 w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
+                    clip-rule="evenodd"
+                  ></path>
+                  <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path>
+                </svg>
+                Info
+              </span>
+            </div>
+            <h2
+              class="mb-2 text-2xl font-bold trackingHere's the continuation of the corrected HTML code: ```html -tight text-gray-900 dark:text-white"
+            >
+              <a href="https://api.printedwaste.live/">Settings</a>
+            </h2>
+            <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
+              Login backups and stuffs
+            </p>
+            <div class="flex justify-between items-center">
+              <a
+                href="https://api.printedwaste.live/"
+                class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                style="color: rgb(221, 221, 221)"
+              >
+                View
+                <svg
+                  class="ml-2 w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
     <section
