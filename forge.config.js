@@ -5,8 +5,7 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        "name": "CF Game Center",
-        "iconUrl": "./assets/icons/cloudforce.ico", 
+        "iconUrl": "https://cdn.discordapp.com/attachments/1102746676462104716/1143278436148842496/cloudforce.ico", 
       },
     },
     {
