@@ -787,3 +787,8 @@ label {
   left: 35%; /* Adjust the left position as needed */
   display: none;
 }
+
+#creditss {
+  animation: slideIn 0.5s ease-in-out forwards;
+  align-self: center;
+}

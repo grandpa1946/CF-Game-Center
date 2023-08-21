@@ -354,6 +354,7 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
           });
 
         document.getElementById("downloader-game-name").textContent = Gamename;
+        document.getElementById("size1").textContent = GameSize;
         document.getElementById(
           "downloadlocation"
         ).value = `C:\\CloudForce\\${Gamename}`;
