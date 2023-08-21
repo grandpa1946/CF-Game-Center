@@ -11,6 +11,13 @@
     "postinstall": "electron-builder install-app-deps",
     "release": "electron-builder --windows  --publish always"
   },
+  "build": {
+    "appId": "com.cloudforce.gamecenter",
+    "asar": true,
+    "win": {
+      "icon": "./assets/icons/cloudforce.ico"
+    }
+  },
   "author": "printedwaste",
   "license": "MIT",
   "devDependencies": {
