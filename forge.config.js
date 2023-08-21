@@ -4,7 +4,10 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        "name": "CF Game Center",
+        "iconUrl": "./assets/icons/cloudforce.ico", 
+      },
     },
     {
       name: '@electron-forge/maker-deb',
