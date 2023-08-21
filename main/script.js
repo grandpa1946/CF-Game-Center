@@ -150,7 +150,7 @@ function fetchInstalledContent() {
               ></path>
               <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path>
             </svg>
-            Help
+            Game
           </span>
         `;
 
@@ -217,6 +217,55 @@ function fetchInstalledContent() {
 
         // Append the article to the bannerList
         bannerList.appendChild(bannerItem);
+
+        // Add the event listeners
+        startButton.addEventListener("click", (event) => {
+          event.preventDefault();
+          startButton.disabled = true;
+          startButton.classList.add("loading");
+          showPopupBox("Starting game...");
+          const xhr = new XMLHttpRequest();
+          xhr.open(
+            "POST",
+            `http://localhost:3000/launch?name=${banner.Name}`,
+            true
+          );
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              showPopupBox("Launched Successfully!", "😎", 5000);
+              startButton.disabled = false;
+            } else if (xhr.readyState === 4 && xhr.status === 400) {
+              showPopupBox("Failed to launch!", "😢", 5000);
+              startButton.disabled = false;
+            }
+          };
+          xhr.send();
+        });
+
+        deleteButton.addEventListener("click", (event) => {
+          event.preventDefault();
+          deleteButton.disabled = true;
+          deleteButton.classList.add("loading");
+          showPopupBox("Deleting game...");
+          const xhr = new XMLHttpRequest();
+          xhr.open(
+            "POST",
+            `http://localhost:3000/uninstall?name=${banner.Name}`,
+            true
+          );
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              showPopupBox("Deleted Successfully!", "😎", 5000);
+              deleteButton.disabled = false;
+              // Remove the banner from the list
+              bannerList.removeChild(bannerItem);
+            } else if (xhr.readyState === 4 && xhr.status === 400) {
+              showPopupBox("Failed to delete!", "😢", 5000);
+              deleteButton.disabled = false;
+            }
+          };
+          xhr.send();
+        });
       });
     });
 }
@@ -324,7 +373,7 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
       }
     } else {
       //show popup box with error
-      showPopupBox("Failed to get game status!", "😢", 5000);
+      //showPopupBox("Failed to get game status!", "😢", 5000);
     }
   };
   xhr.send();
@@ -405,6 +454,7 @@ window.addEventListener("load", () => {
           downloadButton.disabled = false;
           return;
         }
+        console.log(name)
         const xhr = new XMLHttpRequest();
         xhr.open(
           "POST",
@@ -416,7 +466,6 @@ window.addEventListener("load", () => {
             showPopupBox("Download completed!", "😎", 5000);
             downloadButton.textContent = "Install";
             showDownloadSection();
-            fetchInstalledContent();
             downloadButton.disabled = false;
           } else if (xhr.readyState === 4 && xhr.status === 400) {
             showPopupBox("Already installed!", "😢", 5000);

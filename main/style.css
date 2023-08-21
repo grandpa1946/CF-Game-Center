@@ -111,10 +111,7 @@ h2 {
   /*slide in animation*/
   animation: slideIn 0.5s;
 }
-a {
-  /*slide in animation*/
-  animation: slideIn 0.5s;
-}
+
 
 .sidebar input {
   font-size: 15px;
@@ -302,7 +299,7 @@ a {
   font-size: 25px;
   font-weight: 500;
   margin: 18px;
-  animation: fadeInRight 1s ease-in-out;
+
 }
 
 .download-button {
@@ -317,20 +314,16 @@ a {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  animation: fadeInRight 1s ease-in-out;
 }
 
 .downloader-game-name {
   color: white;
   font-size: 24px;
-  margin-bottom: 10px;
   position: absolute;
-  top: 20%;
-  left: 50%;
+  top: 30%; /* Center vertically */
+  left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%);
-  transform-origin: center center;
   text-align: center;
-  animation: fadeInRight 1s ease-in-out;
 }
 
 .download-button:hover {
@@ -350,7 +343,7 @@ a {
   top: 35%;
   left: 32%;
   text-align: center;
-  animation: fadeInRight 1s ease-in-out;
+  /* animation: fadeInRight 1s ease-in-out; */
   background-color: #1d1b31;
   padding: 10px;
   border: 1px solid #666666;
@@ -361,15 +354,10 @@ a {
   /* Status text */
   color: white;
   font-size: 15px;
-  height: auto;
-  width: auto;
-  margin-bottom: 10px;
   position: absolute;
-  transform-origin: center center;
-  top: 42%;
-  left: 50%;
+  top: 45%; /* Adjust to your preferred vertical position */
+  left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%);
-  animation: fadeInRight 1s ease-in-out;
 }
 
 @media (max-width: 420px) {
@@ -786,4 +774,16 @@ label {
   100% {
     transform: translateX(0);
   }
+}
+
+.no-data {
+  animation: slideIn 0.5s ease-in-out forwards;
+}
+
+#shard1234 {
+  width: 30%;
+  position: absolute;
+  top: 50%; /* Add "px" to specify the top position in pixels */
+  left: 35%; /* Adjust the left position as needed */
+  display: none;
 }

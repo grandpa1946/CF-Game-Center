@@ -33,7 +33,7 @@ const createWindow = () => {
     },
   });
   // Disable the application menu
-  Menu.setApplicationMenu(null);
+  //Menu.setApplicationMenu(null);
 
   mainWindow.webContents.on("did-navigate", (event, url) => {
     event.preventDefault();
@@ -95,30 +95,41 @@ app2.get("/", (req, res) => {
   res.send({ message: "CF Game Center | ONLINE" });
 });
 
-app2.get('/drives', (req, res) => {
-  // Get a list of drive letters on Windows
-  const drives = [];
-  for (let i = 65; i <= 90; i++) {
-    const driveLetter = String.fromCharCode(i) + ':';
-    try {
-      const stats = statSync(driveLetter);
-      if (stats.isDirectory()) {
-        const driveInfo = {
-          Drive: driveLetter,
-          DriveSpace: `${(stats.size / (1024 * 1024 * 1024)).toFixed(2)}GB`,
-          AvailableSpace: `${(stats.available / (1024 * 1024 * 1024)).toFixed(2)}GB`,
-        };
-        drives.push(driveInfo);
+app2.get("/drives", (req, res) => {
+  // Use the 'wmic' command to get information about available drives on a Windows machine
+  exec(
+    "wmic logicaldisk get caption, size, freespace",
+    (err, stdout, stderr) => {
+      if (err) {
+        console.error(`Error: ${err.message}`);
+        return res.status(500).send("Internal Server Error");
       }
-    } catch (err) {
-      // Ignore drives that don't exist or can't be accessed
+
+      // Split the output into lines and remove any empty ones
+      const lines = stdout
+        .trim()
+        .split("\r\n")
+        .filter((line) => line !== "");
+
+      // Extract the drive information from each line and format the sizes in GB
+      const drives = lines.slice(1).map((line) => {
+        const [drive, size, available] = line.trim().split(/\s+/);
+        const sizeGB = Math.round(parseInt(size) / (1024 * 1024 * 1024));
+        const availableGB = Math.round(
+          parseInt(available) / (1024 * 1024 * 1024)
+        );
+        return {
+          Drive: drive,
+          DriveSpace: `${sizeGB}GB`,
+          AvailableSpace: `${availableGB}GB`,
+        };
+      });
+
+      // Send the drive information as JSON
+      res.json({ Drives: drives });
     }
-  }
-
-  // Send the drive information as JSON
-  res.json({ Drives: drives });
+  );
 });
-
 app2.post("/download", async (req, res) => {
   try {
     const downloadURL = req.query.drive + ":" + req.query.name;
@@ -126,7 +137,6 @@ app2.post("/download", async (req, res) => {
     const directory = req.query.directory;
     const downloadFilterPath = path.join(disk, directory);
     const downloadPath = downloadFilterPath.replace(req.query.name, "");
-
     const mainPath = path.join(os.homedir(), "CloudForce");
     if (!fs.existsSync(mainPath)) {
       fs.mkdirSync(mainPath);
@@ -154,7 +164,23 @@ app2.post("/download", async (req, res) => {
       "--checkers=16",
       downloadURL,
       downloadPath,
-    ]);
+    ])
+    // const JSONPath = mainPath + "/installed.json";
+    // if (!fs.existsSync(JSONPath)) {
+    //   fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
+    // }
+
+    // const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
+
+    // UpdatedPath.Installed.push({
+    //   Name: req.query.name,
+    //   GameLaunch: req.query.gameLaunch,
+    //   InstallLocation: downloadPath + req.query.name,
+    //   InstallDirectory: downloadPath,
+    //   GameRunning: false,
+    //   Downloading: true,
+    // });
+    // fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
 
     // Set up variables to store download progress
     let eta = "";
@@ -174,10 +200,22 @@ app2.post("/download", async (req, res) => {
           eta = match[4];
           const mainWindow = BrowserWindow.getAllWindows()[0];
           mainWindow.webContents.executeJavaScript(
-            `document.getElementById("download-status").innerHTML = "Speed: ${speed} | ETA: ${eta} | ${percent}%"`
+            `document.getElementById("download-status").innerHTML = ""`
           );
           mainWindow.webContents.executeJavaScript(
             `document.getElementById("download-button").innerHTML = "Installing"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("shard1234").style.display = "block"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-speed").innerHTML = "${speed}"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-progress").innerHTML = "${percent}% | ETA: ${eta}"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-bar").style.width = "${percent}%"`
           );
         }
       }
@@ -202,6 +240,7 @@ app2.post("/download", async (req, res) => {
         InstallLocation: downloadPath + req.query.name,
         InstallDirectory: downloadPath,
         GameRunning: false,
+        Downloading: false,
       });
       fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
     });
@@ -245,7 +284,6 @@ app2.post("/launch", async (req, res) => {
 
     const gameName = req.query.name;
     const game = installedData.Installed.find((game) => game.Name === gameName);
-
     if (!game) {
       return res.status(400).json({ error: "Game not installed" });
     }
@@ -309,13 +347,13 @@ app2.get("/gameStatus", async (req, res) => {
   res.status(200).json({ GameRunning: GameRunning });
 });
 
-app2.get('/uninstall', async (req, res) => {
+app2.post('/uninstall', async (req, res) => {
   try {
     const mainPath = path.join(os.homedir(), 'CloudForce');
     const JSONPath = path.join(mainPath, 'installed.json');
 
     // Read installed.json using fs.promises.readFile
-    const installedData = JSON.parse(await fs.readFile(JSONPath));
+    const installedData = await JSON.parse(fs.readFileSync(JSONPath));
 
     // Find the game by name
     const game = installedData.Installed.find(game => game.Name === req.query.name);
@@ -326,7 +364,6 @@ app2.get('/uninstall', async (req, res) => {
     }
 
     const gamePath = game.InstallLocation;
-    const gameDirectory = game.InstallDirectory;
 
     if (!fs.existsSync(gamePath)) {
       res.status(400).json({ error: 'Game not installed' });
@@ -334,14 +371,14 @@ app2.get('/uninstall', async (req, res) => {
     }
 
     // Use fs.promises.rm to remove directories recursively
-    await fs.rm(gameDirectory, { recursive: true });
+    fs.rm(gamePath, { recursive: true });
 
     // Remove the game from the installed list
     const gameIndex = installedData.Installed.indexOf(game);
     installedData.Installed.splice(gameIndex, 1);
 
     // Write the updated data back to installed.json
-    await fs.writeFile(JSONPath, JSON.stringify(installedData));
+    fs.writeFileSync(JSONPath, JSON.stringify(installedData));
 
     res.status(200).json({ message: 'Game uninstalled' });
   } catch (error) {

@@ -341,40 +341,32 @@
         </div>
       </div>
     </section>
-    <section
-      class="download-section"
-      id="downloader-section"
-      style="display: none"
-    >
+    <section class="download-section" id="downloader-section" style="display: none">
       <div>
         <div class="downloader-text">Downloader</div>
         <div class="downloader-game-name" id="downloader-game-name">Null</div>
-        <button
-          href="#"
-          class="download-button"
-          style="display: block"
-          id="download-button"
-        >
-          Install
-        </button>
-        <input
-          type="text"
-          id="downloadlocation"
-          name="DownloadDirectory"
-          placeholder="C:\Cloudforce\"
-          value="C:\Cloudforce\"
-          class="download-location"
-        />
-        <a class="download-status" id="download-status"></a>
+        <button href="#" class="download-button" style="display: block" id="download-button">Install</button>
+        <input type="text" id="downloadlocation" name="DownloadDirectory" placeholder="C:\Cloudforce\" value="C:\Cloudforce\" class="download-location" />
+        <div>
+          <a class="download-status" id="download-status"></a>
+          <div id="shard1234">
+            <div class="flex justify-between mb-1">
+              <span class="text-base font-medium text-blue-700 dark:text-white" id="download-speed">0.00MiB/S</span>
+              <span class="text-sm font-medium text-blue-700 dark:text-white" id="download-progress">0% | ETA: INF</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div class="bg-blue-600 h-2.5 rounded-full" id="download-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+    
 
     <section class="home-section" id="installed-section" style="display: none">
       <div class="text">Installed Games</div>
       <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-      <div class="grid gap-8 lg:grid-cols-2">
-        <div class="banner-list" id="banner-list"></div>
-        </div>
+        <div class="grid gap-8 lg:grid-cols-2" id="banner-list"></div>
       </div>
     </section>
     <section class="home-section" id="files-section" style="display: none">
