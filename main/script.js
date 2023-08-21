@@ -129,6 +129,31 @@ function fetchInstalledContent() {
         bannerItem.className =
           "p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700";
 
+        // Create the Help section
+        const helpSection = document.createElement("div");
+        helpSection.className =
+          "flex justify-between items-center mb-5 text-gray-500";
+        helpSection.innerHTML = `
+          <span
+            class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800"
+          >
+            <svg
+              class="mr-1 w-3 h-3"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
+                clip-rule="evenodd"
+              ></path>
+              <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path>
+            </svg>
+            Help
+          </span>
+        `;
+
         // Create the game name element
         const gameName = document.createElement("h2");
         gameName.className =
@@ -137,71 +162,57 @@ function fetchInstalledContent() {
 
         // Create the buttons container
         const buttonContainer = document.createElement("div");
-        buttonContainer.className = "flex justify-between items-center";
+        buttonContainer.className = "flex justify-between items-center mt-3"; // Added "mt-3" for spacing
 
-        // Create the Play button
-        const playButton = document.createElement("button");
-        playButton.innerHTML = '<i class="bx bx-play"></i>';
-        playButton.className = "play-button";
-        playButton.addEventListener("click", () => {
-          // Play button click handler
-          playButton.disabled = true;
-          playButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
-          const xhr = new XMLHttpRequest();
-          xhr.open(
-            "POST",
-            `http://localhost:3000/launch?name=${banner.Name}`,
-            true
-          );
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-              showPopupBox("Launched Successfully!", "😎", 5000);
-              playButton.innerHTML = '<i class="bx bx-play"></i>';
-              playButton.disabled = false;
-            } else if (xhr.readyState === 4 && xhr.status === 400) {
-              showPopupBox("Failed to launch!", "😢", 5000);
-              playButton.innerHTML = '<i class="bx bx-play"></i>';
-              playButton.disabled = false;
-            }
-          };
-          xhr.send();
-        });
+        // Create the Start button
+        const startButton = document.createElement("a");
+        startButton.className =
+          "inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline start-button";
+        startButton.style.color = "rgb(221, 221, 221)";
+        startButton.innerHTML = `
+          Start Game
+          <svg
+            class="ml-2 w-4 h-4"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        `;
 
-        // Create the Info button
-        const infoButton = document.createElement("button");
-        infoButton.innerHTML = '<i class="bx bx-trash"></i>';
-        infoButton.className = "info-button";
-        infoButton.addEventListener("click", () => {
-          // Info button click handler
-          infoButton.disabled = true;
-          infoButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
-          const xhr = new XMLHttpRequest();
-          xhr.open(
-            "GET",
-            `http://localhost:3000/uninstall?name=${banner.Name}`,
-            true
-          );
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-              showPopupBox("Uninstalled Successfully!", "😎", 5000);
-              infoButton.innerHTML = '<i class="bx bx-trash"></i>';
-              infoButton.disabled = false;
-              fetchInstalledContent(); // Refresh the list after uninstalling
-            } else if (xhr.readyState === 4 && xhr.status === 400) {
-              showPopupBox("Failed to uninstall!", "😢", 5000);
-              infoButton.innerHTML = '<i class="bx bx-trash"></i>';
-              infoButton.disabled = false;
-            }
-          };
-          xhr.send();
-        });
+        // Create the Delete button
+        const deleteButton = document.createElement("a");
+        deleteButton.className =
+          "inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline start-button";
+        deleteButton.style.color = "rgb(221, 221, 221)";
+        deleteButton.innerHTML = `
+          Delete
+          <svg
+            class="ml-2 w-4 h-4"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        `;
 
-        // Append the buttons to the button container
-        buttonContainer.appendChild(playButton);
-        buttonContainer.appendChild(infoButton);
+        // Append the Help section to the article
+        bannerItem.appendChild(helpSection);
 
         // Append the game name and buttons container to the article
         bannerItem.appendChild(gameName);
+        buttonContainer.appendChild(startButton);
+        buttonContainer.appendChild(deleteButton);
         bannerItem.appendChild(buttonContainer);
 
         // Append the article to the bannerList
@@ -209,6 +220,9 @@ function fetchInstalledContent() {
       });
     });
 }
+
+
+
 
 
 //About me button

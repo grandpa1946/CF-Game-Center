@@ -269,8 +269,8 @@ a {
 
 .download-section {
   position: relative;
-  background: #262346;
-  background-color: #262346;
+  background: #111827;
+  background-color: #111827;
   min-height: 100vh;
   top: 0;
   left: 78px;
@@ -279,10 +279,15 @@ a {
   z-index: 2;
 }
 
+.start-button:hover {
+  cursor: pointer;
+}
+
+
 .installed-section {
   position: relative;
-  background: #262346;
-  background-color: #262346;
+  background: #111827;
+  background-color: #111827;
   min-height: 100vh;
   top: 0;
   left: 78px;
@@ -343,9 +348,7 @@ a {
   margin-bottom: 10px;
   position: absolute;
   top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transform-origin: center center;
+  left: 32%;
   text-align: center;
   animation: fadeInRight 1s ease-in-out;
   background-color: #1d1b31;
