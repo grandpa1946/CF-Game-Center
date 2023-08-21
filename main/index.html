@@ -195,6 +195,7 @@
                 class="inline-flex items-center"
                 style="align-self: center"
                 id="installed-status"
+                onclick="showInstalledGamesSection(); fetchInstalledContent()"
               >
                 <div
                   class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
@@ -345,32 +346,34 @@
       id="downloader-section"
       style="display: none"
     >
-      <div class="downloader-text">Downloader</div>
-      <div class="downloader-game-name" id="downloader-game-name">Null</div>
-      <button
-        href="#"
-        class="download-button"
-        style="display: block"
-        id="download-button"
-      >
-        Install
-      </button>
-      <input
-        type="text"
-        id="downloadlocation"
-        name="DownloadDirectory"
-        placeholder="C:\Cloudforce\"
-        value="C:\Cloudforce\"
-        class="download-location"
-      />
-      <a class="download-status" id="download-status"></a>
+      <div>
+        <div class="downloader-text">Downloader</div>
+        <div class="downloader-game-name" id="downloader-game-name">Null</div>
+        <button
+          href="#"
+          class="download-button"
+          style="display: block"
+          id="download-button"
+        >
+          Install
+        </button>
+        <input
+          type="text"
+          id="downloadlocation"
+          name="DownloadDirectory"
+          placeholder="C:\Cloudforce\"
+          value="C:\Cloudforce\"
+          class="download-location"
+        />
+        <a class="download-status" id="download-status"></a>
+      </div>
     </section>
 
     <section class="home-section" id="installed-section" style="display: none">
       <div class="text">Installed Games</div>
-      <div class="banner-contianer">
+      <div class="grid gap-8 lg:grid-cols-2">
         <div class="banner-list" id="banner-list"></div>
-      </div>
+        </div>
     </section>
     <section class="home-section" id="files-section" style="display: none">
       <div class="text">Games</div>

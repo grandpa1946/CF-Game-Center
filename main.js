@@ -4,6 +4,7 @@
 const { app, BrowserWindow, Menu } = require("electron");
 const path = require("path");
 const fs = require("fs");
+const { readdirSync, statSync } = require('fs');
 const os = require("os");
 const { exec, spawn } = require("child_process");
 const express = require("express");
@@ -28,7 +29,7 @@ const createWindow = () => {
 
     webPreferences: {
       nodeIntegration: true,
-      devTools: true,
+      //devTools: true,
     },
   });
   // Disable the application menu
@@ -94,40 +95,28 @@ app2.get("/", (req, res) => {
   res.send({ message: "CF Game Center | ONLINE" });
 });
 
-app2.get("/drives", (req, res) => {
-  // Use the 'wmic' command to get information about available drives on a Windows machine
-  exec(
-    "wmic logicaldisk get caption, size, freespace",
-    (err, stdout, stderr) => {
-      if (err) {
-        console.error(`Error: ${err.message}`);
-        return res.status(500).send("Internal Server Error");
-      }
-
-      // Split the output into lines and remove any empty ones
-      const lines = stdout
-        .trim()
-        .split("\r\n")
-        .filter((line) => line !== "");
-
-      // Extract the drive information from each line and format the sizes in GB
-      const drives = lines.slice(1).map((line) => {
-        const [drive, size, available] = line.trim().split(/\s+/);
-        const sizeGB = Math.round(parseInt(size) / (1024 * 1024 * 1024));
-        const availableGB = Math.round(
-          parseInt(available) / (1024 * 1024 * 1024)
-        );
-        return {
-          Drive: drive,
-          DriveSpace: `${sizeGB}GB`,
-          AvailableSpace: `${availableGB}GB`,
+app2.get('/drives', (req, res) => {
+  // Get a list of drive letters on Windows
+  const drives = [];
+  for (let i = 65; i <= 90; i++) {
+    const driveLetter = String.fromCharCode(i) + ':';
+    try {
+      const stats = statSync(driveLetter);
+      if (stats.isDirectory()) {
+        const driveInfo = {
+          Drive: driveLetter,
+          DriveSpace: `${(stats.size / (1024 * 1024 * 1024)).toFixed(2)}GB`,
+          AvailableSpace: `${(stats.available / (1024 * 1024 * 1024)).toFixed(2)}GB`,
         };
-      });
-
-      // Send the drive information as JSON
-      res.json({ Drives: drives });
+        drives.push(driveInfo);
+      }
+    } catch (err) {
+      // Ignore drives that don't exist or can't be accessed
     }
-  );
+  }
+
+  // Send the drive information as JSON
+  res.json({ Drives: drives });
 });
 
 app2.post("/download", async (req, res) => {

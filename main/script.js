@@ -110,39 +110,41 @@ function showDownloadSection() {
 
 function fetchInstalledContent() {
   const bannerList = document.getElementById("banner-list");
-  //clear it
+  // Clear the bannerList
   bannerList.innerHTML = "";
+
   fetch("http://localhost:3000/installed")
     .then((response) => response.json())
     .then((data) => {
-      if(data.Installed.length === 0){
-        //put 
+      if (data.Installed.length === 0) {
+        // No installed games, display a message
+        const noData = document.createElement("div");
+        noData.className = "no-data";
+        noData.textContent = "No Installed Games";
+        bannerList.appendChild(noData);
       }
+
       data.Installed.forEach((banner) => {
-        const bannerItem = document.createElement("div");
-        bannerItem.className = "banner-item";
+        const bannerItem = document.createElement("article");
+        bannerItem.className =
+          "p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700";
 
-        const bannerName = document.createElement("div");
-        bannerName.className = "banner-name";
-        bannerName.textContent = banner.Name;
+        // Create the game name element
+        const gameName = document.createElement("h2");
+        gameName.className =
+          "mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white";
+        gameName.innerHTML = `<a href="#games">${banner.Name}</a>`;
 
-        const bannerButtons = document.createElement("div");
-        bannerButtons.className = "banner-buttons";
+        // Create the buttons container
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "flex justify-between items-center";
 
-        const infoButton = document.createElement("button");
-        infoButton.innerHTML = '<i class="bx bx-trash"></i>';
-        infoButton.classList.add("info-button");
-
+        // Create the Play button
         const playButton = document.createElement("button");
         playButton.innerHTML = '<i class="bx bx-play"></i>';
-        playButton.classList.add("play-button");
-        bannerButtons.appendChild(infoButton);
-        bannerButtons.appendChild(playButton);
-        bannerItem.appendChild(bannerName);
-        bannerItem.appendChild(bannerButtons);
-
-        bannerList.appendChild(bannerItem);
+        playButton.className = "play-button";
         playButton.addEventListener("click", () => {
+          // Play button click handler
           playButton.disabled = true;
           playButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
           const xhr = new XMLHttpRequest();
@@ -165,7 +167,12 @@ function fetchInstalledContent() {
           xhr.send();
         });
 
+        // Create the Info button
+        const infoButton = document.createElement("button");
+        infoButton.innerHTML = '<i class="bx bx-trash"></i>';
+        infoButton.className = "info-button";
         infoButton.addEventListener("click", () => {
+          // Info button click handler
           infoButton.disabled = true;
           infoButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
           const xhr = new XMLHttpRequest();
@@ -179,7 +186,7 @@ function fetchInstalledContent() {
               showPopupBox("Uninstalled Successfully!", "😎", 5000);
               infoButton.innerHTML = '<i class="bx bx-trash"></i>';
               infoButton.disabled = false;
-              fetchInstalledContent();
+              fetchInstalledContent(); // Refresh the list after uninstalling
             } else if (xhr.readyState === 4 && xhr.status === 400) {
               showPopupBox("Failed to uninstall!", "😢", 5000);
               infoButton.innerHTML = '<i class="bx bx-trash"></i>';
@@ -188,9 +195,21 @@ function fetchInstalledContent() {
           };
           xhr.send();
         });
+
+        // Append the buttons to the button container
+        buttonContainer.appendChild(playButton);
+        buttonContainer.appendChild(infoButton);
+
+        // Append the game name and buttons container to the article
+        bannerItem.appendChild(gameName);
+        bannerItem.appendChild(buttonContainer);
+
+        // Append the article to the bannerList
+        bannerList.appendChild(bannerItem);
       });
     });
 }
+
 
 //About me button
 
@@ -253,38 +272,42 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
     if (xhr.readyState === 4 && xhr.status === 200) {
       showDownloadSection();
     } else if (xhr.readyState === 4 && xhr.status === 404) {
-      fetch("http://localhost:3000/drives")
-        .then((response) => response.json())
-        .then((data) => {
-          const availableDrives = document.getElementById("download-status");
+      try {
+        fetch("http://localhost:3000/drives")
+          .then((response) => response.json())
+          .then((data) => {
+            const availableDrives = document.getElementById("download-status");
 
-          // Build the drive list string
-          let driveList = "";
-          data.Drives.forEach((drive) => {
-            driveList += `${drive.Drive} ${drive.DriveSpace} | `;
+            // Build the drive list string
+            let driveList = "";
+            data.Drives.forEach((drive) => {
+              driveList += `${drive.Drive} ${drive.DriveSpace} | `;
+            });
+
+            // Remove the trailing '|' character from the drive list string
+            driveList = driveList.slice(0, -2);
+            // Update the text content of the download status element with the drive list string
+            availableDrives.textContent = driveList;
           });
 
-          // Remove the trailing '|' character from the drive list string
-          driveList = driveList.slice(0, -2);
-          // Update the text content of the download status element with the drive list string
-          availableDrives.textContent = driveList;
-        });
+        document.getElementById("downloader-game-name").textContent = Gamename;
+        document.getElementById(
+          "downloadlocation"
+        ).value = `C:\\CloudForce\\${Gamename}`;
+        let homeSection = document.querySelector("#dashboard-section");
+        let filesSection = document.querySelector("#files-section");
+        let settingsSection = document.querySelector("#settings-section");
+        let downloadSection = document.querySelector("#downloader-section");
+        let installedSection = document.querySelector("#installed-section");
 
-      document.getElementById("downloader-game-name").textContent = Gamename;
-      document.getElementById(
-        "downloadlocation"
-      ).value = `C:\\CloudForce\\${Gamename}`;
-      let homeSection = document.querySelector("#dashboard-section");
-      let filesSection = document.querySelector("#files-section");
-      let settingsSection = document.querySelector("#settings-section");
-      let downloadSection = document.querySelector("#downloader-section");
-      let installedSection = document.querySelector("#installed-section");
-
-      homeSection.style.display = "none";
-      filesSection.style.display = "none";
-      settingsSection.style.display = "none";
-      downloadSection.style.display = "block";
-      installedSection.style.display = "none";
+        homeSection.style.display = "none";
+        filesSection.style.display = "none";
+        settingsSection.style.display = "none";
+        downloadSection.style.display = "block";
+        installedSection.style.display = "none";
+      } catch (error) {
+        showPopupBox("Failed to get drive status!", "😢", 5000);
+      }
     } else {
       //show popup box with error
       showPopupBox("Failed to get game status!", "😢", 5000);
@@ -379,6 +402,7 @@ window.addEventListener("load", () => {
             showPopupBox("Download completed!", "😎", 5000);
             downloadButton.textContent = "Install";
             showDownloadSection();
+            fetchInstalledContent();
             downloadButton.disabled = false;
           } else if (xhr.readyState === 4 && xhr.status === 400) {
             showPopupBox("Already installed!", "😢", 5000);
