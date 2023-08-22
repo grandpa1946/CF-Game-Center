@@ -30,6 +30,7 @@
     "electron-builder": "^23.6.0"
   },
   "dependencies": {
+    "@sentry/electron": "^4.10.0",
     "axios": "^1.4.0",
     "cors": "^2.8.5",
     "electron-squirrel-startup": "^1.0.0",

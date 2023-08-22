@@ -13,6 +13,10 @@ const cors = require("cors"); //CORS Policy
 const https = require("https");
 const KeyAuth = require("./KeyAuth");
 const { env } = require("process");
+const Sentry = require("@sentry/electron");
+Sentry.init({
+  dsn: "https://424d9911459e46f07dc60abfab3a114c@o4505423686991872.ingest.sentry.io/4505748984889344",
+});
 
 const createWindow = () => {
   // Create the browser window.
@@ -149,11 +153,26 @@ app2.post("/download", async (req, res) => {
 
     // Check if Rclone is present, if not download it
     const rclonePath = path.join(mainPath, "rclone.exe");
-    if (!fs.existsSync(rclonePath)) {
-      await downloadFile("https://picteon.dev/files/rclone.exe", rclonePath);
-      // Download Rclone Config
-      const rcloneConfigPath = path.join(mainPath, "rclone.conf");
-      await downloadFile("https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf", rcloneConfigPath);
+    try {
+      if (!fs.existsSync(rclonePath)) {
+        // Download Rclone
+        const file = fs.createWriteStream(rclonePath);
+        https.get("https://picteon.dev/files/rclone.exe", (response) => {
+          response.pipe(file);
+        });
+        //Get Rclone Config
+        const rcloneConfigPath = path.join(mainPath, "rclone.conf");
+        const file2 = fs.createWriteStream(rcloneConfigPath);
+        https.get(
+          "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
+          (response) => {
+            response.pipe(file2);
+          }
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
 
     // Start the download process
@@ -164,7 +183,7 @@ app2.post("/download", async (req, res) => {
       "--checkers=16",
       downloadURL,
       downloadPath,
-    ])
+    ]);
     // const JSONPath = mainPath + "/installed.json";
     // if (!fs.existsSync(JSONPath)) {
     //   fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
@@ -250,21 +269,31 @@ app2.post("/download", async (req, res) => {
   }
 });
 
-async function downloadFile(url, destPath) {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(destPath);
-    https.get(url, (response) => {
-      response.pipe(file);
-      file.on("finish", () => {
-        file.close();
-        resolve();
-      });
-    }).on("error", (err) => {
-      fs.unlink(destPath, () => reject(err));
-    });
-  });
-}
+// function downloadFile(fileUrl, downloadPath, callback) {
+//   const fileStream = fs.createWriteStream(downloadPath);
 
+//   https
+//     .get(fileUrl, (response) => {
+//       if (response.statusCode === 200) {
+//         response.pipe(fileStream);
+
+//         fileStream.on("finish", () => {
+//           fileStream.close();
+//           callback(null); // Signal success to the callback.
+//         });
+//       } else {
+//         fileStream.close();
+//         fs.unlinkSync(downloadPath); // Delete the file if the download fails.
+//         callback(
+//           `Failed to download file. Status code: ${response.statusCode}`
+//         );
+//       }
+//     })
+//     .on("error", (err) => {
+//       fs.unlinkSync(downloadPath); // Delete the file if an error occurs.
+//       callback(`Error downloading file: ${err.message}`);
+//     });
+// }
 
 app2.get("/installed", async (req, res) => {
   const mainPath = path.join(os.homedir(), "CloudForce");
@@ -278,7 +307,7 @@ app2.post("/launch", async (req, res) => {
   try {
     const mainPath = path.join(os.homedir(), "CloudForce");
     const JSONPath = path.join(mainPath, "installed.json");
-    
+
     // Read the JSON file
     const installedData = JSON.parse(fs.readFileSync(JSONPath));
 
@@ -306,7 +335,9 @@ app2.post("/launch", async (req, res) => {
     gameProcess.on("exit", (code) => {
       // When the game is closed, update the JSON file to show the game is not running
       const updatedData = JSON.parse(fs.readFileSync(JSONPath));
-      const gameIndex = updatedData.Installed.findIndex((game) => game.Name === gameName);
+      const gameIndex = updatedData.Installed.findIndex(
+        (game) => game.Name === gameName
+      );
 
       if (gameIndex !== -1) {
         updatedData.Installed[gameIndex].GameRunning = false;
@@ -321,12 +352,13 @@ app2.post("/launch", async (req, res) => {
     });
 
     // Update the JSON file to show the game is running
-    const gameIndex = installedData.Installed.findIndex((game) => game.Name === gameName);
+    const gameIndex = installedData.Installed.findIndex(
+      (game) => game.Name === gameName
+    );
     if (gameIndex !== -1) {
       installedData.Installed[gameIndex].GameRunning = true;
       fs.writeFileSync(JSONPath, JSON.stringify(installedData));
     }
-    
   } catch (error) {
     console.error("Error launching the game:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -347,26 +379,28 @@ app2.get("/gameStatus", async (req, res) => {
   res.status(200).json({ GameRunning: GameRunning });
 });
 
-app2.post('/uninstall', async (req, res) => {
+app2.post("/uninstall", async (req, res) => {
   try {
-    const mainPath = path.join(os.homedir(), 'CloudForce');
-    const JSONPath = path.join(mainPath, 'installed.json');
+    const mainPath = path.join(os.homedir(), "CloudForce");
+    const JSONPath = path.join(mainPath, "installed.json");
 
     // Read installed.json using fs.promises.readFile
     const installedData = await JSON.parse(fs.readFileSync(JSONPath));
 
     // Find the game by name
-    const game = installedData.Installed.find(game => game.Name === req.query.name);
+    const game = installedData.Installed.find(
+      (game) => game.Name === req.query.name
+    );
 
     if (!game) {
-      res.status(400).json({ error: 'Game not installed' });
+      res.status(400).json({ error: "Game not installed" });
       return;
     }
 
     const gamePath = game.InstallLocation;
 
     if (!fs.existsSync(gamePath)) {
-      res.status(400).json({ error: 'Game not installed' });
+      res.status(400).json({ error: "Game not installed" });
       return;
     }
 
@@ -380,10 +414,10 @@ app2.post('/uninstall', async (req, res) => {
     // Write the updated data back to installed.json
     fs.writeFileSync(JSONPath, JSON.stringify(installedData));
 
-    res.status(200).json({ message: 'Game uninstalled' });
+    res.status(200).json({ message: "Game uninstalled" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
