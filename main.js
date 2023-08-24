@@ -32,12 +32,12 @@ const createWindow = () => {
 
     webPreferences: {
       nodeIntegration: true,
-      devTools: false,
+      devTools: true,
     },
   });
   nativeTheme.themeSource = "dark";
   // Disable the application menu
-  Menu.setApplicationMenu(null);
+  //Menu.setApplicationMenu(null);
 
   mainWindow.webContents.on("did-navigate", (event, url) => {
     event.preventDefault();

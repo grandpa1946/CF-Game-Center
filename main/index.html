@@ -11,8 +11,12 @@
       href="https://cdn.discordapp.com/attachments/1061755202086125678/1085013775893143563/Boosteriod_Rounded.png"
     />
     <link
-      href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
     />
     <link
       rel="stylesheet"
@@ -48,7 +52,7 @@
         </li>
         <li>
           <a href="#" id="dashboard-link" onclick="showDashboardSection()">
-            <i class="bx bx-grid-alt"></i>
+            <i class="bx bx-home"></i>
             <span class="links_name">Dashboard</span>
           </a>
           <span class="tooltip">Dashboard</span>
@@ -59,6 +63,13 @@
             <span class="links_name">Games</span>
           </a>
           <span class="tooltip">Games</span>
+        </li>
+        <li>
+          <a href="#" onclick="showAppsSection()">
+            <i class="bx bx-category"></i>
+            <span class="links_name">Apps</span>
+          </a>
+          <span class="tooltip">Apps</span>
         </li>
         <li>
           <a href="#" onclick="showDownloadSection()">
@@ -358,7 +369,10 @@
         >
           Install
         </button>
-        <p style="font-size: 12px; position: fixed; bottom: 3px; right: 45px" id="size1">
+        <p
+          style="font-size: 12px; position: fixed; bottom: 3px; right: 45px"
+          id="size1"
+        >
           0.00GB
         </p>
         <input
@@ -405,6 +419,10 @@
     <section class="home-section" id="files-section" style="display: none">
       <div class="text">Games</div>
       <div class="game-list"></div>
+    </section>
+    <section class="home-section" id="apps-section" style="display: none">
+      <div class="text">Apps</div>
+      <div class="apps-list"></div>
     </section>
     <section class="home-section" id="settings-section" style="display: none">
       <div class="text">Settings</div>

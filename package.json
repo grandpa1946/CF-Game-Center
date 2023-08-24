@@ -1,21 +1,31 @@
 {
-  "name": "cloudforce-game-center",
+  "name": "cloudforce",
   "version": "1.0.0",
   "description": "Cloudforce game center",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "build": "electron-forge make",
+    "build": "electron-builder",
     "make": "electron-forge make --platform=win32",
     "postinstall": "electron-builder install-app-deps",
-    "release": "electron-builder --windows  --publish always"
+    "release": "electron-builder --windows --publish always"
   },
   "build": {
-    "appId": "com.cloudforce.gamecenter",
+    "appId": "com.cloudforce",
     "asar": true,
     "win": {
-      "icon": "./assets/icons/cloudforce.ico"
+      "target": [
+        "nsis"
+      ],
+      "icon": "./assets/icons/cloudforce2.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "installerIcon": "./assets/icons/cloudforce2.ico",
+      "uninstallerIcon": "./assets/icons/cloudforce2.ico",
+      "uninstallDisplayName": "Cloudforce",
+      "allowToChangeInstallationDirectory": false
     }
   },
   "author": "printedwaste",

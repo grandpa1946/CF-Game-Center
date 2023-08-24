@@ -634,6 +634,14 @@ label {
   margin-top: 20px;
   animation: fade-in 0.3s ease-in-out forwards;
 }
+.apps-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  animation: fade-in 0.3s ease-in-out forwards;
+}
 
 .game-item {
   width: 20%;
@@ -655,7 +663,34 @@ label {
   border-style: solid;
 }
 
+.app-item {
+  width: 20%;
+  height: 100px;
+  width: 250px;
+  margin: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Added this property */
+  justify-content: space-between; /* Added this property */
+  box-sizing: border-box;
+  background-color: #1f2937;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none; /* Prevents content from being highlightable */
+  border-color: #807878;
+  border-width: 2px;
+  border-style: solid;
+}
+
+
+
 .game-item:hover {
+  transform: scale(1.1);
+}
+
+.app-item:hover {
   transform: scale(1.1);
 }
 
@@ -666,6 +701,27 @@ label {
   overflow: hidden;
   object-fit: cover !important;
   padding-top: 10px; /* add padding to the top */
+}
+
+.app-poster {
+  width: 100%;
+  height: 100% !important;
+  margin-bottom: 10px;
+  overflow: hidden;
+  object-fit: cover !important;
+  padding-top: 10px; /* add padding to the top */
+}
+
+.app-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-drag: none; /* Prevents image from being draggable */
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .game-poster img {

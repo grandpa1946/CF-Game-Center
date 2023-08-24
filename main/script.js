@@ -58,7 +58,9 @@ function showDashboardSection() {
   let settingsSection = document.querySelector("#settings-section");
   let downloadSection = document.querySelector("#downloader-section");
   let installedSection = document.querySelector("#installed-section");
+  let appsSection = document.querySelector("#apps-section");
 
+  appsSection.style.display = "none";
   homeSection.style.display = "block";
   filesSection.style.display = "none";
   settingsSection.style.display = "none";
@@ -72,7 +74,9 @@ function showSettingsSection() {
   let settingsSection = document.querySelector("#settings-section");
   let downloadSection = document.querySelector("#downloader-section");
   let installedSection = document.querySelector("#installed-section");
+  let appsSection = document.querySelector("#apps-section");
 
+  appsSection.style.display = "none";
   homeSection.style.display = "none";
   filesSection.style.display = "none";
   settingsSection.style.display = "block";
@@ -86,9 +90,27 @@ function showFilesSection() {
   let settingsSection = document.querySelector("#settings-section");
   let downloadSection = document.querySelector("#downloader-section");
   let installedSection = document.querySelector("#installed-section");
+  let appsSection = document.querySelector("#apps-section");
 
+  appsSection.style.display = "none";
   homeSection.style.display = "none";
   filesSection.style.display = "block";
+  settingsSection.style.display = "none";
+  downloadSection.style.display = "none";
+  installedSection.style.display = "none";
+}
+
+function showAppsSection() {
+  let homeSection = document.querySelector("#dashboard-section");
+  let filesSection = document.querySelector("#files-section");
+  let settingsSection = document.querySelector("#settings-section");
+  let downloadSection = document.querySelector("#downloader-section");
+  let installedSection = document.querySelector("#installed-section");
+  let appsSection = document.querySelector("#apps-section");
+
+  appsSection.style.display = "block";
+  homeSection.style.display = "none";
+  filesSection.style.display = "none";
   settingsSection.style.display = "none";
   downloadSection.style.display = "none";
   installedSection.style.display = "none";
@@ -100,7 +122,11 @@ function showDownloadSection() {
   let settingsSection = document.querySelector("#settings-section");
   let downloadSection = document.querySelector("#downloader-section");
   let installedSection = document.querySelector("#installed-section");
+  let appsSection = document.querySelector("#apps-section");
+
   fetchInstalledContent();
+
+  appsSection.style.display = "none";
   homeSection.style.display = "none";
   filesSection.style.display = "none";
   settingsSection.style.display = "none";
@@ -227,7 +253,9 @@ function fetchInstalledContent() {
           const xhr = new XMLHttpRequest();
           xhr.open(
             "POST",
-            `http://localhost:3000/launch?name=${encodeURIComponent(banner.Name)}`,
+            `http://localhost:3000/launch?name=${encodeURIComponent(
+              banner.Name
+            )}`,
             true
           );
           xhr.onreadystatechange = function () {
@@ -250,7 +278,9 @@ function fetchInstalledContent() {
           const xhr = new XMLHttpRequest();
           xhr.open(
             "POST",
-            `http://localhost:3000/uninstall?name=${encodeURIComponent(banner.Name)}`,
+            `http://localhost:3000/uninstall?name=${encodeURIComponent(
+              banner.Name
+            )}`,
             true
           );
           xhr.onreadystatechange = function () {
@@ -420,6 +450,47 @@ window.addEventListener("load", () => {
         });
       });
     });
+  fetch(
+    "https://raw.githubusercontent.com/zortos293/Cloudforce-Revamped-Resources/Dev/Apps.json"
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const gameList = document.querySelector(".apps-list");
+      // Loop through the API data to create the HTML structure for each game item
+      data.Apps.forEach((app) => {
+        const gameItem = document.createElement("div");
+        gameItem.className = "app-item";
+        gameItem.style.animation = "fadeIn 1s ease-in-out;";
+
+        const gamePoster = document.createElement("div");
+        gamePoster.className = "app-poster";
+        const posterImg = document.createElement("img");
+        posterImg.src = app.AppImage;
+        gamePoster.appendChild(posterImg);
+
+        const gameName = document.createElement("div");
+        gameName.className = "game-name";
+        gameName.textContent = app.AppName;
+
+        gameItem.appendChild(gamePoster);
+        gameItem.appendChild(gameName);
+        gameList.appendChild(gameItem);
+
+        gameItem.addEventListener("click", () => {
+          // handle click event here
+          if (downloading) {
+            showPopupBox("Something is already downloading!", "🤔", 5000);
+          } else {
+            showDownloadMenu(
+              game.Gamename,
+              game.GaneDownload,
+              game.GameLaunch,
+              game.GameSize
+            );
+          }
+        });
+      });
+    });
 
   //Download stuff
   const downloadButton = document.getElementById("download-button");
@@ -455,7 +526,9 @@ window.addEventListener("load", () => {
         const xhr = new XMLHttpRequest();
         xhr.open(
           "POST",
-          `http://localhost:3000/download?drive=${drive}&name=${gameName}&disk=${disk}&directory=${directory}&gameLaunch=${encodeURIComponent(Gamelaunch)}`,
+          `http://localhost:3000/download?drive=${drive}&name=${gameName}&disk=${disk}&directory=${directory}&gameLaunch=${encodeURIComponent(
+            Gamelaunch
+          )}`,
           true
         );
         xhr.onreadystatechange = function () {
@@ -469,7 +542,11 @@ window.addEventListener("load", () => {
             downloadButton.textContent = "Install";
             downloadButton.disabled = false;
           } else if (xhr.readyState === 4 && xhr.status === 504) {
-            showPopupBox("Still Installing RClone, please try again later.", "😢", 5000);
+            showPopupBox(
+              "Still Installing RClone, please try again later.",
+              "😢",
+              5000
+            );
             downloadButton.textContent = "Install";
             downloadButton.disabled = false;
           } else {
