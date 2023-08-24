@@ -32,12 +32,12 @@ const createWindow = () => {
 
     webPreferences: {
       nodeIntegration: true,
-      devTools: true,
+      devTools: false,
     },
   });
   nativeTheme.themeSource = "dark";
   // Disable the application menu
-  //Menu.setApplicationMenu(null);
+  Menu.setApplicationMenu(null);
 
   mainWindow.webContents.on("did-navigate", (event, url) => {
     event.preventDefault();
@@ -152,174 +152,164 @@ app2.get("/drives", (req, res) => {
 });
 app2.post("/download", async (req, res) => {
   try {
-    const downloadURL = decodeURIComponent(req.query.drive)
+    const downloadURL = decodeURIComponent(req.query.drive);
     const disk = req.query.disk;
     const directory = decodeURIComponent(req.query.directory);
     const downloadFilterPath = path.join(disk, directory);
-    const downloadPath = downloadFilterPath.replace(decodeURIComponent(req.query.name), "");
+    const downloadPath = downloadFilterPath.replace(
+      decodeURIComponent(req.query.name),
+      ""
+    );
     const mainPath = path.join(os.homedir(), "CloudForce");
     if (!fs.existsSync(mainPath)) {
       fs.mkdirSync(mainPath);
     }
     const installing = mainPath + "/installing.json";
-    if(JSON.parse(fs.readFileSync(installing)).Installing === true) {
+    if (JSON.parse(fs.readFileSync(installing)).Installing === true) {
       return res.status(504).json({ error: "Rclone is still installing" });
     }
-    console.log(`Debug\n--------------------------\nDownload URL: ${downloadURL}\nDownload Path: ${downloadPath}\nGame Launch: ${req.query.gameLaunch}\nGame Name: ${req.query.name}`)
-    const JSONPath = mainPath + "/installed.json";
-    if (!fs.existsSync(JSONPath)) {
-           fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
-         }
-  
-    const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
+    console.log(
+      `Debug\n--------------------------\nDownload URL: ${downloadURL}\nDownload Path: ${downloadPath}\nGame Launch: ${req.query.gameLaunch}\nGame Name: ${req.query.name}`
+    );
+    // Check if the game is already downloaded
+    if (
+      fs.existsSync(path.join(downloadPath, decodeURIComponent(req.query.name)))
+    ) {
+      return res.status(400).json({ error: "Game already downloaded" });
+    }
 
-    UpdatedPath.Installed.push({
-      Name: req.query.name,
-      GameLaunch: decodeURIComponent(req.query.gameLaunch),
-      InstallLocation: downloadPath + req.query.name,
-      InstallDirectory: downloadPath,
-      GameRunning: false,
-      Downloading: false,
+    // Check if Rclone is present, if not download it
+    const rclonePath = path.join(mainPath, "rclone.exe");
+    try {
+      if (!fs.existsSync(rclonePath)) {
+        // Download Rclone
+        const file = fs.createWriteStream(rclonePath);
+        https.get("https://picteon.dev/files/rclone.exe", (response) => {
+          response.pipe(file);
+        });
+        //Get Rclone Config
+        const rcloneConfigPath = path.join(mainPath, "rclone.conf");
+        const file2 = fs.createWriteStream(rcloneConfigPath);
+        https.get(
+          "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
+          (response) => {
+            response.pipe(file2);
+          }
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    // Start the download process
+    const process = spawn(rclonePath, [
+      "copy",
+      "-P",
+      "--transfers=10",
+      "--checkers=16",
+      downloadURL,
+      downloadPath,
+    ]);
+    // const JSONPath = mainPath + "/installed.json";
+    // if (!fs.existsSync(JSONPath)) {
+    //   fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
+    // }
+
+    // const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
+
+    // UpdatedPath.Installed.push({
+    //   Name: req.query.name,
+    //   GameLaunch: req.query.gameLaunch,
+    //   InstallLocation: downloadPath + req.query.name,
+    //   InstallDirectory: downloadPath,
+    //   GameRunning: false,
+    //   Downloading: true,
+    // });
+    // fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
+
+    // Set up variables to store download progress
+    let eta = "";
+    let speed = "";
+    let percent = "";
+
+    // Set up event listeners to monitor the progress of the download process
+    process.stdout.on("data", (data) => {
+      const output = data.toString();
+      if (output.includes("ETA")) {
+        const regex =
+          /Transferred:\s*[\d.]+\s*\w+\s*\/\s*[\d.]+\s*\w+,\s*([\d]+)%,\s*([\d.]+)\s*(\w+\/s),\s*ETA\s*([\d]+[smh])/;
+        const match = output.match(regex);
+        if (match) {
+          percent = match[1];
+          speed = match[2] + match[3];
+          eta = match[4];
+          const mainWindow = BrowserWindow.getAllWindows()[0];
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-status").innerHTML = ""`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-button").innerHTML = "Installing"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("shard1234").style.display = "block"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-speed").innerHTML = "${speed}"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-progress").innerHTML = "${percent}% | ETA: ${eta}"`
+          );
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("download-bar").style.width = "${percent}%"`
+          );
+        }
+      }
     });
-    fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
-    // // Check if the game is already downloaded
-    // if (fs.existsSync(path.join(downloadPath, decodeURIComponent(req.query.name)))) {
-    //   return res.status(400).json({ error: "Game already downloaded" });
-    // }
 
-    // // Check if Rclone is present, if not download it
-    // const rclonePath = path.join(mainPath, "rclone.exe");
-    // try {
-    //   if (!fs.existsSync(rclonePath)) {
-    //     // Download Rclone
-    //     const file = fs.createWriteStream(rclonePath);
-    //     https.get("https://picteon.dev/files/rclone.exe", (response) => {
-    //       response.pipe(file);
-    //     });
-    //     //Get Rclone Config
-    //     const rcloneConfigPath = path.join(mainPath, "rclone.conf");
-    //     const file2 = fs.createWriteStream(rcloneConfigPath);
-    //     https.get(
-    //       "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
-    //       (response) => {
-    //         response.pipe(file2);
-    //       }
-    //     );
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    //   return res.status(500).json({ error: "Internal Server Error" });
-    // }
+    process.stderr.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+      res.status(500).json({ error: "Internal Server Error" });
+      //wipe the mainPath and re-download rclone
+      fs.rmdirSync(mainPath, { recursive: true });
+      const file = fs.createWriteStream(rclonePath);
+      https.get("https://picteon.dev/files/rclone.exe", (response) => {
+        response.pipe(file);
+      });
+      const rcloneConfigPath = path.join(mainPath, "rclone.conf");
+      const file2 = fs.createWriteStream(rcloneConfigPath);
+      https.get(
+        "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
+        (response) => {
+          response.pipe(file2);
+        }
+      );
+    });
 
-    // // Start the download process
-    // const process = spawn(rclonePath, [
-    //   "copy",
-    //   "-P",
-    //   "--transfers=10",
-    //   "--checkers=16",
-    //   downloadURL,
-    //   downloadPath,
-    // ]);
-    // // const JSONPath = mainPath + "/installed.json";
-    // // if (!fs.existsSync(JSONPath)) {
-    // //   fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
-    // // }
+    process.on("close", async (code) => {
+      //check if the download was successful
+      if (code !== 0) {
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+      res.status(200).json({ message: "Download Complete" });
+      const JSONPath = mainPath + "/installed.json";
+      if (!fs.existsSync(JSONPath)) {
+        fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
+      }
 
-    // // const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
+      const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
 
-    // // UpdatedPath.Installed.push({
-    // //   Name: req.query.name,
-    // //   GameLaunch: req.query.gameLaunch,
-    // //   InstallLocation: downloadPath + req.query.name,
-    // //   InstallDirectory: downloadPath,
-    // //   GameRunning: false,
-    // //   Downloading: true,
-    // // });
-    // // fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
-
-    // // Set up variables to store download progress
-    // let eta = "";
-    // let speed = "";
-    // let percent = "";
-
-    // // Set up event listeners to monitor the progress of the download process
-    // process.stdout.on("data", (data) => {
-    //   const output = data.toString();
-    //   if (output.includes("ETA")) {
-    //     const regex =
-    //       /Transferred:\s*[\d.]+\s*\w+\s*\/\s*[\d.]+\s*\w+,\s*([\d]+)%,\s*([\d.]+)\s*(\w+\/s),\s*ETA\s*([\d]+[smh])/;
-    //     const match = output.match(regex);
-    //     if (match) {
-    //       percent = match[1];
-    //       speed = match[2] + match[3];
-    //       eta = match[4];
-    //       const mainWindow = BrowserWindow.getAllWindows()[0];
-    //       mainWindow.webContents.executeJavaScript(
-    //         `document.getElementById("download-status").innerHTML = ""`
-    //       );
-    //       mainWindow.webContents.executeJavaScript(
-    //         `document.getElementById("download-button").innerHTML = "Installing"`
-    //       );
-    //       mainWindow.webContents.executeJavaScript(
-    //         `document.getElementById("shard1234").style.display = "block"`
-    //       );
-    //       mainWindow.webContents.executeJavaScript(
-    //         `document.getElementById("download-speed").innerHTML = "${speed}"`
-    //       );
-    //       mainWindow.webContents.executeJavaScript(
-    //         `document.getElementById("download-progress").innerHTML = "${percent}% | ETA: ${eta}"`
-    //       );
-    //       mainWindow.webContents.executeJavaScript(
-    //         `document.getElementById("download-bar").style.width = "${percent}%"`
-    //       );
-    //     }
-    //   }
-    // });
-
-    // process.stderr.on("data", (data) => {
-    //   console.error(`stderr: ${data}`);
-    //   res.status(500).json({ error: "Internal Server Error" });
-    //   //wipe the mainPath and re-download rclone
-    //   fs.rmdirSync(mainPath, { recursive: true });
-    //   const file = fs.createWriteStream(rclonePath);
-    //   https.get("https://picteon.dev/files/rclone.exe", (response) => {
-    //     response.pipe(file);
-    //   }
-    //   );
-    //   const rcloneConfigPath = path.join(mainPath, "rclone.conf");
-    //   const file2 = fs.createWriteStream(rcloneConfigPath);
-    //   https.get(
-    //     "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
-    //     (response) => {
-    //       response.pipe(file2);
-    //     }
-    //   );
-    // });
-
-    // process.on("close", async (code) => {
-    //   //check if the download was successful
-    //   if (code !== 0) {
-    //     res.status(500).json({ error: "Internal Server Error" });
-    //     return;
-    //   }
-    //   res.status(200).json({ message: "Download Complete" });
-    //   const JSONPath = mainPath + "/installed.json";
-    //   if (!fs.existsSync(JSONPath)) {
-    //     fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
-    //   }
-
-    //   const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
-
-    //   UpdatedPath.Installed.push({
-    //     Name: req.query.name,
-    //     GameLaunch: decodeURIComponent(req.query.gameLaunch),
-    //     InstallLocation: downloadPath + req.query.name,
-    //     InstallDirectory: downloadPath,
-    //     GameRunning: false,
-    //     Downloading: false,
-    //   });
-    //   fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
-    // });
+      UpdatedPath.Installed.push({
+        Name: req.query.name,
+        GameLaunch: decodeURIComponent(req.query.gameLaunch),
+        InstallLocation: downloadPath + req.query.name,
+        InstallDirectory: downloadPath,
+        GameRunning: false,
+        Downloading: false,
+      });
+      fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal Server Error" });
