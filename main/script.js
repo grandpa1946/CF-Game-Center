@@ -227,7 +227,7 @@ function fetchInstalledContent() {
           const xhr = new XMLHttpRequest();
           xhr.open(
             "POST",
-            `http://localhost:3000/launch?name=${banner.Name}`,
+            `http://localhost:3000/launch?name=${encodeURIComponent(banner.Name)}`,
             true
           );
           xhr.onreadystatechange = function () {
@@ -269,10 +269,6 @@ function fetchInstalledContent() {
       });
     });
 }
-
-
-
-
 
 //About me button
 
@@ -431,9 +427,7 @@ window.addEventListener("load", () => {
     event.preventDefault();
     downloadButton.textContent = "Loading...";
     downloadButton.disabled = true;
-    const gameName = document.getElementById(
-      "downloader-game-name"
-    ).textContent;
+    let gameName = document.getElementById("downloader-game-name").textContent;
     fetch(
       "https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json"
     )
@@ -442,24 +436,26 @@ window.addEventListener("load", () => {
         const { GameDownload, Gamelaunch } = data.crack.find(
           (game) => game.Gamename === gameName
         );
-        const [drive, name] = GameDownload.split(":");
+        const drive = encodeURIComponent(GameDownload);
         const path = document.getElementById("downloadlocation").value;
         const regex = /^[a-zA-Z]:\\(?:[^\\/:*?"<>|]+\\)*[^\\/:*?"<>|]*$/;
         let disk, directory;
+
+        //url encode the game name
+        gameName = encodeURIComponent(gameName);
         if (regex.test(path)) {
           [disk, ...dirs] = path.split("\\");
-          directory = dirs.join("\\");
+          directory = encodeURIComponent(dirs.join("\\"));
         } else {
           showPopupBox("Invalid path!", "😢", 5000);
           downloadButton.textContent = "Install";
           downloadButton.disabled = false;
           return;
         }
-        console.log(name)
         const xhr = new XMLHttpRequest();
         xhr.open(
           "POST",
-          `http://localhost:3000/download?drive=${drive}&name=${name}&disk=${disk}&directory=${directory}&gameLaunch=${Gamelaunch}`,
+          `http://localhost:3000/download?drive=${drive}&name=${gameName}&disk=${disk}&directory=${directory}&gameLaunch=${encodeURIComponent(Gamelaunch)}`,
           true
         );
         xhr.onreadystatechange = function () {
@@ -472,8 +468,15 @@ window.addEventListener("load", () => {
             showPopupBox("Already installed!", "😢", 5000);
             downloadButton.textContent = "Install";
             downloadButton.disabled = false;
+          } else if (xhr.readyState === 4 && xhr.status === 504) {
+            showPopupBox("Still Installing RClone, please try again later.", "😢", 5000);
+            downloadButton.textContent = "Install";
+            downloadButton.disabled = false;
           } else {
-            console.log(xhr.status);
+            //show popup box with error
+            showPopupBox("Failed to download!", "😢", 5000);
+            downloadButton.textContent = "Install";
+            downloadButton.disabled = false;
           }
         };
         xhr.send();
