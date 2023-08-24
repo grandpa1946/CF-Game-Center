@@ -250,7 +250,7 @@ function fetchInstalledContent() {
           const xhr = new XMLHttpRequest();
           xhr.open(
             "POST",
-            `http://localhost:3000/uninstall?name=${banner.Name}`,
+            `http://localhost:3000/uninstall?name=${encodeURIComponent(banner.Name)}`,
             true
           );
           xhr.onreadystatechange = function () {

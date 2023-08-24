@@ -426,7 +426,7 @@ app2.post("/uninstall", async (req, res) => {
 
     // Find the game by name
     const game = installedData.Installed.find(
-      (game) => game.Name === req.query.name
+      (game) => game.Name === decodeURIComponent(req.query.name)
     );
 
     if (!game) {
