@@ -63,15 +63,15 @@ app.on("window-all-closed", () => {
 app.on("ready", () => {
   //const child = spawn('cmd.exe', ['/c', 'start']);
   const mainPath = path.join(os.homedir(), "CloudForce");
+  if (!fs.existsSync(mainPath)) {
+    fs.mkdirSync(mainPath);
+  }
   const installing = mainPath + "/installing.json";
   if (!fs.existsSync(installing)) {
     fs.writeFileSync(installing, JSON.stringify({ Installing: false }));
   }
   setTimeout(() => {
     //set installing to true
-    if (!fs.existsSync(mainPath)) {
-      fs.mkdirSync(mainPath);
-    }
     const rclonePath = path.join(mainPath, "rclone.exe");
     if (!fs.existsSync(rclonePath)) {
       // Download Rclone
@@ -82,6 +82,10 @@ app.on("ready", () => {
       const file = fs.createWriteStream(rclonePath);
       https.get("https://picteon.dev/files/rclone.exe", (response) => {
         response.pipe(file);
+        //set installing to false
+        const installingData2 = JSON.parse(fs.readFileSync(installing));
+        installingData2.Installing = false;
+        fs.writeFileSync(installing, JSON.stringify(installingData2));
       });
       //Get Rclone Config
       const rcloneConfigPath = path.join(mainPath, "rclone.conf");
@@ -92,10 +96,6 @@ app.on("ready", () => {
           response.pipe(file2);
         }
       );
-      //set installing to false
-      const installingData2 = JSON.parse(fs.readFileSync(installing));
-      installingData2.Installing = false;
-      fs.writeFileSync(installing, JSON.stringify(installingData2));
     }
   }, 5000);
 
@@ -183,6 +183,7 @@ app2.post("/download", async (req, res) => {
     try {
       if (!fs.existsSync(rclonePath)) {
         // Download Rclone
+        res.status(504).json({ message: "Downloading Rclone" });
         const file = fs.createWriteStream(rclonePath);
         https.get("https://picteon.dev/files/rclone.exe", (response) => {
           response.pipe(file);
