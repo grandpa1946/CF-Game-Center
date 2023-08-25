@@ -18,9 +18,13 @@ Sentry.init({
   dsn: "https://424d9911459e46f07dc60abfab3a114c@o4505423686991872.ingest.sentry.io/4505748984889344",
 });
 
+
+let mainWindow;
+
+
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     resizable: false, // set resizable property to false
@@ -264,6 +268,7 @@ app2.post("/download", async (req, res) => {
           mainWindow.webContents.executeJavaScript(
             `document.getElementById("download-bar").style.width = "${percent}%"`
           );
+          mainWindow.setProgressBar(parseInt(percent) / 100);
         }
       }
     });
@@ -310,6 +315,7 @@ app2.post("/download", async (req, res) => {
         Downloading: false,
       });
       fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
+      mainWindow.setProgressBar(-1);
     });
   } catch (err) {
     console.error(err);
