@@ -39,6 +39,7 @@ const createWindow = () => {
       devTools: true,
     },
   });
+
   nativeTheme.themeSource = "dark";
   // Disable the application menu
   //Menu.setApplicationMenu(null);

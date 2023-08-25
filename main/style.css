@@ -669,8 +669,8 @@ label {
   width: 250px;
   margin: 20px;
   position: relative;
+  align-items: center; /* Center vertically */
   display: flex;
-  flex-direction: column; /* Added this property */
   justify-content: space-between; /* Added this property */
   box-sizing: border-box;
   background-color: #1f2937;
@@ -704,25 +704,27 @@ label {
 }
 
 .app-poster {
-  width: 100%;
-  height: 100% !important;
-  margin-bottom: 10px;
+  width: auto;
+  height: auto;
   overflow: hidden;
-  object-fit: cover !important;
-  padding-top: 10px; /* add padding to the top */
+  display: flex; /* Add display: flex; */
+  align-items: center; /* Center vertically */
 }
 
 .app-poster img {
-  width: 100%;
-  height: 100%;
+  width: 50px; /* Set a fixed width of 60px */
+  height: 50px; /* Set a fixed height of 60px */
   object-fit: contain;
   display: block;
-  user-drag: none; /* Prevents image from being draggable */
+  user-drag: none;
   -moz-user-select: none;
   -webkit-user-drag: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+  margin-left: 10px;
 }
+
+
 
 .game-poster img {
   width: 100%;
@@ -742,6 +744,17 @@ label {
   text-align: center;
   color: white; /* Added this property */
   margin: 10px; /* Added this property */
+}
+
+.app-name {
+  font-size: 16px;
+  font-weight: bold;
+  flex: 1; /* Allow the name to take up available space */
+  margin-left: 40px; /* Add margin for spacing */
+  color: white;
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide any overflowed text */
+  text-overflow: ellipsis; /* Add ellipsis (...) if text overflows */
 }
 
 /*Scroll bar that matches style with the rest of website*/

@@ -461,20 +461,20 @@ window.addEventListener("load", () => {
         const gameItem = document.createElement("div");
         gameItem.className = "app-item";
         gameItem.style.animation = "fadeIn 1s ease-in-out;";
-
+        
         const gamePoster = document.createElement("div");
         gamePoster.className = "app-poster";
         const posterImg = document.createElement("img");
         posterImg.src = app.AppImage;
         gamePoster.appendChild(posterImg);
-
         const gameName = document.createElement("div");
-        gameName.className = "game-name";
+        gameName.className = "app-name";
         gameName.textContent = app.AppName;
-
+        
         gameItem.appendChild(gamePoster);
         gameItem.appendChild(gameName);
         gameList.appendChild(gameItem);
+        
 
         gameItem.addEventListener("click", () => {
           // handle click event here
