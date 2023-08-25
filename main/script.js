@@ -389,7 +389,9 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
         let settingsSection = document.querySelector("#settings-section");
         let downloadSection = document.querySelector("#downloader-section");
         let installedSection = document.querySelector("#installed-section");
+        let appsSection = document.querySelector("#apps-section");
 
+        appsSection.style.display = "none";
         homeSection.style.display = "none";
         filesSection.style.display = "none";
         settingsSection.style.display = "none";
@@ -405,6 +407,41 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
   };
   xhr.send();
 }
+
+function showAppDownloadMenu(AppName, AppImage, AppDescription, AppGFNIssues, AppGFNStatus, AppDownloadUrl, AppExe, AppArguments) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", `http://localhost:3000/appStatus?name=${AppName}`, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      
+    } else if (xhr.readyState === 4 && xhr.status === 404) {
+      try {
+        let homeSection = document.querySelector("#dashboard-section");
+        let filesSection = document.querySelector("#files-section");
+        let settingsSection = document.querySelector("#settings-section");
+        let downloadSection = document.querySelector("#downloader-section");
+        let installedSection = document.querySelector("#installed-section");
+        let appsSection = document.querySelector("#apps-section");
+        let appDownloadSection = document.querySelector("#app-downloader-section");
+
+        appDownloadSection.style.display = "block";
+        appsSection.style.display = "none";
+        homeSection.style.display = "none";
+        filesSection.style.display = "none";
+        settingsSection.style.display = "none";
+        downloadSection.style.display = "none";
+        installedSection.style.display = "none";
+      } catch (error) {
+        showPopupBox("Failed to get drive status!", "😢", 5000);
+      }
+    } else {
+      //show popup box with error
+      //showPopupBox("Failed to get game status!", "😢", 5000);
+    }
+  };
+  xhr.send();
+}
+
 
 window.addEventListener("load", () => {
   let downloading = false;
@@ -470,7 +507,7 @@ window.addEventListener("load", () => {
         const gameName = document.createElement("div");
         gameName.className = "app-name";
         gameName.textContent = app.AppName;
-        
+
         gameItem.appendChild(gamePoster);
         gameItem.appendChild(gameName);
         gameList.appendChild(gameItem);
@@ -481,11 +518,15 @@ window.addEventListener("load", () => {
           if (downloading) {
             showPopupBox("Something is already downloading!", "🤔", 5000);
           } else {
-            showDownloadMenu(
-              game.Gamename,
-              game.GaneDownload,
-              game.GameLaunch,
-              game.GameSize
+            showAppDownloadMenu(
+              app.AppName,
+              app.AppImage,
+              app.AppDescription,
+              app.AppGFNIssues,
+              app.AppGFNStatus,
+              app.AppDownloadUrl,
+              app.AppExe,
+              app.AppArguments
             );
           }
         });

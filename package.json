@@ -1,7 +1,7 @@
 {
   "name": "cloudforce",
   "version": "1.0.0",
-  "description": "Cloudforce game center",
+  "description": "Cloudforce app",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",

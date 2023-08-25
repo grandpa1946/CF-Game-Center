@@ -276,6 +276,18 @@ h2 {
   z-index: 2;
 }
 
+.app-downloader-section {
+  position: relative;
+  background: #111827;
+  background-color: #111827;
+  min-height: 100vh;
+  top: 0;
+  left: 78px;
+  width: calc(100% - 78px);
+  transition: all 0.5s ease;
+  z-index: 2;
+}
+
 .start-button:hover {
   cursor: pointer;
 }

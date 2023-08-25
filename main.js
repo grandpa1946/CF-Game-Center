@@ -324,6 +324,10 @@ app2.post("/download", async (req, res) => {
   }
 });
 
+app2.post("/app/download", async (req, res) => {
+  
+});
+
 // function downloadFile(fileUrl, downloadPath, callback) {
 //   const fileStream = fs.createWriteStream(downloadPath);
 
