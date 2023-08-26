@@ -111,6 +111,12 @@ app.on("ready", () => {
   if (!fs.existsSync(JSONPath1)) {
     fs.writeFileSync(JSONPath1, JSON.stringify({ Installed: [] }));
   }
+
+  //create C:\\Cloudforce\\Apps if it doesn't exist
+  const appPath = path.join(mainPath, "Apps");
+  if (!fs.existsSync(appPath)) {
+    fs.mkdirSync(appPath);
+  }
 });
 
 //ExpressJS server
@@ -326,8 +332,6 @@ app2.post("/download", async (req, res) => {
   }
 });
 
-app2.post("/app/download", async (req, res) => {});
-
 // function downloadFile(fileUrl, downloadPath, callback) {
 //   const fileStream = fs.createWriteStream(downloadPath);
 
@@ -478,7 +482,7 @@ app2.post("/app/install", async (req, res) => {
       //install the app
       const appPath = path.join(mainPath, "Apps");
       if (!fs.existsSync(appPath)) {
-        fs.mkdirSync(appPath);
+        fs.mkdirSync(appPath, { recursive: true });
       }
       let appPath1 = "";
       //check if the app downloads ends with .zip or .exe
@@ -530,8 +534,9 @@ app2.post("/app/install", async (req, res) => {
         res.status(400).json({ error: "App failed to launch" });
       }
     }
-  } catch {
+  } catch (err){
     res.status(500).json({ error: "Internal Server Error" });
+    console.log(err)
   }
 });
 
