@@ -429,28 +429,82 @@ function showAppDownloadMenu(
   AppArguments
 ) {
   const xhr = new XMLHttpRequest();
-  xhr.open("POST", `http://localhost:3000/appStatus?name=${AppName}`, true);
+  xhr.open("GET", `http://localhost:3000/appStatus?name=${AppName}`, true);
   xhr.onreadystatechange = function () {
-    try {
-      let homeSection = document.querySelector("#dashboard-section");
-      let filesSection = document.querySelector("#files-section");
-      let settingsSection = document.querySelector("#settings-section");
-      let downloadSection = document.querySelector("#downloader-section");
-      let installedSection = document.querySelector("#installed-section");
-      let appsSection = document.querySelector("#apps-section");
-      let appDownloadSection = document.querySelector(
-        "#app-downloader-section"
-      );
+    if (xhr.readyState === 4) {
+      try {
+        let appUIName = document.getElementById("appdl-app-name");
+        let appUIDescription = document.getElementById("appdl-app-description");
 
-      appDownloadSection.style.display = "block";
-      appsSection.style.display = "none";
-      homeSection.style.display = "none";
-      filesSection.style.display = "none";
-      settingsSection.style.display = "none";
-      downloadSection.style.display = "none";
-      installedSection.style.display = "none";
-    } catch (error) {
-      showPopupBox("Failed to get game status!", "😢", 5000);
+        appUIName.textContent = AppName;
+        appUIDescription.textContent = AppDescription;
+
+        //checks
+        let appUIGFNStatus = document.getElementById("app-status");
+        if (AppGFNStatus == "Safe") {
+          appUIGFNStatus.innerHTML = `<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"> <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span> ${AppGFNStatus} </span>`;
+        } else {
+          appUIGFNStatus.innerHTML = `<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"> <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> ${AppGFNStatus} - ${AppGFNIssues} </span>`;
+        }
+
+        let appDownloadButton = document.getElementById("app-download-button");
+        if (xhr.status === 200) {
+          appDownloadButton.textContent = "Launch";
+        } else if (xhr.status === 400) {
+          appDownloadButton.textContent = "Install";
+        } else {
+          //show popup box with error
+          showPopupBox("Failed to get app status!", "😢", 5000);
+        }
+
+        let homeSection = document.querySelector("#dashboard-section");
+        let filesSection = document.querySelector("#files-section");
+        let settingsSection = document.querySelector("#settings-section");
+        let downloadSection = document.querySelector("#downloader-section");
+        let installedSection = document.querySelector("#installed-section");
+        let appsSection = document.querySelector("#apps-section");
+        let appDownloadSection = document.querySelector(
+          "#app-downloader-section"
+        );
+        appDownloadSection.style.display = "block";
+        appsSection.style.display = "none";
+        homeSection.style.display = "none";
+        filesSection.style.display = "none";
+        settingsSection.style.display = "none";
+        downloadSection.style.display = "none";
+        installedSection.style.display = "none";
+
+        appDownloadButton.addEventListener("click", (event) => {
+          event.preventDefault();
+          appDownloadButton.disabled = true;
+          appDownloadButton.classList.add("loading");
+          const xhr = new XMLHttpRequest();
+          xhr.open(
+            "POST",
+            `http://localhost:3000/app/install?AppName=${encodeURIComponent(
+              AppName
+            )}&AppDownloadURL=${encodeURIComponent(
+              AppDownloadUrl
+            )}&AppExe=${encodeURIComponent(
+              AppExe
+            )}&AppArguments=${encodeURIComponent(AppArguments)}`,
+            true
+          );
+          xhr.onreadystatechange = function () {
+            const response = JSON.parse(xhr.responseText);
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              showPopupBox(response.message, "😎", 5000);
+              appDownloadButton.disabled = false;
+            } else if (xhr.readyState === 4 && xhr.status === 400) {
+              showPopupBox(response.message, "😢", 5000);
+              appDownloadButton.disabled = false;
+            }
+          };
+          xhr.send();
+        });
+      } catch (error) {
+        showPopupBox("Failed to get game status!", "😢", 5000);
+      }
     }
   };
   xhr.send();
@@ -458,7 +512,7 @@ function showAppDownloadMenu(
 
 window.addEventListener("load", () => {
   let downloading = false;
-  showPopupBox("Welcome to CF Game Center!", "👋", 2000);
+  showPopupBox("Welcome to the new Cloudforce!", "👋", 2000);
   fetch(
     "https://files.zortos.me/files/public/CF%20GC%20Resources/GameCenter.json"
   )
@@ -524,7 +578,7 @@ window.addEventListener("load", () => {
         gameItem.appendChild(gamePoster);
         gameItem.appendChild(gameName);
         gameList.appendChild(gameItem);
-
+        console.log(app.AppDownloadUrl);
         gameItem.addEventListener("click", () => {
           // handle click event here
           if (downloading) {
@@ -617,6 +671,7 @@ window.addEventListener("load", () => {
 window.addEventListener("load", async () => {
   const fileServerStatus = document.getElementById("installed-status");
   const gamesStatus = document.getElementById("games-status");
+  const appStatus = document.getElementById("apps-status");
 
   const handleTimeout = (serverStatus, message) => {
     if (message == "none") {
@@ -660,6 +715,24 @@ window.addEventListener("load", async () => {
       }
     } catch (error) {
       handleTimeout(gamesStatus, "error");
+    }
+
+    try {
+      const fileResponse = await Promise.race([
+        fetch(
+          "https://raw.githubusercontent.com/zortos293/Cloudforce-Revamped-Resources/Dev/Apps.json"
+        ),
+        new Promise((_, reject) => setTimeout(() => reject(), 5000)),
+      ]);
+      if (fileResponse.status == 200) {
+        const data = await fileResponse.json();
+        const amount = data.Apps.length;
+        appStatus.innerHTML = `<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"> <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span> ${amount} </span>`;
+      } else {
+        handleTimeout(appStatus, "none");
+      }
+    } catch (error) {
+      handleTimeout(appStatus, "error");
     }
   };
 
