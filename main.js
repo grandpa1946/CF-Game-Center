@@ -34,13 +34,13 @@ const createWindow = () => {
 
     webPreferences: {
       nodeIntegration: true,
-      devTools: true,
+      devTools: false,
     },
   });
 
   nativeTheme.themeSource = "dark";
   // Disable the application menu
-  //Menu.setApplicationMenu(null);
+  Menu.setApplicationMenu(null);
 
   mainWindow.webContents.on("did-navigate", (event, url) => {
     event.preventDefault();
