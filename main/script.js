@@ -366,7 +366,7 @@ function Login(username, password) {
 
 function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
   const xhr = new XMLHttpRequest();
-  xhr.open("POST", `http://localhost:3000/gameStatus?name=${Gamename}`, true);
+  xhr.open("POST", `http://localhost:3000/gameStatus?name=${encodeURIComponent(Gamename)}`, true);
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       showDownloadSection();
@@ -429,7 +429,7 @@ function showAppDownloadMenu(
   AppArguments
 ) {
   const xhr = new XMLHttpRequest();
-  xhr.open("GET", `http://localhost:3000/appStatus?name=${AppName}`, true);
+  xhr.open("GET", `http://localhost:3000/appStatus?name=${encodeURIComponent(AppName)}`, true);
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
       try {
@@ -457,6 +457,12 @@ function showAppDownloadMenu(
           showPopupBox("Failed to get app status!", "😢", 5000);
         }
 
+        //set global variables
+        AppName = AppName;
+        AppDownloadUrl = AppDownloadUrl;
+        AppExe = AppExe;
+        AppArguments = AppArguments;
+
         let homeSection = document.querySelector("#dashboard-section");
         let filesSection = document.querySelector("#files-section");
         let settingsSection = document.querySelector("#settings-section");
@@ -473,35 +479,6 @@ function showAppDownloadMenu(
         settingsSection.style.display = "none";
         downloadSection.style.display = "none";
         installedSection.style.display = "none";
-
-        appDownloadButton.addEventListener("click", (event) => {
-          event.preventDefault();
-          appDownloadButton.disabled = true;
-          appDownloadButton.classList.add("loading");
-          const xhr = new XMLHttpRequest();
-          xhr.open(
-            "POST",
-            `http://localhost:3000/app/install?AppName=${encodeURIComponent(
-              AppName
-            )}&AppDownloadURL=${encodeURIComponent(
-              AppDownloadUrl
-            )}&AppExe=${encodeURIComponent(
-              AppExe
-            )}&AppArguments=${encodeURIComponent(AppArguments)}`,
-            true
-          );
-          xhr.onreadystatechange = function () {
-            const response = JSON.parse(xhr.responseText);
-            if (xhr.readyState === 4 && xhr.status === 200) {
-              showPopupBox(response.message, "😎", 5000);
-              appDownloadButton.disabled = false;
-            } else if (xhr.readyState === 4 && xhr.status === 400) {
-              showPopupBox(response.message, "😢", 5000);
-              appDownloadButton.disabled = false;
-            }
-          };
-          xhr.send();
-        });
       } catch (error) {
         showPopupBox("Failed to get game status!", "😢", 5000);
       }
@@ -511,6 +488,50 @@ function showAppDownloadMenu(
 }
 
 window.addEventListener("load", () => {
+  let appDownloadButton = document.getElementById("app-download-button");
+  appDownloadButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    appDownloadButton.disabled = true;
+    //get the app name
+    const AppNameTemp = document.getElementById("appdl-app-name").textContent;
+    fetch(
+      "https://raw.githubusercontent.com/zortos293/Cloudforce-Revamped-Resources/Dev/Apps.json"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const { AppName, AppDownloadUrl, AppExe, AppArguments } =
+          data.Apps.find((app) => app.AppName === AppNameTemp);
+        const xhr = new XMLHttpRequest();
+        xhr.open(
+          "POST",
+          `http://localhost:3000/app/install?AppName=${encodeURIComponent(
+            AppName
+          )}&AppDownloadURL=${encodeURIComponent(
+            AppDownloadUrl
+          )}&AppExe=${encodeURIComponent(
+            AppExe
+          )}&AppArguments=${encodeURIComponent(AppArguments)}`,
+          true
+        );
+        xhr.onreadystatechange = function () {
+          console.log(xhr.responseText)
+          const response = JSON.parse(xhr.responseText);
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            showPopupBox(response.message, "😎", 5000);
+            appDownloadButton.disabled = false;
+          } else if (xhr.readyState === 4 && xhr.status === 400) {
+            showPopupBox(response.message, "😢", 5000);
+            appDownloadButton.disabled = false;
+          } else {
+            //show popup box with error
+            showPopupBox("Failed", "😢", 5000);
+            appDownloadButton.disabled = false;
+          }
+        };
+        xhr.send();
+      });
+  });
+
   let downloading = false;
   showPopupBox("Welcome to the new Cloudforce!", "👋", 2000);
   fetch(
@@ -578,7 +599,6 @@ window.addEventListener("load", () => {
         gameItem.appendChild(gamePoster);
         gameItem.appendChild(gameName);
         gameList.appendChild(gameItem);
-        console.log(app.AppDownloadUrl);
         gameItem.addEventListener("click", () => {
           // handle click event here
           if (downloading) {

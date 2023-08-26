@@ -417,7 +417,7 @@ app2.get("/gameStatus", async (req, res) => {
   const mainPath = path.join(os.homedir(), "CloudForce");
   const JSONPath = mainPath + "/installed.json";
   const Installed = await JSON.parse(fs.readFileSync(JSONPath));
-  const Game = Installed.Installed.find((game) => game.Name === req.query.name);
+  const Game = Installed.Installed.find((game) => game.Name === decodeURIComponent(req.query.name));
   if (!Game) {
     res.status(400).json({ error: "Game not installed" });
     return;
@@ -435,7 +435,7 @@ app2.get("/appStatus", async (req, res) => {
   const mainPath = path.join(os.homedir(), "CloudForce");
   const JSONPath = mainPath + "/installedApps.json";
   const Installed = await JSON.parse(fs.readFileSync(JSONPath));
-  const app = Installed.Installed.find((app) => app.Name === req.query.name);
+  const app = Installed.Installed.find((app) => app.Name === decodeURIComponent(req.query.name));
   if (!app) {
     res.status(400).json({ installed: false });
     return;
@@ -449,98 +449,89 @@ app2.get("/appStatus", async (req, res) => {
 });
 
 app2.post("/app/install", async (req, res) => {
-  const appName = decodeURIComponent(req.query.AppName);
-  const appDownloadURL = decodeURIComponent(req.query.AppDownloadURL);
-  const appExe = decodeURIComponent(req.query.AppExe);
-  const AppArguments = decodeURIComponent(req.query.AppArguments);
-  console.log(
-    "Debug\n--------------------------\n" +
-      appName +
-      "\n" +
-      appDownloadURL +
-      "\n" +
-      appExe +
-      "\n" +
-      AppArguments
-  );
-  //if the app is already installed, launch it. All exes should be installed at C:\Apps\ if its a zip then it should be extracted to C:\Apps\appzip\ (the app zip is the name of the .zip) eg 7-zip.zip would be extracted to C:\Apps\7-zip\
-  /***
-   * Example data:
-   *  "AppName": "Desktop",
-      "AppImage": "https://raw.githubusercontent.com/zortos293/Cloudforce-Revamped-Resources/Dev/Resources/desktop_480px.png",
-      "AppDescription": "Runs script that opens Desktop",
-      "AppGFNIssues": "none",
-      "AppGFNStatus": "Safe",
-      "AppDownloadUrl": "https://picteon.dev/ZortosShell.zip",
-      "AppExe": "ZortosShell\\bin\\shell\\notsus.exe",
-      "AppArguments": "-Desktop",
-   */
-  //mainpath is C:\CloudForce
-  const mainPath = "C:\\CloudForce\\";
-  const JSONPath =
-    path.join(os.homedir(), "CloudForce") + "/installedApps.json";
-  if (!fs.existsSync(JSONPath)) {
-    //create the file
-    fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
-  }
-  const Installed = await JSON.parse(fs.readFileSync(JSONPath));
-  const app = Installed.Installed.find((app) => app.Name === appName);
-  console.log(app)
-  if (!app) {
-    //install the app
-    const appPath = path.join(mainPath, "Apps");
-    if (!fs.existsSync(appPath)) {
-      fs.mkdirSync(appPath);
+  try {
+    const appName = decodeURIComponent(req.query.AppName);
+    const appDownloadURL = decodeURIComponent(req.query.AppDownloadURL);
+    const appExe = decodeURIComponent(req.query.AppExe);
+    const AppArguments = decodeURIComponent(req.query.AppArguments);
+    console.log(
+      "Debug\n--------------------------\n" +
+        appName +
+        "\n" +
+        appDownloadURL +
+        "\n" +
+        appExe +
+        "\n" +
+        AppArguments
+    );
+    const mainPath = "C:\\CloudForce\\";
+    const JSONPath =
+      path.join(os.homedir(), "CloudForce") + "/installedApps.json";
+    if (!fs.existsSync(JSONPath)) {
+      //create the file
+      fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
     }
-    let appPath1 = "";
-    //check if the app downloads ends with .zip or .exe
-    if (appDownloadURL.endsWith(".zip")) {
-      appPath1 = path.join(appPath, appName + "zip");
-    } else {
-      appPath1 = path.join(appPath, appExe);
-    }
-    const file = fs.createWriteStream(appPath1);
-    https.get(appDownloadURL, async (response) => {
-      mainWindow.webContents.executeJavaScript(
-        `document.getElementById("app-download-button").innerHTML = "Installing"`
-      );
-
-      response.pipe(file);
-
-      file.on("finish", async () => {
+    const Installed = await JSON.parse(fs.readFileSync(JSONPath));
+    const app = Installed.Installed.find((app) => app.Name === appName);
+    console.log(app);
+    if (!app) {
+      //install the app
+      const appPath = path.join(mainPath, "Apps");
+      if (!fs.existsSync(appPath)) {
+        fs.mkdirSync(appPath);
+      }
+      let appPath1 = "";
+      //check if the app downloads ends with .zip or .exe
+      if (appDownloadURL.endsWith(".zip")) {
+        appPath1 = path.join(appPath, appName + ".zip");
+      } else {
+        appPath1 = path.join(appPath, appExe);
+      }
+      const file = fs.createWriteStream(appPath1);
+      https.get(appDownloadURL, async (response) => {
         mainWindow.webContents.executeJavaScript(
-          `document.getElementById("app-download-button").innerHTML = "Launch"`
+          `document.getElementById("app-download-button").innerHTML = "Installing"`
         );
 
-        // If it's a zip, extract it and then send the response
-        if (appDownloadURL.endsWith(".zip")) {
-          const extract = require("extract-zip");
-          await extract(appPath1, { dir: appPath });
-        }
+        response.pipe(file);
 
-        // Add the app to the installed list
-        Installed.Installed.push({
-          Name: appName,
-          InstallLocation: appPath,
-          AppExe: appExe,
-          AppArguments: AppArguments,
+        file.on("finish", async () => {
+          mainWindow.webContents.executeJavaScript(
+            `document.getElementById("app-download-button").innerHTML = "Launch"`
+          );
+
+          // If it's a zip, extract it and then send the response
+          if (appDownloadURL.endsWith(".zip")) {
+            const extract = require("extract-zip");
+            await extract(appPath1, { dir: appPath });
+          }
+
+          // Add the app to the installed list
+          Installed.Installed.push({
+            Name: appName,
+            InstallLocation: appPath,
+            AppExe: appExe,
+            AppArguments: AppArguments,
+          });
+
+          fs.writeFileSync(JSONPath, JSON.stringify(Installed));
+
+          res.status(200).json({ message: "App installed" });
         });
-
-        fs.writeFileSync(JSONPath, JSON.stringify(Installed));
-
-        res.status(200).json({ message: "App installed" });
       });
-    });
-  } else {
-    //launch the app
-    const appPath = app.InstallLocation;
-    const appExePath = path.join(appPath, appExe);
-    const process = spawn(appExePath, [AppArguments]);
-    if (process.pid) {
-      res.status(200).json({ message: "App launched" });
     } else {
-      res.status(400).json({ error: "App failed to launch" });
+      //launch the app
+      const appPath = app.InstallLocation;
+      const appExePath = path.join(appPath, appExe);
+      const process = spawn(appExePath, [AppArguments]);
+      if (process.pid) {
+        res.status(200).json({ message: "App launched" });
+      } else {
+        res.status(400).json({ error: "App failed to launch" });
+      }
     }
+  } catch {
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
