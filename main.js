@@ -316,9 +316,9 @@ app2.post("/download", async (req, res) => {
       const UpdatedPath = await JSON.parse(fs.readFileSync(JSONPath));
 
       UpdatedPath.Installed.push({
-        Name: req.query.name,
+        Name: decodeURIComponent(req.query.name),
         GameLaunch: decodeURIComponent(req.query.gameLaunch),
-        InstallLocation: downloadPath + req.query.name,
+        InstallLocation: downloadPath + decodeURIComponent(req.query.name),
         InstallDirectory: downloadPath,
         GameRunning: false,
         Downloading: false,
