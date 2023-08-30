@@ -325,6 +325,11 @@ app2.post("/download", async (req, res) => {
       });
       fs.writeFileSync(JSONPath, JSON.stringify(UpdatedPath));
       mainWindow.setProgressBar(-1);
+
+      //hide shard1234
+      mainWindow.webContents.executeJavaScript(
+        `document.getElementById("shard1234").style.display = "none"`
+      );
     });
   } catch (err) {
     console.error(err);
