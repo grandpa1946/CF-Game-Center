@@ -372,6 +372,13 @@
     >
       <div>
         <div class="downloader-text">Downloader</div>
+        <span class="inline-flex items-center" id="downloader-size">
+          <div
+            class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+          >
+            Fetching...
+          </div>
+        </span>
         <div class="downloader-game-name" id="downloader-game-name">Null</div>
         <button
           href="#"
@@ -459,11 +466,21 @@
       <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div class="grid gap-8 lg:grid-cols-2" id="banner-list"></div>
       </div>
-      <a id="creditss">Looking for Apps? Just go to the apps section and click an installed one!</a>
+      <a id="creditss" class="creditss"
+        >Looking for Apps? Just go to the apps section and click an installed
+        one!</a
+      >
     </section>
     <section class="home-section" id="files-section" style="display: none">
       <div class="text">Games</div>
+      <input
+        placeholder="Search..."
+        class="games-search"
+        oninput="handleSearch()"
+        id="games-search"
+      />
       <div class="game-list"></div>
+      <a id="no-data" class="nodata" style="display: none; align-self: center; padding-left: 200px;">No results</a>
     </section>
     <section class="home-section" id="apps-section" style="display: none">
       <div class="text">Apps</div>

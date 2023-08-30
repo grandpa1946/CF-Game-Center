@@ -390,7 +390,8 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
           });
 
         document.getElementById("downloader-game-name").textContent = Gamename;
-        document.getElementById("size1").textContent = GameSize;
+        document.getElementById("downloader-size").innerHTML = `<span class="inline-flex items-center bg-green-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-orange-900 dark:text-orange-300"> <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> ${GameSize} </span>`
+        document.getElementById("size1").textContent = "";
         document.getElementById(
           "downloadlocation"
         ).value = `C:\\CloudForce\\${Gamename}`;
@@ -487,6 +488,44 @@ function showAppDownloadMenu(
   xhr.send();
 }
 
+function handleSearch() {
+  const searchQuery = document.getElementById("games-search").value.toLowerCase(); // Convert to lowercase for case-insensitive search
+  const gameItems = document.querySelectorAll(".game-item");
+
+
+  if(searchQuery == ""){
+    const nodata = document.getElementById("no-data");
+    nodata.style.display = "none";
+    //make all game name visible
+    gameItems.forEach((gameItem) => {
+      const gameName = gameItem.querySelector(".game-name")
+      gameName.style.display = "block";
+      gameItem.style.display = "block";
+    });
+  }
+
+  gameItems.forEach((gameItem) => {
+    const gameName = gameItem.querySelector(".game-name").textContent.toLowerCase();
+
+    if (gameName.includes(searchQuery)) {
+      gameItem.style.display = "block";
+    } else {
+      gameItem.style.display = "none";
+    }
+  });
+
+  // Check if no results
+  const visibleGameItems = document.querySelectorAll(".game-item[style='display: block;']");
+  if (visibleGameItems.length === 0) {
+    const nodata = document.getElementById("no-data");
+    nodata.style.display = "block";
+  } else {
+    const nodata = document.getElementById("no-data");
+    nodata.style.display = "none";
+  }
+}
+
+
 window.addEventListener("load", () => {
   let appDownloadButton = document.getElementById("app-download-button");
   appDownloadButton.addEventListener("click", (event) => {
@@ -531,6 +570,7 @@ window.addEventListener("load", () => {
         xhr.send();
       });
   });
+
 
   let downloading = false;
   showPopupBox("Welcome to the new Cloudforce!", "👋", 2000);
