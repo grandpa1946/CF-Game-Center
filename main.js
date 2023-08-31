@@ -13,10 +13,10 @@ const cors = require("cors"); //CORS Policy
 const https = require("https");
 const KeyAuth = require("./KeyAuth");
 const { env } = require("process");
-const Sentry = require("@sentry/electron");
-Sentry.init({
-  dsn: "https://424d9911459e46f07dc60abfab3a114c@o4505423686991872.ingest.sentry.io/4505748984889344",
-});
+//const Sentry = require("@sentry/electron");
+//Sentry.init({
+//  dsn: "https://424d9911459e46f07dc60abfab3a114c@o4505423686991872.ingest.sentry.io/4505748984889344",
+//});
 
 let mainWindow;
 
