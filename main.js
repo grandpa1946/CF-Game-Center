@@ -259,6 +259,7 @@ app2.post("/download", async (req, res) => {
           speed = match[2] + match[3];
           eta = match[4];
           const mainWindow = BrowserWindow.getAllWindows()[0];
+          try {
           mainWindow.webContents.executeJavaScript(
             `document.getElementById("download-status").innerHTML = ""`
           );
@@ -278,6 +279,9 @@ app2.post("/download", async (req, res) => {
             `document.getElementById("download-bar").style.width = "${percent}%"`
           );
           mainWindow.setProgressBar(parseInt(percent) / 100);
+          } catch {
+            //do nothing
+          }
         }
       }
     });
