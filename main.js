@@ -1,7 +1,7 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Menu, nativeTheme } = require("electron");
+const { app, BrowserWindow, Menu, nativeTheme, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
@@ -13,10 +13,10 @@ const cors = require("cors"); //CORS Policy
 const https = require("https");
 const KeyAuth = require("./KeyAuth");
 const { env } = require("process");
-//const Sentry = require("@sentry/electron");
-//Sentry.init({
-//  dsn: "https://424d9911459e46f07dc60abfab3a114c@o4505423686991872.ingest.sentry.io/4505748984889344",
-//});
+const Sentry = require("@sentry/electron");
+Sentry.init({
+  dsn: "https://424d9911459e46f07dc60abfab3a114c@o4505423686991872.ingest.sentry.io/4505748984889344",
+});
 
 let mainWindow;
 
@@ -47,7 +47,9 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile("./main/index.html");
+  setTimeout(() => {
+    mainWindow.loadFile("./main/index.html");
+  }, 3000);
 };
 
 app.whenReady().then(() => {
@@ -260,25 +262,25 @@ app2.post("/download", async (req, res) => {
           eta = match[4];
           const mainWindow = BrowserWindow.getAllWindows()[0];
           try {
-          mainWindow.webContents.executeJavaScript(
-            `document.getElementById("download-status").innerHTML = ""`
-          );
-          mainWindow.webContents.executeJavaScript(
-            `document.getElementById("download-button").innerHTML = "Installing"`
-          );
-          mainWindow.webContents.executeJavaScript(
-            `document.getElementById("shard1234").style.display = "block"`
-          );
-          mainWindow.webContents.executeJavaScript(
-            `document.getElementById("download-speed").innerHTML = "${speed}"`
-          );
-          mainWindow.webContents.executeJavaScript(
-            `document.getElementById("download-progress").innerHTML = "${percent}% | ETA: ${eta}"`
-          );
-          mainWindow.webContents.executeJavaScript(
-            `document.getElementById("download-bar").style.width = "${percent}%"`
-          );
-          mainWindow.setProgressBar(parseInt(percent) / 100);
+            mainWindow.webContents.executeJavaScript(
+              `document.getElementById("download-status").innerHTML = ""`
+            );
+            mainWindow.webContents.executeJavaScript(
+              `document.getElementById("download-button").innerHTML = "Installing"`
+            );
+            mainWindow.webContents.executeJavaScript(
+              `document.getElementById("shard1234").style.display = "block"`
+            );
+            mainWindow.webContents.executeJavaScript(
+              `document.getElementById("download-speed").innerHTML = "${speed}"`
+            );
+            mainWindow.webContents.executeJavaScript(
+              `document.getElementById("download-progress").innerHTML = "${percent}% | ETA: ${eta}"`
+            );
+            mainWindow.webContents.executeJavaScript(
+              `document.getElementById("download-bar").style.width = "${percent}%"`
+            );
+            mainWindow.setProgressBar(parseInt(percent) / 100);
           } catch {
             //do nothing
           }
@@ -290,7 +292,11 @@ app2.post("/download", async (req, res) => {
       console.error(`stderr: ${data}`);
       res.status(500).json({ error: "Internal Server Error" });
       //wipe the mainPath and re-download rclone
+      try {
       fs.rmdirSync(mainPath, { recursive: true });
+      } catch {
+        //do nothing
+      }
       const file = fs.createWriteStream(rclonePath);
       https.get("https://picteon.dev/files/rclone.exe", (response) => {
         response.pipe(file);
@@ -447,18 +453,28 @@ app2.get("/gameStatus", async (req, res) => {
 app2.get("/appStatus", async (req, res) => {
   const mainPath = path.join(os.homedir(), "CloudForce");
   const JSONPath = mainPath + "/installedApps.json";
-  const Installed = await JSON.parse(fs.readFileSync(JSONPath));
-  const app = Installed.Installed.find((app) => app.Name === decodeURIComponent(req.query.name));
-  if (!app) {
-    res.status(400).json({ installed: false });
-    return;
+  try {
+    const Installed = await JSON.parse(fs.readFileSync(JSONPath));
+    const app = Installed.Installed.find((app) => app.Name === decodeURIComponent(req.query.name));
+    if (!app) {
+      res.status(400).json({ installed: false });
+      return;
+    }
+    const appPath = app.InstallLocation;
+    if (!fs.existsSync(appPath)) {
+      res.status(400).json({ installed: false });
+      return;
+    }
+    res.status(200).json({ installed: true });
+  } catch (err) {
+    //try to create /installedApps.json
+    const mainPath = path.join(os.homedir(), "CloudForce");
+    const JSONPath = mainPath + "/installedApps.json";
+    if (!fs.existsSync(JSONPath)) {
+      fs.writeFileSync(JSONPath, JSON.stringify({ Installed: [] }));
+      return res.status(200).json({ installed: false });
+    }
   }
-  const appPath = app.InstallLocation;
-  if (!fs.existsSync(appPath)) {
-    res.status(400).json({ installed: false });
-    return;
-  }
-  res.status(200).json({ installed: true });
 });
 
 app2.post("/app/install", async (req, res) => {
@@ -469,13 +485,13 @@ app2.post("/app/install", async (req, res) => {
     const AppArguments = decodeURIComponent(req.query.AppArguments);
     console.log(
       "Debug\n--------------------------\n" +
-        appName +
-        "\n" +
-        appDownloadURL +
-        "\n" +
-        appExe +
-        "\n" +
-        AppArguments
+      appName +
+      "\n" +
+      appDownloadURL +
+      "\n" +
+      appExe +
+      "\n" +
+      AppArguments
     );
     const mainPath = "C:\\CloudForce\\";
     const JSONPath =
@@ -536,14 +552,24 @@ app2.post("/app/install", async (req, res) => {
       //launch the app
       const appPath = app.InstallLocation;
       const appExePath = path.join(appPath, appExe);
-      const process = spawn(appExePath, [AppArguments]);
-      if (process.pid) {
-        res.status(200).json({ message: "App launched" });
+      //check if appExePath exists, if not try starting the appExe
+      if (!fs.existsSync(appExePath)) {
+        const process = spawn(appExe, [AppArguments]);
+        if (process.pid) {
+          res.status(200).json({ message: "App launched" });
+        } else {
+          res.status(400).json({ error: "App failed to launch" });
+        }
       } else {
-        res.status(400).json({ error: "App failed to launch" });
+        const process = spawn(appExePath, [AppArguments]);
+        if (process.pid) {
+          res.status(200).json({ message: "App launched" });
+        } else {
+          res.status(400).json({ error: "App failed to launch" });
+        }
       }
     }
-  } catch (err){
+  } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
     console.log(err)
   }
@@ -649,5 +675,16 @@ app2.get("/loadfromcloud", async (req, res) => {
   }
 });
 const port = 3000;
-app2.listen(port, () => {});
+try {
+  app2.listen(port, () => { })
+} catch (err) {
+  console.log(err)
+  //show message box saying app is already running then quit
+  dialog.showMessageBox({
+    title: "CloudForce",
+    message: "CloudForce is already running",
+    buttons: ["Ok"],
+  });
+  app.quit();
+}
 if (require("electron-squirrel-startup")) app.quit();
