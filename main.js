@@ -47,9 +47,13 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  setTimeout(() => {
+
+  const mainPath = path.join(os.homedir(), "CloudForce");
+  if (!fs.existsSync(path.join(mainPath, "rclone.exe"))) {
+    mainWindow.loadFile("./main/installing.html");
+  } else {
     mainWindow.loadFile("./main/index.html");
-  }, 3000);
+  }
 };
 
 app.whenReady().then(() => {
@@ -85,13 +89,15 @@ app.on("ready", () => {
       installingData.Installing = true;
       fs.writeFileSync(installing, JSON.stringify(installingData));
       const file = fs.createWriteStream(rclonePath);
+      try {
       https.get("https://picteon.dev/files/rclone.exe", (response) => {
         response.pipe(file);
         //set installing to false
         const installingData2 = JSON.parse(fs.readFileSync(installing));
         installingData2.Installing = false;
         fs.writeFileSync(installing, JSON.stringify(installingData2));
-      });
+        mainWindow.loadFile("./main/index.html");
+      })
       //Get Rclone Config
       const rcloneConfigPath = path.join(mainPath, "rclone.conf");
       const file2 = fs.createWriteStream(rcloneConfigPath);
@@ -101,9 +107,31 @@ app.on("ready", () => {
           response.pipe(file2);
         }
       );
+      } catch (err) {
+        console.error(err);
+        //wipe the mainPath and re-download rclone
+        try {
+          fs.rmdirSync(mainPath, { recursive: true });
+        } catch {
+          //do nothing
+        }
+        const file = fs.createWriteStream(rclonePath);
+        https.get("https://picteon.dev/files/rclone.exe", (response) => {
+          response.pipe(file);
+        });
+        const rcloneConfigPath = path.join(mainPath, "rclone.conf");
+        const file2 = fs.createWriteStream(rcloneConfigPath);
+        https.get(
+          "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
+          (response) => {
+            response.pipe(file2);
+          }
+        );
+        //render index.html
+        mainWindow.loadFile("./main/index.html");
+      }
     }
-  }, 5000);
-
+  }, 1000);
   //Create installed.json if it doesn't exist
   const JSONPath = mainPath + "/installed.json";
   if (!fs.existsSync(JSONPath)) {
@@ -115,7 +143,7 @@ app.on("ready", () => {
   }
 
   //create C:\\Cloudforce\\Apps if it doesn't exist
-  const appPath = path.join(mainPath, "Apps");
+  const appPath = path.join("C:\\", "Apps");
   if (!fs.existsSync(appPath)) {
     fs.mkdirSync(appPath);
   }
@@ -293,7 +321,7 @@ app2.post("/download", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       //wipe the mainPath and re-download rclone
       try {
-      fs.rmdirSync(mainPath, { recursive: true });
+        fs.rmdirSync(mainPath, { recursive: true });
       } catch {
         //do nothing
       }
