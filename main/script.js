@@ -390,7 +390,22 @@ function showDownloadMenu(Gamename, GaneDownload, GameLaunch, GameSize) {
           });
 
         document.getElementById("downloader-game-name").textContent = Gamename;
-        document.getElementById("downloader-size").innerHTML = `<span class="inline-flex items-center bg-green-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-orange-900 dark:text-orange-300"> <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> ${GameSize} </span>`
+        //gamesize will be like 10 GB or 10.13 GB
+        //if gamesize is under 20gb then show it as green if its between 20 and 40 show it as yellow, if its between 40 and 98 show it as orange and if its over 98 show it as red
+        if (GameSize.includes("GB")) {
+          GameSize = GameSize.replace("GB", "");
+          GameSize = GameSize.trim();
+          GameSize = parseFloat(GameSize);
+          if (GameSize < 20) {
+            document.getElementById("downloader-size").innerHTML = `<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"> <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span> ${GameSize} </span>`;
+          } else if (GameSize >= 20 && GameSize < 40) {
+            document.getElementById("downloader-size").innerHTML = `<span class="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300"> <span class="w-2 h-2 mr-1 bg-yellow-500 rounded-full"></span> ${GameSize} </span>`;
+          } else if (GameSize >= 40 && GameSize < 98) {
+            document.getElementById("downloader-size").innerHTML = `<span class="inline-flex items-center bg-orange-100 text-orange-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-orange-900 dark:text-orange-300"> <span class="w-2 h-2 mr-1 bg-orange-500 rounded-full"></span> ${GameSize} </span>`;
+          } else if (GameSize >= 98) {
+            document.getElementById("downloader-size").innerHTML = `<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-orange-900 dark:text-orange-300"> <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> ${GameSize} </span>`;
+          }
+        }
         document.getElementById("size1").textContent = "";
         document.getElementById(
           "downloadlocation"
