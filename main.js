@@ -257,12 +257,12 @@ app2.post("/download", async (req, res) => {
       console.error(err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-    console.log(`Debug-------------------------------------------------------\nExecuting: ${rclonePath} copy -P --transfers=10 --checkers=16 ${downloadURL} ${downloadPath}`)
+    console.log(`Debug-------------------------------------------------------\nExecuting: ${rclonePath} copy -P --transfers=15 --checkers=16 ${downloadURL} ${downloadPath}`)
     // Start the download process
     const process = spawn(rclonePath, [
       "copy",
       "-P",
-      "--transfers=10",
+      "--transfers=15",
       "--checkers=16",
       downloadURL,
       downloadPath,
