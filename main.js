@@ -90,28 +90,32 @@ app.on("ready", () => {
       fs.writeFileSync(installing, JSON.stringify(installingData));
       const file = fs.createWriteStream(rclonePath);
       try {
-      https.get("https://picteon.dev/files/rclone.exe", (response) => {
-        response.pipe(file);
-        //set installing to false
-        const installingData2 = JSON.parse(fs.readFileSync(installing));
-        installingData2.Installing = false;
-        fs.writeFileSync(installing, JSON.stringify(installingData2));
-        mainWindow.loadFile("./main/index.html");
-      })
-      //Get Rclone Config
-      const rcloneConfigPath = path.join(mainPath, "rclone.conf");
-      const file2 = fs.createWriteStream(rcloneConfigPath);
-      https.get(
-        "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
-        (response) => {
-          response.pipe(file2);
-        }
-      );
+        https.get("https://picteon.dev/files/rclone.exe", (response) => {
+          response.pipe(file);
+          //set installing to false
+          const installingData2 = JSON.parse(fs.readFileSync(installing));
+          installingData2.Installing = false;
+          fs.writeFileSync(installing, JSON.stringify(installingData2));
+          mainWindow.loadFile("./main/index.html");
+        })
+        //Get Rclone Config
+        const rcloneConfigPath = path.join(mainPath, "rclone.conf");
+        const file2 = fs.createWriteStream(rcloneConfigPath);
+        https.get(
+          "https://files.printedwaste.live/files/public/GFN/rclone.conf",
+          Headers = {
+            "Access-Control-Allow-Origin": "*",
+            "User-Agent": "cloudforce",
+          },
+          (response) => {
+            response.pipe(file2);
+          }
+        );
       } catch (err) {
         console.error(err);
         //wipe the mainPath and re-download rclone
         try {
-          fs.rmdirSync(mainPath, { recursive: true });
+          fs.rm(mainPath, { recursive: true });
         } catch {
           //do nothing
         }
@@ -122,7 +126,11 @@ app.on("ready", () => {
         const rcloneConfigPath = path.join(mainPath, "rclone.conf");
         const file2 = fs.createWriteStream(rcloneConfigPath);
         https.get(
-          "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
+          "https://files.printedwaste.live/files/public/GFN/rclone.conf",
+          Headers = {
+            "Access-Control-Allow-Origin": "*",
+            "User-Agent": "cloudforce",
+          },
           (response) => {
             response.pipe(file2);
           }
@@ -212,7 +220,7 @@ app2.post("/download", async (req, res) => {
       return res.status(504).json({ error: "Rclone is still installing" });
     }
     console.log(
-      `Debug\n--------------------------\nDownload URL: ${downloadURL}\nDownload Path: ${downloadPath}\nGame Launch: ${req.query.gameLaunch}\nGame Name: ${req.query.name}`
+      `Debug---------------------------------------------------------------\nDownload URL: ${downloadURL}\nDownload Path: ${downloadPath}\nGame Launch: ${req.query.gameLaunch}\nGame Name: ${req.query.name}`
     );
     // Check if the game is already downloaded
     if (
@@ -235,7 +243,11 @@ app2.post("/download", async (req, res) => {
         const rcloneConfigPath = path.join(mainPath, "rclone.conf");
         const file2 = fs.createWriteStream(rcloneConfigPath);
         https.get(
-          "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
+          "https://files.printedwaste.live/files/public/GFN/rclone.conf",
+          Headers = {
+            "Access-Control-Allow-Origin": "*",
+            "User-Agent": "cloudforce",
+          },
           (response) => {
             response.pipe(file2);
           }
@@ -245,12 +257,12 @@ app2.post("/download", async (req, res) => {
       console.error(err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-
+    console.log(`Debug-------------------------------------------------------\nExecuting: ${rclonePath} copy -P --transfers=15 --checkers=16 ${downloadURL} ${downloadPath}`)
     // Start the download process
     const process = spawn(rclonePath, [
       "copy",
       "-P",
-      "--transfers=10",
+      "--transfers=15",
       "--checkers=16",
       downloadURL,
       downloadPath,
@@ -319,24 +331,13 @@ app2.post("/download", async (req, res) => {
     process.stderr.on("data", (data) => {
       console.error(`stderr: ${data}`);
       res.status(500).json({ error: "Internal Server Error" });
-      //wipe the mainPath and re-download rclone
       try {
-        fs.rmdirSync(mainPath, { recursive: true });
+        fs.rm(mainPath, { recursive: true });
+        //restart the app
+        app.relaunch();
+        app.quit();
       } catch {
-        //do nothing
       }
-      const file = fs.createWriteStream(rclonePath);
-      https.get("https://picteon.dev/files/rclone.exe", (response) => {
-        response.pipe(file);
-      });
-      const rcloneConfigPath = path.join(mainPath, "rclone.conf");
-      const file2 = fs.createWriteStream(rcloneConfigPath);
-      https.get(
-        "https://files.zortos.me/files/public/CF%20GC%20Resources/rclone.conf",
-        (response) => {
-          response.pipe(file2);
-        }
-      );
     });
 
     process.on("close", async (code) => {
@@ -512,7 +513,7 @@ app2.post("/app/install", async (req, res) => {
     const appExe = decodeURIComponent(req.query.AppExe);
     const AppArguments = decodeURIComponent(req.query.AppArguments);
     console.log(
-      "Debug\n--------------------------\n" +
+      "Debug---------------------------------------------------\n" +
       appName +
       "\n" +
       appDownloadURL +
